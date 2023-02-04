@@ -5,17 +5,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 group='com.github.tdxtxt'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "30.0.3"
-
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildTools
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 32
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
     }
 
     buildTypes {
@@ -30,9 +26,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //google官方lib
+    implementation rootProject.ext.supprotLibs
+    api rootProject.ext.netLibs
+    api rootProject.ext.fastDev
 }

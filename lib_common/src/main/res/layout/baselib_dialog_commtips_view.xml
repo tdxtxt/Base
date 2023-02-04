@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.tdxtxt.baselib.view.container.RatioRoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white_ffffff"
+    android:orientation="vertical"
+    app:rRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/tv_common_prompt_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#000"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:text="标题"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_common_prompt_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textColor="#000"
+            android:textSize="14dp"
+            tools:text="内容" />
+    </LinearLayout>
+    <View
+        android:id="@+id/view_line"
+        style="@style/line_horizontal" />
+    <LinearLayout
+        android:id="@+id/layout_menu"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:divider="@drawable/baselib_line_dialog"
+        android:orientation="horizontal"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/btn_common_prompt_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/black_999999"
+            android:textSize="14dp"
+            android:visibility="gone"
+            tools:text="左按钮"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_common_prompt_center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#3CAFA5"
+            android:textSize="14dp"
+            android:visibility="gone"
+            tools:text="中按钮"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_common_prompt_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/bule_4379ff"
+            android:textSize="14dp"
+            android:visibility="gone"
+            tools:text="右按钮"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+</com.tdxtxt.baselib.view.container.RatioRoundLinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white_ffffff">#ffffff</color>
+    <color name="white_f5f5f5">#f5f5f5</color>
+    <color name="white_f9f9f9">#f9f9f9</color>
+    <color name="white_f0f0f0">#f0f0f0</color>
+
+    <color name="black_999999">#999999</color>
+
+    <color name="bule_4379ff">#4379ff</color>
+
+    <color name="line_bg">#f0f0f0</color>
+
+    <!--Toast-->
+    <color name="toast_default_text_color">#FFFFFF</color>
+    <color name="toast_error_color">#F15C58</color>
+    <color name="toast_info_color">#3F51B5</color>
+    <color name="toast_success_color">#388E3C</color>
+    <color name="toast_warning_color">#FEC005</color>
+    <color name="toast_normal_tint_color">#353A3E</color>
+
+</resources>

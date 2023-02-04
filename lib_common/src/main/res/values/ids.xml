@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tag_watcher_listener" type="id"/>
+    <item name="titlebar" type="id"/>
+</resources>
