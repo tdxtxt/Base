@@ -1,7 +1,11 @@
 ext{
-    mavenDir = [
-            "tdxtxt" : ""
+    mavenConfig = [
+            "releasesRepoUrl"   : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/",
+            "snapshotsRepoUrl "   : "https://s01.oss.sonatype.org/content/repositories/snapshots/",
+            "pwd"   : "local.properties",
+            "group" : "io.github.tdxtxt"
     ]
+
 //    解决冲突 http://www.wanandroid.com/blog/show/2314
     versions = [
             compileSdk    : 30,
