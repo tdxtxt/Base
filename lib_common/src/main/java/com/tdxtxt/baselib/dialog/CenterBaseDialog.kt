@@ -19,12 +19,6 @@ import com.tdxtxt.baselib.tools.lifecycleOwner
 abstract class CenterBaseDialog constructor(val context: FragmentActivity) : IBDialog {
     val dialog: CenterPopupView = object : CenterPopupView(context){
         override fun getImplLayoutId() = getLayoutId()
-        override fun getMaxWidth(): Int {
-            return super.getMaxWidth()
-        }
-        override fun getMaxHeight(): Int {
-            return super.getMaxHeight()
-        }
         override fun getPopupWidth(): Int {
             return getDialogWidth()
         }
@@ -106,10 +100,6 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity) : IBD
     override fun <T : View> findViewById(@IdRes id: Int): T? {
         return dialog.findViewById(id)
     }
-
-    override fun getMaxWidth() = 0
-
-    override fun getMaxHeight() = 0
 
     override fun getDialogWidth() = 0
 

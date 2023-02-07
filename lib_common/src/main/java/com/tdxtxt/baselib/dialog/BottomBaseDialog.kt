@@ -5,6 +5,7 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.DeviceUtils
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.core.BottomPopupView
@@ -19,12 +20,6 @@ import com.tdxtxt.baselib.tools.lifecycleOwner
 abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
     val dialog: BottomPopupView = object : BottomPopupView(context){
         override fun getImplLayoutId() = getLayoutId()
-        override fun getMaxWidth(): Int {
-            return super.getMaxWidth()
-        }
-        override fun getMaxHeight(): Int {
-            return super.getMaxHeight()
-        }
         override fun getPopupWidth(): Int {
             return getDialogWidth()
         }
@@ -33,21 +28,34 @@ abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
         }
     }
 
-    val builder: XPopup.Builder = XPopup.Builder(context).setPopupCallback(object : SimpleCallback() {
-        override fun onBackPressed(popupView: BasePopupView?) = false  //如果你自己想拦截返回按键事件，则重写这个方法，返回true即可
+    val builder: XPopup.Builder = XPopup.Builder(context).setPopupCallback(object :
+        SimpleCallback() {
+        override fun onBackPressed(popupView: BasePopupView?) =
+            false  //如果你自己想拦截返回按键事件，则重写这个方法，返回true即可
+
         override fun onDismiss(popupView: BasePopupView?) {
             mCancelListener?.invoke()
         }
+
         override fun beforeShow(popupView: BasePopupView?) {
         }
+
         override fun onCreated(popupView: BasePopupView?) {
             this@BottomBaseDialog.apply { onCreate(this) }
         }
+
         override fun beforeDismiss(popupView: BasePopupView?) {
         }
+
         override fun onShow(popupView: BasePopupView?) {
         }
     })
+
+    init {
+        if ("RedmiNote8Pro" == DeviceUtils.getModel())//适配红米note 8pro机型下边显示不全的问题
+            builder.isViewMode(true)
+    }
+
     var popupView: BasePopupView? = null
 
     override fun show(): BottomBaseDialog {
@@ -106,10 +114,6 @@ abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
     override fun <T : View> findViewById(@IdRes id: Int): T? {
         return dialog.findViewById(id)
     }
-
-    override fun getMaxWidth() = 0
-
-    override fun getMaxHeight() = 0
 
     override fun getDialogWidth() = 0
 

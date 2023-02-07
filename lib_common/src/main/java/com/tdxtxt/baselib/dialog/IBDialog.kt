@@ -23,8 +23,7 @@ interface IBDialog {
     fun setCancelableOnTouchOutside(cancelableOnTouchOutside: Boolean): IBDialog
 
     fun <T : View> findViewById(@IdRes int: Int): T?
-    fun getMaxWidth(): Int
-    fun getMaxHeight(): Int
+
     fun getDialogWidth(): Int
     fun getDialogHeight(): Int
 

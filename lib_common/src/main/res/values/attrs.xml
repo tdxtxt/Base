@@ -114,4 +114,27 @@
         <attr name="sl_showLoadingOnce" format="boolean" />
         <attr name="sl_animDuration" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="RoundStyleTextView">
+        <!--边框的宽度，默认为1dp-->
+        <attr name="strokeWidth" format="dimension" />
+        <!--圆角半径，默认为2dp-->
+        <attr name="radius" format="dimension" />
+        <attr name="leftRadius" format="dimension" />
+        <attr name="rightRadius" format="dimension" />
+        <attr name="topRadius" format="dimension" />
+        <attr name="bottomRadius" format="dimension" />
+        <attr name="topLeftRadius" format="dimension" />
+        <attr name="topRightRadius" format="dimension" />
+        <attr name="bottomLeftRadius" format="dimension" />
+        <attr name="bottomRightRadius" format="dimension" />
+        <!--边框颜色，默认是没有边框即颜色为Color.TRANSPARENT-->
+        <attr name="strokeColor" format="reference|color" />
+        <!-- 背景颜色 -->
+        <attr name="bgColor" format="reference|color" />
+        <!-- 开始背景颜色 -->
+        <attr name="startBgColor" format="reference|color" />
+        <!-- 结束背景颜色 -->
+        <attr name="endBgColor" format="reference|color" />
+    </declare-styleable>
 </resources>

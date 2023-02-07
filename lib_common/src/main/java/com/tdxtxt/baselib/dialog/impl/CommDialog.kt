@@ -57,17 +57,15 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var leftMenu: (MenuCallBack.() -> Unit)? = null
-    fun setLeftMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog {
+    var leftMenu: MenuCallBack? = null
+    fun setLeftMenu(listener: MenuCallBack?): CommDialog {
         this.leftMenu = listener
-        if (listener != null) {
-            val callback = object : MenuCallBack() {}
-            callback.listener()
+        if (leftMenu != null) {
 
             tvBtnLeft?.visibility = View.VISIBLE
-            tvBtnLeft?.text = callback.menuText
+            tvBtnLeft?.text = leftMenu?.menuText
             tvBtnLeft?.setOnClickListener {
-                callback.click?.invoke()
+                leftMenu?.click?.invoke()
                 if (autoDismiss) dismiss()
             }
         } else {
@@ -77,17 +75,15 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var centerMenu: (MenuCallBack.() -> Unit)? = null
-    fun setCenterMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog {
+    var centerMenu: MenuCallBack? = null
+    fun setCenterMenu(listener: MenuCallBack?): CommDialog {
         this.centerMenu = listener
         if (listener != null) {
-            val callback = object : MenuCallBack() {}
-            callback.listener()
 
             tvBtnCenter?.visibility = View.VISIBLE
-            tvBtnCenter?.text = callback.menuText
+            tvBtnCenter?.text = centerMenu?.menuText
             tvBtnCenter?.setOnClickListener {
-                callback.click?.invoke()
+                centerMenu?.click?.invoke()
                 if (autoDismiss) dismiss()
             }
         } else {
@@ -97,17 +93,15 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var rightMenu: (MenuCallBack.() -> Unit)? = null
-    fun setRightMenu(listener: (MenuCallBack.() -> Unit)?): CommDialog {
+    var rightMenu: MenuCallBack? = null
+    fun setRightMenu(listener: MenuCallBack?): CommDialog {
         this.rightMenu = listener
         if (listener != null) {
-            val callback = object : MenuCallBack() {}
-            callback.listener()
 
             tvBtnRight?.visibility = View.VISIBLE
-            tvBtnRight?.text = callback.menuText
+            tvBtnRight?.text = rightMenu?.menuText
             tvBtnRight?.setOnClickListener {
-                callback.click?.invoke()
+                rightMenu?.click?.invoke()
                 if (autoDismiss) dismiss()
             }
         } else {

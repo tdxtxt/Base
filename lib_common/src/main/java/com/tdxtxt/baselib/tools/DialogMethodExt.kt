@@ -19,16 +19,21 @@ import com.lxj.xpopup.impl.FullScreenPopupView
  * dialog工具类
  */
 object DialogMethodExt {
+    fun showCommDialog(activity: FragmentActivity?, content: String?,
+                       leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
+        if (activity == null) return null
+        return createCommDialog(activity, null, content, leftMenu, rightMenu)?.apply { show() }
+    }
+
     fun showCommDialog(activity: FragmentActivity?, title: String?, content: String?,
-                       leftMenu: (MenuCallBack.() -> Unit)? = null,
-                       rightMenu: (MenuCallBack.() -> Unit)? = null): CommDialog? {
+                       leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
         if (activity == null) return null
         return createCommDialog(activity, title, content, leftMenu, rightMenu)?.apply { show() }
     }
 
     fun createCommDialog(activity: FragmentActivity?, title: String?, content: String?,
-                         leftMenu: (MenuCallBack.() -> Unit)? = null,
-                         rightMenu: (MenuCallBack.() -> Unit)? = null): CommDialog? {
+                         leftMenu: MenuCallBack? = null,
+                         rightMenu: MenuCallBack? = null): CommDialog? {
         if (activity == null) return null
         return CommDialog(activity).setTitle(title)
                 .setContent(content)
@@ -42,9 +47,7 @@ object DialogMethodExt {
     }
 
     fun showTips(context: FragmentActivity, content: String?){
-        showCommDialog(context, "温馨提示", content, leftMenu = {
-
-        })
+        showCommDialog(context, "温馨提示", content)
     }
 
     /**
