@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.2"
+        versionName "0.0.5"
     }
 
     lintOptions {
@@ -100,6 +100,8 @@ task androidSourcesJar(type: Jar) {
 publishing {
     publications {
         release(MavenPublication) {
+//                from components.release
+//            from(components.getByName("release"))
             // group id，发布后引用的依赖的 group id
             groupId rootProject.ext.mavenConfig['group']
             // 发布后引用的依赖的 artifact id
@@ -112,7 +114,7 @@ publishing {
                  */
                 version = android.defaultConfig.versionName + "-" + android.defaultPublishConfig + "-" + debugNum
                 // 版本号
-            }else {
+            } else {
                 /**
                  * 打release包，用于实际的版本使用
                  */
@@ -165,11 +167,11 @@ publishing {
     repositories {
         maven {
             Properties properties = new Properties()
-            InputStream inputStream = project.rootProject.file(rootProject.ext.mavenConfig["pwd"]).newDataInputStream() ;
-            properties.load( inputStream )
+            InputStream inputStream = project.rootProject.file(rootProject.ext.mavenConfig["pwd"]).newDataInputStream();
+            properties.load(inputStream)
 
             // 发布的位置，这里根据发布的版本区分了 SNAPSHOT 和最终版本两种情况
-            url = version.endsWith('SNAPSHOT') ? rootProject.ext.mavenConfig['snapshotsRepoUrl']  : rootProject.ext.mavenConfig['releasesRepoUrl']
+            url = version.endsWith('SNAPSHOT') ? rootProject.ext.mavenConfig['snapshotsRepoUrl'] : rootProject.ext.mavenConfig['releasesRepoUrl']
             credentials {
                 username properties.getProperty("USERNAME")
                 password properties.getProperty("PASSWORD")

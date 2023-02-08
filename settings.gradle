@@ -1,3 +1,8 @@
 rootProject.name='Base'
 include ':app'
 include ':lib_common'
+include ':lib_socialcore'
+include ':lib_socialwechat'
+include ':lib_socialqq'
+include ':lib_socialalipay'
+include ':lib_socialweibo'

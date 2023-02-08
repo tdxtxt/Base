@@ -1,0 +1,26 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tdxtxt.lib_socialwechat">
+
+    <application>
+        <!--微信-->
+        <activity
+            android:name="com.pingerx.socialgo.wechat.uikit.WxActionActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="${applicationId}"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--微信别名配置，如果自定义了接收类，不需要配置这个，否则在app中配置-->
+        <!--<activity-alias
+            android:name="${applicationId}.wxapi.WXEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:targetActivity="com.pingerx.socialgo.wechat.uikit.WxActionActivity"
+            android:taskAffinity="${applicationId}"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
+    </application>
+</manifest>

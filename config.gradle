@@ -28,7 +28,7 @@ ext{
             "support-v4"     : 'androidx.legacy:legacy-support-v4:1.0.0',
 //            "liveDataAndViewModel" :  'androidx.lifecycle:lifecycle-extensions:2.2.0', //ViewModel and LiveData
             "viewpager2" :  'androidx.viewpager2:viewpager2:1.0.0',
-            "androidcore-ktx"  : 'androidx.core:core-ktx:1.0.2',
+            "androidcore-ktx"  : 'androidx.core:core-ktx:1.3.2',
 //            "activity-ktx" : "androidx.activity:activity-ktx:1.2.3" //解决错误 cannot access ActivityResultCaller which is a supertype of
 //            "recyclerview" :  "com.android.support:recyclerview-v7:28.0.0",
 //            "design" : "com.liveDataAndViewModelandroid.support:design:28.0.0",
@@ -85,6 +85,10 @@ ext{
             "statusBar": 'com.gyf.immersionbar:immersionbar:3.0.0',
             "XPopup" : 'com.github.li-xiaojun:XPopup:2.7.5',
             "utilcodex" : 'com.blankj:utilcodex:1.31.0'
+    ].values()
+
+    json = [
+            "gson" : "com.google.code.gson:gson:2.8.5"
     ].values()
 
 //    annotationProcessorLibs = [image["glideCompiler"]]

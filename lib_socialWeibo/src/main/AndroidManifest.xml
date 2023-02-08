@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tdxtxt.lib_socialweibo">
+
+    <application>
+        <activity
+            android:name="com.pingerx.socialgo.weibo.uikit.WbActionActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+</manifest>
