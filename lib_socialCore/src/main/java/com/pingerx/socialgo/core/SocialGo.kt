@@ -248,16 +248,22 @@ object SocialGo {
         }
         listener.onStart { mLoginListener?.getFunction()?.onStart?.invoke() }
         listener.onSuccess {
-            mLoginListener?.getFunction()?.onLoginSuccess?.invoke(it)
-            finish(activity)
+            mHandler.post {
+                mLoginListener?.getFunction()?.onLoginSuccess?.invoke(it)
+                finish(activity)
+            }
         }
         listener.onFailure {
-            mLoginListener?.getFunction()?.onFailure?.invoke(it)
-            finish(activity)
+            mHandler.post {
+                mLoginListener?.getFunction()?.onFailure?.invoke(it)
+                finish(activity)
+            }
         }
         listener.onCancel {
-            mLoginListener?.getFunction()?.onCancel?.invoke()
-            finish(activity)
+            mHandler.post {
+                mLoginListener?.getFunction()?.onCancel?.invoke()
+                finish(activity)
+            }
         }
         return listener
     }
