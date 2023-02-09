@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/baselib_layout_comm_toolbar" />
-
-    <ImageView
-        android:id="@+id/image"
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_next_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/CommTextButtonStyle"
+        android:text="Social"
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

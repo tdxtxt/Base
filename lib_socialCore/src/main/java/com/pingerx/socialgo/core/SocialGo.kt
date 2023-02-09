@@ -70,6 +70,17 @@ import java.util.concurrent.Executors
  *              <data android:scheme="tencent${QQ_ID}" />
  *          </intent-filter>
  *    </activity>
+ *    <provider
+ *       android:name="androidx.core.content.FileProvider"
+ *       android:authorities="${applicationId}.fileprovider"
+ *       tools:replace="android:authorities"
+ *       android:exported="false"
+ *       android:grantUriPermissions="true">
+ *          <meta-data
+ *              tools:replace="android:resource"
+ *              android:name="android.support.FILE_PROVIDER_PATHS"
+ *              android:resource="@xml/file_paths" />
+ *    </provider>
  * </pre>
  */
 object SocialGo {

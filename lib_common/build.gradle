@@ -42,6 +42,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //google官方lib
+    compileOnly rootProject.ext.multidex
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
     implementation rootProject.ext.fastDev

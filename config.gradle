@@ -17,6 +17,9 @@ ext{
             versionName   : "v1.0.2",
     ]
 
+    multidex = [
+            "dex"   :   'androidx.multidex:multidex:2.0.1'
+    ].values()
 
     supprotLibs = [
             //支持库迁移AndroidX速查表 https://juejin.im/post/5bf203b7f265da6136220f89  https://www.jianshu.com/p/7dc111353328

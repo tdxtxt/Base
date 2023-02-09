@@ -8,4 +8,24 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CommTextButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white_ffffff</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:paddingEnd">11dp</item>
+        <item name="android:paddingStart">11dp</item>
+        <item name="android:paddingTop">13dp</item>
+        <item name="android:paddingBottom">13dp</item>
+        <item name="android:enabled">true</item>
+        <item name="android:gravity">center</item>
+        <item name="startBgColor">@color/bule_4379ff</item>
+        <item name="endBgColor">@color/bule_4379ff</item>
+        <item name="radius">50dp</item>
+    </style>
+
 </resources>
