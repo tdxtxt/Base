@@ -2,12 +2,14 @@ package com.tdxtxt.net
 
 import android.text.TextUtils
 import com.google.gson.GsonBuilder
+import com.tdxtxt.net.annotate.BaseUrl
 import com.tdxtxt.net.config.DefaultNetProvider
 import com.tdxtxt.net.config.NetProvider
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 /**
  * <pre>
@@ -40,13 +42,27 @@ object NetMgr {
     //获取service服务
     fun <S> getService(host: String, service: Class<S>) = getRetrofit(host).create(service)
 
+    //获取service服务
+    fun <S> getService(service: Class<S>): S{
+        var host = ""
+        if(providerMap.size == 1){
+            providerMap.forEach { host = it.value.host() }
+        }else{
+            val annotation = service.getAnnotation(BaseUrl::class.java)
+            host = annotation?.host?: ""
+        }
+        return getRetrofit(host).create(service)
+    }
+
     fun clearCache(){
         retrofitMap.clear()
         clientMap.clear()
     }
 
     private fun getRetrofit(host: String) : Retrofit{
-        if(checkBaseUrl(host)) throw  IllegalStateException("host error--> host=$host")
+        if(TextUtils.isEmpty(host)){
+            throw  IllegalStateException("baseUrl未配置，支持Service中使用@BaseUrl注解 或者 重写NetProvider配置")
+        }
         var retrofit: Retrofit? = retrofitMap.get(host)
         if(retrofit != null) return retrofit
 
@@ -67,8 +83,6 @@ object NetMgr {
     }
 
     private fun getClient(host: String, provider: NetProvider): OkHttpClient{
-        if(checkBaseUrl(host)) throw  IllegalStateException("baseUrl error--> baseurl=$host")
-
         if(clientMap.get(host) != null) return clientMap.get(host)!!
 
         val builder = OkHttpClient.Builder()
@@ -78,7 +92,4 @@ object NetMgr {
         clientMap[host] = client
         return client
     }
-
-    private fun checkBaseUrl(host: String) = TextUtils.isEmpty(host)
-
 }
