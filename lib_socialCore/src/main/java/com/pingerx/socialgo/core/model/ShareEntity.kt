@@ -144,7 +144,7 @@ class ShareEntity(val shareObjType: Int) : Parcelable {
     }
 
     companion object CREATOR : Parcelable.Creator<ShareEntity> {
-        val THUMB_URL = "https:defalut.png"
+        val THUMB_URL = "https://issues.sonatype.org/secure/thumbnail/139078/_thumb_139078.png"
 
         const val SHARE_TYPE_TEXT = 0x41   // 分享文字
         const val SHARE_TYPE_IMAGE = 0x42  // 分享图片

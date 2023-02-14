@@ -3,6 +3,7 @@ package com.pingerx.socialgo.core
 import android.content.Context
 import com.pingerx.socialgo.core.common.SocialConstants
 import com.pingerx.socialgo.core.utils.SocialGoUtils
+import com.tdxtxt.lib_socialcore.R
 import java.io.File
 
 
@@ -24,7 +25,7 @@ class SocialGoConfig private constructor() {
     private var weiboScope: String? = null
 
     private var cacheDir: String? = null         // 存储路径，不允许更改
-    private var defImageResId: Int = 0           // 图片默认资源
+    private var defImageResId: Int = R.mipmap.ic_launcher          // 图片默认资源
 
     fun qq(qqAppId: String): SocialGoConfig {
         this.qqAppId = qqAppId
