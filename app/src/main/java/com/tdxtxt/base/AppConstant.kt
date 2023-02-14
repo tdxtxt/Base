@@ -7,6 +7,8 @@ package com.tdxtxt.base
  */
 object AppConstant {
 
+    const val HOST = "https://www.wanandroid.com"
+
     // 微信开发者平台
     const val WX_APP_ID = "wx0f5c0871b99db365"
     const val WX_APP_SECRET = "7214a012f060c8345833fb5969e06f1b"

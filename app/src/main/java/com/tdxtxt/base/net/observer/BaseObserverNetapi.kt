@@ -1,0 +1,17 @@
+package com.tdxtxt.base.net.observer
+
+import com.tdxtxt.base.AppConstant
+import com.tdxtxt.base.net.data.BaseResponse
+import com.tdxtxt.net.observer.AbsObserverNetapi
+
+/**
+ * <pre>
+ *     author : ton
+ *     time   : 2023/2/13
+ *     desc   :
+ * </pre>
+ */
+abstract class BaseObserverNetapi<T> : AbsObserverNetapi<T, BaseResponse<T>>() {
+    override fun host() = AppConstant.HOST
+
+}

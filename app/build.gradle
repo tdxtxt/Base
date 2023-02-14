@@ -50,6 +50,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation project(':lib_common')
+    implementation project(':lib_net')
     implementation project(':lib_socialcore')
     implementation project(':lib_socialwechat')
     implementation project(':lib_socialqq')
@@ -65,4 +66,6 @@ dependencies {
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
     implementation rootProject.ext.fastDev
+
+    implementation 'com.orhanobut:logger:2.2.0'
 }
