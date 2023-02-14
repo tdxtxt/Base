@@ -19,14 +19,13 @@ abstract class AbsObserverNetapi <T, R : AbsResponse<T>> : DisposableObserver<R>
     abstract fun onFailure(response: R?, errorCode: Int?, errorMsg: String?, e: Throwable?)
 
     override fun onNext(response: R) {
-
-        onComplete()
-
         if(filter(response)){
             onSuccess(response)
         }else{
             onFailure(response, response.getCode(), response.getMessage(), null);
         }
+
+        onComplete()
     }
 
     override fun onError(e: Throwable) {
