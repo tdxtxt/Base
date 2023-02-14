@@ -1,6 +1,5 @@
 package com.tdxtxt.base.net
 
-import com.tdxtxt.base.AppConstant
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.net.NetMgr
 import io.reactivex.Observable
@@ -13,7 +12,7 @@ import io.reactivex.Observable
  * </pre>
  */
 object AppRepository {
-    private fun getService() = NetMgr.getService(AppConstant.HOST, InterfaceApi::class.java)
+    private fun getService() = NetMgr.getService(InterfaceApi::class.java)
 
     fun queryArticleList(pageNum: Int): Observable<BaseResponse<Any>> {
         return getService().queryArticleList(pageNum)

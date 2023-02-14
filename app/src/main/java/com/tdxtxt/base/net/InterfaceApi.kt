@@ -12,6 +12,7 @@ import retrofit2.http.Path
  *     desc   :
  * </pre>
  */
+//@BaseUrl(AppConstant.HOST)
 interface InterfaceApi {
     @GET("/article/list/{pageNum}/json")
     fun queryArticleList(@Path("pageNum") pageNum: Int): Observable<BaseResponse<Any>>

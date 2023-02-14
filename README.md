@@ -50,94 +50,30 @@
 
 ### 使用流程
 * 在Application中初始化第三方平台和配置各自的appkey
-
-        val config = SocialGoConfig.create(context)
-                .debug(true)
-                .qq(QQ_APP_ID)
-                .wechat(WX_APP_ID, AppConstant.WX_APP_SECRET)
-                .weibo(WEIBO_APP_KEY)
-
-        SocialGo
-                .init(config)
-                .registerWxPlatform(WxPlatform.Creator())
-                .registerWbPlatform(WbPlatform.Creator())
-                .registerQQPlatform(QQPlatform.Creator())
-                .registerAliPlatform(AliPlatform.Creator())
-                .setJsonAdapter(GsonJsonAdapter())
-                .setRequestAdapter(OkHttpRequestAdapter())
+        SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
+            .registerWxPlatform(WxPlatform.Creator())
+            .registerWbPlatform(WbPlatform.Creator())
+            .registerQQPlatform(QQPlatform.Creator())
+            .registerAliPlatform(AliPlatform.Creator())
 
 * 登录
 
-        SocialGo.doLogin(this, Target.LOGIN_QQ) {
-            onStart {
-                mProgressDialog.show()
-                tvConsole?.text = "登录开始"
-            }
-
-            onSuccess {
-                mProgressDialog.dismiss()
-                tvConsole?.text = it.socialUser?.toString()
-            }
-
-            onCancel {
-                mProgressDialog.dismiss()
-                tvConsole?.text = "登录取消"
-            }
-
-            onFailure {
-                mProgressDialog.dismiss()
-                tvConsole?.text = "登录异常 + ${it?.errorMsg}"
-            }
-        }
+        SocialSdk.LOGIN.wechat(this){
+                    onSuccess {  }
+                    onFailure {  }
+                }
 
 * 分享
 
-         SocialGo.doShare(this, platformType, shareMedia) {
-            onStart { _, _ ->
-                mProgressDialog.show()
-                tvConsole?.text = "分享开始"
-            }
-            onSuccess {
-                mProgressDialog.dismiss()
-                tvConsole?.text = "分享成功"
-            }
-            onFailure {
-                mProgressDialog.dismiss()
-                tvConsole?.text = "分享失败"
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (it.errorCode == SocialError.CODE_STORAGE_READ_ERROR) {
-                        requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 100)
-                    } else if (it.errorCode == SocialError.CODE_STORAGE_WRITE_ERROR) {
-                        requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
-                    }
-                }
-            }
-            onCancel {
-                mProgressDialog.dismiss()
-                tvConsole?.text = "分享取消"
-            }
-        }
+         SocialSdk.SHARE.wechatFriendsWeb(this, "title", "content", "https://baidu.com")
 
 
 * 支付
 
-         SocialGo.doPay(this, params, Target.SHARE_QQ_FRIENDS) {
-            onStart {
-                tvConsole?.text = "支付开始"
-            }
-            onSuccess {
-                tvConsole?.text = "支付成功"
-            }
-            onDealing {
-                tvConsole?.text = "支付Dealing"
-            }
-            onFailure {
-                tvConsole?.text = "支付异常：${it?.errorMsg}"
-            }
-            onCancel {
-                tvConsole?.text = "支付取消"
-            }
-        }
+         SocialSdk.PAY.wechat(this, ""){
+                     onSuccess {  }
+                     onFailure {  }
+                 }
 
 
 

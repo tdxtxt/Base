@@ -7,6 +7,7 @@ import com.orhanobut.logger.Logger
 import com.pingerx.socialgo.ali.alipay.AliPlatform
 import com.pingerx.socialgo.core.SocialGo
 import com.pingerx.socialgo.core.SocialGoConfig
+import com.pingerx.socialgo.core.SocialSdk
 import com.pingerx.socialgo.core.adapter.impl.DefaultGsonAdapter
 import com.pingerx.socialgo.core.adapter.impl.DefaultRequestAdapter
 import com.pingerx.socialgo.qq.QQPlatform
@@ -54,21 +55,11 @@ class ApplicationDelegateImpl constructor(val context: Application) : Applicatio
             })
         }
 
-        val config = SocialGoConfig.create(context)
-            .debug(true)
-            .qq(AppConstant.QQ_APP_ID)
-            .wechat(AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET)
-            .weibo(AppConstant.SINA_APP_KEY)
-            .defImageResId(R.mipmap.ic_launcher_round)
-
-        SocialGo
-            .init(config)
+        SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
             .registerWxPlatform(WxPlatform.Creator())
-//                .registerWbPlatform(WbPlatform.Creator())
+//            .registerWbPlatform(WbPlatform.Creator())
             .registerQQPlatform(QQPlatform.Creator())
             .registerAliPlatform(AliPlatform.Creator())
-            .setJsonAdapter(DefaultGsonAdapter())
-            .setRequestAdapter(DefaultRequestAdapter())
     }
 
 }

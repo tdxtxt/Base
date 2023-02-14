@@ -2,14 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.tdxtxt.base">
-    <!-- 如果您的 App 的 targetSdkVersion 大于或等于 30，则需要在 AndroidManifest.xml 中提供下面的应用可见性声明，
+    <!--
+     如果您的 App 的 targetSdkVersion 大于或等于 30，则需要在 AndroidManifest.xml 中提供下面的应用可见性声明，
              让支付宝 SDK 感知设备上是否已经安装了支付宝 App。同时，您可能还需要升级 Gradle Plugin 到最新版本。
-             关于 Android 11 的 "应用可见性" 机制，参见 https://developer.android.com/about/versions/11/privacy/package-visibility?hl=zh-cn -->
+             关于 Android 11 的 "应用可见性" 机制，参见 https://developer.android.com/about/versions/11/privacy/package-visibility?hl=zh-cn
+    -->
     <queries>
-        <package android:name="com.tencent.mm" />   <!-- 指定微信包名   -->
-        <package android:name="com.tencent.mobileqq" />   <!-- 指定QQ包名   -->
-        <package android:name="com.sina.weibo" />   <!-- 指定微博包名   -->
-        <package android:name="com.eg.android.AlipayGphone" />   <!-- 指定支付宝包名   -->
+        <package android:name="com.tencent.mm" /> <!-- 指定微信包名 -->
+        <package android:name="com.tencent.mobileqq" /> <!-- 指定QQ包名 -->
+        <package android:name="com.sina.weibo" /> <!-- 指定微博包名 -->
+        <package android:name="com.eg.android.AlipayGphone" /> <!-- 指定支付宝包名 -->
         <package android:name="hk.alipay.wallet" /> <!-- AlipayHK -->
     </queries>
 
@@ -20,14 +22,15 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".DemoApplication"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SocialTestActivity"/>
+        <activity
+            android:name=".SocialTestActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,21 +38,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name="com.juexiao.english.wxapi.WXEntryActivity"
             android:exported="true"
-            android:launchMode="singleTask"/>
-
-        <activity-alias
-            android:name="${applicationId}.wxapi.WXEntryActivity"
-            android:exported="true"
-            android:targetActivity="com.juexiao.english.wxapi.WXEntryActivity" />
+            android:launchMode="singleTask" />
 
         <activity-alias
             android:name="${applicationId}.wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.juexiao.english.wxapi.WXEntryActivity" />
+        <activity-alias
+            android:name="${applicationId}.wxapi.WXEntryActivity"
             android:exported="true"
             android:targetActivity="com.juexiao.english.wxapi.WXEntryActivity" />
 
@@ -57,6 +56,7 @@
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
             android:noHistory="true">
+
             <!-- 集成的时候记得配置哟 -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -71,13 +71,13 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
-            tools:replace="android:authorities"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
-                tools:replace="android:resource"
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_paths"
+                tools:replace="android:resource" />
         </provider>
     </application>
 
