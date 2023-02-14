@@ -21,11 +21,11 @@ interface CEngine {
     fun <T> putJson(key : String, value: T?): Boolean?
 
     fun getString(key: String, defaultValue: String = ""): String?
-    fun getInt(key: String, defaultValue: Int = 0): Int?
-    fun getLong(key: String, defaultValue: Long = 0): Long?
-    fun getFloat(key: String, defaultValue: Float = 0F): Float?
-    fun getDouble(key: String, defaultValue: Double = 0.0): Double?
-    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean?
+    fun getInt(key: String, defaultValue: Int = 0): Int
+    fun getLong(key: String, defaultValue: Long = 0): Long
+    fun getFloat(key: String, defaultValue: Float = 0F): Float
+    fun getDouble(key: String, defaultValue: Double = 0.0): Double
+    fun getBoolean(key: String, defaultValue: Boolean = false): Boolean
     fun <T : Parcelable> getParcelable(key: String, clazz: Class<T>, defaultVale: T? = null): T?
     fun <T> getJson(key: String, clazz: Class<T>, defaultVale: T? = null): T?
 

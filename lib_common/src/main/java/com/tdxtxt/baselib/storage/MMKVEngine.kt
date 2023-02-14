@@ -10,7 +10,7 @@ import com.tencent.mmkv.MMKV
  * @author tangdexiang
  * @since 2021/12/11
  */
- abstract class MMKVEngine : CEngine {
+abstract class MMKVEngine : CEngine {
     abstract fun createMMKVFileKey(): String
     
     override fun init(context: Context) {

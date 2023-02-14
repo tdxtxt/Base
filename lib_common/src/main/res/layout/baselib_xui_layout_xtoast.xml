@@ -6,6 +6,11 @@
     android:layout_height="wrap_content"
     android:fitsSystemWindows="false"
     android:gravity="center"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:background="@drawable/baselib_xtoast_bg"
     android:orientation="horizontal"
     tools:ignore="UseCompoundDrawables">
 
@@ -14,12 +19,15 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/toast_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"/>
+        tools:text="我是toast"
+        android:textColor="@color/white_ffffff"
+        android:textSize="15dp"/>
 
 </LinearLayout>

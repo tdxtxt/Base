@@ -34,7 +34,7 @@ import java.lang.ref.WeakReference;
  */
 @SuppressLint("InflateParams")
 public class XToast {
-    private static WeakReference<Toast> lastToast = null;
+    private static WeakReference<Toast> refLastToast = null;
 
     public static final int LENGTH_SHORT = Toast.LENGTH_SHORT;
     public static final int LENGTH_LONG = Toast.LENGTH_LONG;
@@ -292,14 +292,14 @@ public class XToast {
         final View toastLayout = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.baselib_xui_layout_xtoast, null);
         final ImageView toastIcon = toastLayout.findViewById(R.id.toast_icon);
         final TextView toastTextView = toastLayout.findViewById(R.id.toast_text);
-        Drawable drawableFrame;
-
-        if (shouldTint) {
-            drawableFrame = tint9PatchDrawableFrame(context, tintColor);
-        } else {
-            drawableFrame = ContextCompat.getDrawable(context, R.drawable.baselib_xtoast_frame);
-        }
-        setBackground(toastLayout, drawableFrame);
+//        Drawable drawableFrame;
+//
+//        if (shouldTint) {
+//            drawableFrame = tint9PatchDrawableFrame(context, tintColor);
+//        } else {
+//            drawableFrame = ContextCompat.getDrawable(context, R.drawable.baselib_xtoast_frame);
+//        }
+//        setBackground(toastLayout, drawableFrame);
 
         if (withIcon) {
             if (icon == null) {
@@ -322,11 +322,11 @@ public class XToast {
         currentToast.setView(toastLayout);
 
         if (!Config.get().allowQueue) {
-            if (lastToast != null) {
-                Toast toast = lastToast.get();
+            if (refLastToast != null) {
+                Toast toast = refLastToast.get();
                 if(toast != null) toast.cancel();
             }
-            lastToast = new WeakReference<>(currentToast);
+            refLastToast = new WeakReference<>(currentToast);
         }
         if (Config.get().gravity != -1) {
             currentToast.setGravity(Config.get().gravity, Config.get().xOffset, Config.get().yOffset);
