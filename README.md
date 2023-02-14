@@ -50,6 +50,7 @@
 
 ### 使用流程
 * 在Application中初始化第三方平台和配置各自的appkey
+
         SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
             .registerWxPlatform(WxPlatform.Creator())
             .registerWbPlatform(WbPlatform.Creator())
