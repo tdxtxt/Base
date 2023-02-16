@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="opaque">
+    <!-- 背景颜色，在上图中该颜色为黑色 -->
+    <item android:drawable="@color/white_ffffff" />
+    <!-- 黑色背景上的其他图片元素，比如 一个居中显示的 logo 图标-->
+    <item android:bottom="@dimen/dp_40">
+        <!--<bitmap
+            android:gravity="center"
+            android:src="@drawable/logo_splash" />-->
+    </item>
+
+    <!-- 最下面的文字，注意这里有个 bottom 设置 -->
+    <!--<item android:bottom="@dimen/dp_5">
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/icon_sxbank_about_logo" />
+    </item>-->
+
+</layer-list>

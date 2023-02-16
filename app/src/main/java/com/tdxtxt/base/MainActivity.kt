@@ -5,6 +5,7 @@ import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
 import com.tdxtxt.base.net.observer.BaseObserverNetapi2
+import com.tdxtxt.baselib.tools.ActivityExt.startActivityForResult
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.net.model.AbsResponse
@@ -16,7 +17,10 @@ class MainActivity : BaseActivity() {
 
     override fun initUi() {
         btn_next_1.setOnClickListener {
-            startActivity(Intent(this, SocialTestActivity::class.java))
+            startActivityForResult(Intent(this, SocialTestActivity::class.java)){
+                ToastHelper.showToast("${it.resultCode}")
+            }
+//            startActivity(Intent(this, SocialTestActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

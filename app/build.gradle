@@ -65,7 +65,7 @@ dependencies {
     implementation rootProject.ext.multidex
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
-    implementation rootProject.ext.fastDev
+    implementation rootProject.ext.fastLibs
 
     implementation 'com.orhanobut:logger:2.2.0'
 }
