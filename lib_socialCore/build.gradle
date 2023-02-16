@@ -43,7 +43,7 @@ dependencies {
 
     //google官方lib
     implementation rootProject.ext.supprotLibs
-    implementation rootProject.ext.json
+    implementation rootProject.ext.jsonLibs
 }
 
 //上传到Maven仓库的task

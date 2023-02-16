@@ -20,11 +20,11 @@
 
 #### 基础库CommonLib
 
-      implementation 'io.github.tdxtxt:baselib_beta:0.0.5-release'
+      implementation 'io.github.tdxtxt:baselib_beta:0.0.6-release'
 
 #### 网络库NetLib
 
-      implementation 'io.github.tdxtxt:net_beta:0.0.1-release'
+      implementation 'io.github.tdxtxt:net_beta:0.0.2-release'
 
 #### 三方分享、支付、登录库Social
 * 平台核心库SDK（使用单个平台时必须添加核心库SDK）

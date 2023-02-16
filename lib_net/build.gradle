@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.0.2"
     }
 
     lintOptions {
@@ -42,7 +42,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation rootProject.ext.netLibs
-    implementation rootProject.ext.json
+    implementation rootProject.ext.jsonLibs
 }
 
 //上传到Maven仓库的task
