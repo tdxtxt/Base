@@ -2,10 +2,13 @@ package com.tdxtxt.baselib.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.KeyEvent
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.juexiao.widget.viewstate.StateLayout
@@ -13,6 +16,7 @@ import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
 import com.tdxtxt.baselib.tools.DialogMethodExt
+import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.ActivityEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
@@ -94,7 +98,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
      * 状态栏
      */
     open fun initStatusBar(){
-
+        StatusBarHelper.setStatusBar(this, Color.WHITE)
     }
 
     override fun getProgressBar(): ProgressDialog? {
@@ -156,5 +160,4 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         super.onDestroy()
         hideProgressBar()
     }
-
 }

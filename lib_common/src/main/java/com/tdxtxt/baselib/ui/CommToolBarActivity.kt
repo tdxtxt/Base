@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.callback.MenuCallBack
+import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.view.titlebar.OnTitleBarListener
 import com.tdxtxt.baselib.view.titlebar.TitleBar
 
@@ -65,7 +66,8 @@ abstract class CommToolBarActivity : BaseActivity() {
 
 
      override fun initStatusBar() {
-
+         super.initStatusBar()
+        StatusBarHelper.setPaddingStatusBarHeight(getTitleBar())
     }
 
 
