@@ -9,7 +9,7 @@ import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
  * <pre>
  *     author : ton
  *     time   : 2023/2/23
- *     desc   :
+ *     desc   : 接口
  * </pre>
  */
 interface IController {
