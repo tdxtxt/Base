@@ -20,7 +20,6 @@ class MainActivity : BaseActivity() {
             startActivityForResult(Intent(this, SocialTestActivity::class.java)){
                 ToastHelper.showToast("${it.resultCode}")
             }
-//            startActivity(Intent(this, SocialTestActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)
@@ -40,6 +39,9 @@ class MainActivity : BaseActivity() {
                         ToastHelper.showToast(errorMsg)
                     }
                 })
+        }
+        btn_next_3.setOnClickListener {
+            startActivity(Intent(this, VideoActivity::class.java))
         }
     }
 }

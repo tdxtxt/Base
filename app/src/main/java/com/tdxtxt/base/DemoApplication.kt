@@ -17,6 +17,7 @@ import com.tdxtxt.baselib.app.ApplicationDelegate
 import com.tdxtxt.baselib.tools.CacheHelper
 import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.net.NetMgr
+import com.tdxtxt.video.VideoPlayerManager
 
 
 /**
@@ -44,6 +45,7 @@ class ApplicationDelegateImpl constructor(val context: Application) : Applicatio
     }
 
     override fun onPrivacyBefore(context: Context) {
+        VideoPlayerManager.init(context)
         CacheHelper.init(context)
         NetMgr.registerProvider(AppNetProvider())
         if(BuildConfig.DEBUG){

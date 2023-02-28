@@ -30,7 +30,11 @@
         android:supportsRtl="true"
         android:theme="@style/Base.App.Theme">
         <activity
-            android:name=".SocialTestActivity"/>
+            android:name=".VideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity android:name=".SocialTestActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
