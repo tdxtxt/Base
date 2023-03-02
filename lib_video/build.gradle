@@ -46,6 +46,7 @@ dependencies {
 //    //视频内核层，必须有
 //    implementation 'cn.yc:VideoKernel:3.0.6'
 
+    implementation rootProject.ext.supprotLibs
     implementation ('com.google.android.exoplayer:exoplayer:2.16.1') {
         exclude group : "androidx.core" , module: "core"
         exclude group : "androidx.annotation" , module: "annotation"

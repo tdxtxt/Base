@@ -1,5 +1,6 @@
 package com.tdxtxt.video.player
 
+import android.content.res.Configuration
 import android.view.View
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 
@@ -31,4 +32,9 @@ interface IVideoView : IVideoPlayer {
      * 设置圆角
      */
     fun setRound(round: Float)
+
+    /**
+     * 横竖屏切换
+     */
+//    fun onConfigurationChanged(newConfig: Configuration)
 }

@@ -1,8 +1,10 @@
-package com.tdxtxt.video.player.view
+package com.tdxtxt.video.player.controller
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
-import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
+import com.tdxtxt.video.player.VideoPlayerView
 import kotlin.math.abs
 
 /**
@@ -12,35 +14,21 @@ import kotlin.math.abs
  *     desc   :
  * </pre>
  */
-class GestureController(val baiseController: IBaiseController) : IController{
-    private var mVideoPlayer: AbstractVideoPlayer? = null
+class GestureController() : IController {
+    private var mContext: Context? = null
+    private var mContainer: VideoPlayerView? = null
+//    private var mVideoPlayer: AbstractVideoPlayer? = null
+//    private var mWrapperController: ControlWrapperView? = null
     private var isHorizenalDistance = false
     private var isLeftVerticalDistance = false
     private var isRightVerticalDistance = false
 
-    init {
-        baiseController.getView().setOnTouchListener { v, event ->
-            when(event.action){
-                MotionEvent.ACTION_UP,
-                MotionEvent.ACTION_CANCEL ->{
-                    isHorizenalDistance = false
-                    isRightVerticalDistance = false
-                    isLeftVerticalDistance = false
-
-                    onGestureEnd()
-                }
-            }
-            mGestureDetector.onTouchEvent(event)
-            true
-        }
-    }
-
-    private val mGestureDetector = GestureDetector(baiseController.getContext(), object : GestureDetector.SimpleOnGestureListener(){
+    private val mGestureDetector = GestureDetector(mContext, object : GestureDetector.SimpleOnGestureListener(){
         var xDown: Float = 0f
         var currentDuration = 0L
 
         override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            baiseController.toggleMenu()
+            mContainer?.getControlWrapper()?.toggleMenu()
             return false
         }
 
@@ -49,7 +37,7 @@ class GestureController(val baiseController: IBaiseController) : IController{
         }
 
         override fun onDoubleTap(e: MotionEvent?): Boolean {
-            mVideoPlayer?.togglePlay()
+            mContainer?.getVideoPlayer()?.togglePlay()
             return false
         }
 
@@ -74,7 +62,7 @@ class GestureController(val baiseController: IBaiseController) : IController{
                         isLeftVerticalDistance = true
                         onLeftVerticalDistance(e1?.y ?: 0f, e2?.y ?: 0f)
                     }else if(isRight(xDown)){
-                        isRightVerticalDistance = false
+                        isRightVerticalDistance = true
                         onRightVerticalDistance(e1?.y ?: 0f, e2?.y ?: 0f)
                     }
                 }
@@ -88,7 +76,7 @@ class GestureController(val baiseController: IBaiseController) : IController{
 
         override fun onDown(e: MotionEvent?): Boolean {
             xDown = e?.x ?: 0f
-            currentDuration = mVideoPlayer?.getCurrentDuration()?: 0L
+            currentDuration = mContainer?.getCurrentDuration()?: 0L
             return true
         }
 
@@ -99,10 +87,13 @@ class GestureController(val baiseController: IBaiseController) : IController{
 
     fun onHorizontalDistance(currentDuration: Long, donwX: Float, nowX: Float){
         val deltaX = nowX - donwX
-        val totalTime = mVideoPlayer?.getDuration()?: 0L
+        if(abs(deltaX) < 5) return
+        val totalTime = mContainer?.getDuration()?: 0L
         if(totalTime <= 0) return
+        if(mContainer?.getControlWrapper() == null) return
+        val viewWidth = mContainer?.getControlWrapper()?.getViewWidth()?: 1
 
-        val deltaPosition = deltaX / baiseController.getViewWidth() * totalTime
+        val deltaPosition = deltaX / viewWidth * totalTime
         var targetTime: Long = currentDuration +
                 (if (totalTime >= 60 * 60 * 1000) {
                     (deltaPosition / 8f).toLong()
@@ -116,31 +107,62 @@ class GestureController(val baiseController: IBaiseController) : IController{
         if(targetTime < 0) targetTime = 0
         if(targetTime > totalTime) targetTime = totalTime
 
-        baiseController.scrollSeekBar(targetTime)
+        mContainer?.getControlWrapper()?.scrollSeekBar(targetTime)
         }
 
-    override fun attachPlayer(videoPlayer: AbstractVideoPlayer) {
-        this.mVideoPlayer = videoPlayer
-    }
-
     fun onLeftVerticalDistance(donwY: Float, nowY: Float){
+        mContainer?.getControlWrapper()?.hideMenu()
 
+        val deltaX = donwY - nowY
+        val height = mContainer?.getControlWrapper()?.getViewWidth()?: 1
+        val changePercent = deltaX * 2 / height
+        mContainer?.getBrightController()?.show(changePercent)
     }
 
     fun onRightVerticalDistance(donwY: Float, nowY: Float){
+        mContainer?.getControlWrapper()?.hideMenu()
 
+        val deltaX = donwY - nowY
+        val height = mContainer?.getControlWrapper()?.getViewWidth()?: 1
+        val changePercent = deltaX * 2 / height
+        mContainer?.getVolumeController()?.show(changePercent)
     }
 
     fun onGestureEnd(){
-
+        mContainer?.getVolumeController()?.hide()
+        mContainer?.getBrightController()?.hide()
     }
 
     private fun isLeft(x: Number): Boolean{
-        return x.toFloat() < baiseController.getViewWidth() / 2f
+        return x.toFloat() < (mContainer?.getControlWrapper()?.getViewWidth()?: 1) / 2f
     }
 
     private fun isRight(x: Number): Boolean{
-        return x.toFloat() > baiseController.getViewWidth() / 2
+        return x.toFloat() > (mContainer?.getControlWrapper()?.getViewWidth()?: 1) / 2f
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun attach(container: VideoPlayerView) {
+        this.mContainer = container
+
+        this.mContainer?.getControlWrapper()?.setOnTouchListener { v, event ->
+            when(event.action){
+                MotionEvent.ACTION_UP,
+                MotionEvent.ACTION_CANCEL ->{
+                    isHorizenalDistance = false
+                    isRightVerticalDistance = false
+                    isLeftVerticalDistance = false
+                    onGestureEnd()
+                }
+            }
+            mGestureDetector.onTouchEvent(event)
+
+            return@setOnTouchListener true
+        }
+    }
+
+    override fun detach() {
+
     }
 
 }

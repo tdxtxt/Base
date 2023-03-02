@@ -160,17 +160,32 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     }
 
     override fun seekTo(time: Long) {
-        mMediaPlayer?.seekTo(time)
+        if(time > getDuration()){
+            mMediaPlayer?.seekTo(getDuration())
+        }else if(time < 0){
+            mMediaPlayer?.seekTo(0)
+        }else{
+            mMediaPlayer?.seekTo(time)
+        }
     }
 
     override fun accurateSeekTo(time: Long) {
-        mMediaPlayer?.seekTo(time)
+        if(time > getDuration()){
+            mMediaPlayer?.seekTo(getDuration())
+        }else if(time < 0){
+            mMediaPlayer?.seekTo(0)
+        }else{
+            mMediaPlayer?.seekTo(time)
+        }
     }
 
     override fun release() {
         stopProgress()
+        mMediaPlayer?.pause()
         mMediaPlayer?.release()
         mMediaPlayer == null
+        setPlayerEventListener(null)
+        removePlayerEventListener()
     }
 
     override fun getCurrentDuration(): Long {
@@ -204,6 +219,7 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     override fun setSpeed(speed: Float) {
         multiple = speed
         mMediaPlayer?.setPlaybackSpeed(speed)
+        shendMultipleChangeEvent(speed)
     }
 
     override fun getSpeed(): Float {

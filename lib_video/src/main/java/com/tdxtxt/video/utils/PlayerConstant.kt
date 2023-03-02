@@ -12,8 +12,9 @@ import java.lang.annotation.RetentionPolicy
  */
 object PlayerConstant {
 
-    const val EVENT_PLAYING = 0
-    const val EVENT_PASUE = 1
+    const val VERITCAL = 0
+    const val HORIZONTA_REVERSE = 1
+    const val HORIZONTA_FORWARD = 2
 
 
 
@@ -56,6 +57,7 @@ object PlayerConstant {
             var STATE_BUFFERING = 7
 
             var CHANGE_VIDEO_SIZE = 11
+            var CHANGE_MULTIPLE = 12
         }
     }
 }

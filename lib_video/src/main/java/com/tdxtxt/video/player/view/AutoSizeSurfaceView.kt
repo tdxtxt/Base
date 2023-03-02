@@ -32,9 +32,13 @@ class AutoSizeSurfaceView  : SurfaceView {
         var resultWidthSpecSize = widthSpecSize
         var resultHeightSpecSize = heightSpecSize
 
-
         if(mVideoWidth > 0 && mVideoHeight > 0){
-            val videoRatio = mVideoHeight.toFloat() / mVideoWidth.toFloat()
+            if (mVideoWidth * heightSpecSize < widthSpecSize * mVideoHeight) {
+                resultWidthSpecSize = heightSpecSize * mVideoWidth / mVideoHeight
+            } else if (mVideoWidth * heightSpecSize > widthSpecSize * mVideoHeight) {
+                resultHeightSpecSize = widthSpecSize * mVideoHeight / mVideoWidth
+            }
+            /*val videoRatio = mVideoHeight.toFloat() / mVideoWidth.toFloat()
 
             if(widthSpecSize > 0 && heightSpecSize > 0){
                 val viewRatio = heightSpecSize.toFloat() / widthSpecSize.toFloat()
@@ -53,7 +57,7 @@ class AutoSizeSurfaceView  : SurfaceView {
                         resultHeightSpecSize = (heightSpecSize * videoRatio / viewRatio).toInt()
                     }
                 }
-            }
+            }*/
         }
         setMeasuredDimension(resultWidthSpecSize, resultHeightSpecSize)
     }

@@ -7,21 +7,22 @@
     tools:parentTag="android.widget.FrameLayout">
 
     <com.tdxtxt.video.player.view.AutoSizeSurfaceView
-        android:id="@+id/baise_surface"
+        android:id="@+id/wrapper_surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         tools:visibility="gone" />
 
     <ImageView
-        android:id="@+id/baise_cover"
+        android:id="@+id/wrapper_cover"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <FrameLayout
-        android:id="@+id/baise_buffer"
+        android:id="@+id/wrapper_buffer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -35,32 +36,51 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/baise_menu"
+        android:id="@+id/wrapper_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:visibility="visible"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@drawable/libvideo_navigationbar_top"
-            android:orientation="horizontal"
             android:padding="12dp">
 
             <TextView
+                android:id="@+id/wrapper_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
                 android:drawableStart="@mipmap/libvideo_ic_back"
                 android:drawablePadding="8dp"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
+                android:gravity="center"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
                 android:textSize="16dp"
                 tools:text="视频标题" />
-        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/wrapper_multiple"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:background="@drawable/libvideo_shape_round_80000000_16dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="6dp"
+                    android:text="1.0X"
+                    android:textColor="@android:color/white"
+                    android:textSize="11dp" />
+            </LinearLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,6 +95,7 @@
                 android:layout_weight="1" />
 
             <ImageView
+                android:id="@+id/wrapper_backward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/libvideo_ic_backward" />
@@ -85,7 +106,7 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/baise_switch"
+                android:id="@+id/wrapper_toggleplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/libvideo_ic_playing" />
@@ -96,6 +117,7 @@
                 android:layout_weight="1" />
 
             <ImageView
+                android:id="@+id/wrapper_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/libvideo_ic_forward" />
@@ -116,13 +138,13 @@
             android:padding="12dp">
 
             <ImageView
-                android:id="@+id/baise_switch_small"
+                android:id="@+id/wrapper_toggleplay_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/libvideo_ic_playing_small" />
 
             <TextView
-                android:id="@+id/tv_current_time"
+                android:id="@+id/wrapper_current_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -142,13 +164,13 @@
                     android:background="@android:color/transparent"
                     android:max="1000"
                     android:maxHeight="2dp"
-                    tools:progress="500"
                     android:progressDrawable="@drawable/libvideo_seekbar"
-                    android:thumb="@drawable/libvideo_seekbar_thumb" />
+                    android:thumb="@drawable/libvideo_seekbar_thumb"
+                    tools:progress="500" />
             </FrameLayout>
 
             <TextView
-                android:id="@+id/tv_total_time"
+                android:id="@+id/wrapper_total_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -157,9 +179,10 @@
                 android:textSize="10dp" />
 
             <ImageView
+                android:id="@+id/wrapper_toggle_orient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/libvideo_ic_scale_large" />
+                android:src="@mipmap/libvideo_ic_orient_large" />
         </LinearLayout>
     </FrameLayout>
 

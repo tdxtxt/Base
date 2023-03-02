@@ -47,6 +47,7 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
 
     fun setPlayerEventListener(listener: VideoPlayerListener?){
         if(listener == null){
+            mPlayerEventListenerRef?.clear()
             mPlayerEventListenerRef = null
             return
         }
@@ -58,6 +59,14 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
     fun addPlayerEventListener(listener: VideoPlayerListener) {
         if(mPlayerEventListenerListRef == null) mPlayerEventListenerListRef = WeakHashMap()
         mPlayerEventListenerListRef?.put(listener, 0)
+    }
+
+    fun removePlayerEventListener(listener: VideoPlayerListener?){
+        mPlayerEventListenerListRef?.remove(listener)
+    }
+
+    fun removePlayerEventListener(){
+        mPlayerEventListenerListRef?.clear()
     }
 
     private fun sendPlayerEvent(@PlayerConstant.PlaylerState state: Int, value: Any? = null){
@@ -106,6 +115,10 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
 
     protected fun sendVideoSizeChangedEvent(width: Int, height: Int){
         sendPlayerEvent(PlayerConstant.PlaylerState.CHANGE_VIDEO_SIZE)
+    }
+
+    protected fun shendMultipleChangeEvent(value: Float){
+        sendPlayerEvent(PlayerConstant.PlaylerState.CHANGE_MULTIPLE, value)
     }
 
 }

@@ -179,6 +179,7 @@ class AndroidMediaPlayer constructor(val context: Context?) : AbstractVideoPlaye
                 mMediaPlayer?.playbackParams?.apply {
                     setSpeed(speed)
                     mMediaPlayer?.playbackParams = this
+                    shendMultipleChangeEvent(speed)
                 }
             } catch (e: Exception) {
                 sendErrorEvent(e.message)
