@@ -16,7 +16,8 @@
 * 支持QQ分享、登录功能。
 
 
-### 添加依赖
+### 添加仓库依赖
+      maven { url "https://s01.oss.sonatype.org/content/groups/public" }
 
 #### 基础库CommonLib
 
