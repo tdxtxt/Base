@@ -26,6 +26,10 @@
 
       implementation 'io.github.tdxtxt:net_beta:0.0.2-release'
 
+#### 视频组件库VideoLib
+
+     implementation 'io.github.tdxtxt:video_beta:0.0.1-release'
+
 #### 三方分享、支付、登录库Social
 * 平台核心库SDK（使用单个平台时必须添加核心库SDK）
 
