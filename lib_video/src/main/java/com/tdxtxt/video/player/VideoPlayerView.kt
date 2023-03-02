@@ -11,10 +11,10 @@ import android.widget.FrameLayout
 import com.tdxtxt.video.VideoPlayerManager
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 import com.tdxtxt.video.kernel.inter.VideoPlayerListener
-import com.tdxtxt.video.player.view.ControlWrapperView
 import com.tdxtxt.video.player.controller.GestureController
 import com.tdxtxt.video.player.controller.OrientationController
 import com.tdxtxt.video.player.view.BrightControllerView
+import com.tdxtxt.video.player.view.ControlWrapperView
 import com.tdxtxt.video.player.view.MultipleControllerView
 import com.tdxtxt.video.player.view.VolumeControllerView
 import com.tdxtxt.video.utils.PlayerConstant

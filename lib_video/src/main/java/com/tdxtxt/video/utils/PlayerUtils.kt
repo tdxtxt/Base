@@ -1,16 +1,11 @@
 package com.tdxtxt.video.utils
 
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
-import com.yc.video.controller.BaseVideoController
-import com.yc.video.player.VideoPlayerHelper
-import kotlinx.android.synthetic.main.libvideo_view_control_wrapper.view.*
 import java.util.concurrent.TimeUnit
 
 /**

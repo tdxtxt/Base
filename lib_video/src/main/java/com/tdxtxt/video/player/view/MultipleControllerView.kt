@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.tdxtxt.video.R
-import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.adapter.MultipleAdapter
 import com.tdxtxt.video.player.controller.IControllerMultiple

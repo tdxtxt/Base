@@ -1,8 +1,5 @@
 package com.tdxtxt.video.utils
 
-import java.lang.annotation.Retention
-import java.lang.annotation.RetentionPolicy
-
 /**
  * <pre>
  *     author : ton

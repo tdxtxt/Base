@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import com.tdxtxt.video.R
-import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerWrapper
 import com.tdxtxt.video.utils.PlayerUtils

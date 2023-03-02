@@ -1,6 +1,5 @@
 package com.tdxtxt.video.player
 
-import android.content.res.Configuration
 import android.view.View
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 
