@@ -45,13 +45,14 @@ object PlayerConstant {
     annotation class PlaylerState {
         companion object {
             var STATE_ERROR = -1
-            var STATE_IDLE = 0
+            var STATE_STOP = 0
             var STATE_PREPARED = 1
             var STATE_START = 2
             var STATE_PLAYING = 3
             var STATE_PAUSED = 4
             var STATE_COMPLETED = 5
             var STATE_BUFFERING = 7
+            var STATE_RELEASE = 8
 
             var CHANGE_VIDEO_SIZE = 11
             var CHANGE_MULTIPLE = 12

@@ -1,7 +1,5 @@
 package com.tdxtxt.video.kernel.inter
 
-import android.view.Surface
-import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.tdxtxt.video.utils.PlayerConstant
 import java.lang.ref.WeakReference
@@ -89,8 +87,8 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
         sendPlayerEvent(PlayerConstant.PlaylerState.STATE_COMPLETED)
     }
 
-    protected fun sendIdleEvent(){
-        sendPlayerEvent(PlayerConstant.PlaylerState.STATE_IDLE)
+    protected fun sendStopEvent(){
+        sendPlayerEvent(PlayerConstant.PlaylerState.STATE_STOP)
     }
 
     protected fun sendStartEvent(){
@@ -117,8 +115,12 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
         sendPlayerEvent(PlayerConstant.PlaylerState.CHANGE_VIDEO_SIZE)
     }
 
-    protected fun shendMultipleChangeEvent(value: Float){
+    protected fun sendMultipleChangeEvent(value: Float){
         sendPlayerEvent(PlayerConstant.PlaylerState.CHANGE_MULTIPLE, value)
+    }
+
+    protected fun sendReleaseEvent(){
+        sendPlayerEvent(PlayerConstant.PlaylerState.STATE_RELEASE)
     }
 
 }

@@ -51,7 +51,6 @@ class GestureController() : IController {
                 if(isLeftVerticalDistance || isRightVerticalDistance){
 
                 }else{
-                    isHorizenalDistance = true
                     onHorizontalDistance(currentDuration, e1?.x ?: 0f, e2?.x ?: 0f)
                 }
             }else{//垂直滑动
@@ -59,10 +58,8 @@ class GestureController() : IController {
 
                 }else{
                     if(isLeft(xDown)){
-                        isLeftVerticalDistance = true
                         onLeftVerticalDistance(e1?.y ?: 0f, e2?.y ?: 0f)
                     }else if(isRight(xDown)){
-                        isRightVerticalDistance = true
                         onRightVerticalDistance(e1?.y ?: 0f, e2?.y ?: 0f)
                     }
                 }
@@ -86,6 +83,8 @@ class GestureController() : IController {
     })
 
     fun onHorizontalDistance(currentDuration: Long, donwX: Float, nowX: Float){
+        isHorizenalDistance = true
+
         val deltaX = nowX - donwX
         if(abs(deltaX) < 5) return
         val totalTime = mContainer?.getDuration()?: 0L
@@ -107,10 +106,18 @@ class GestureController() : IController {
         if(targetTime < 0) targetTime = 0
         if(targetTime > totalTime) targetTime = totalTime
 
-        mContainer?.getControlWrapper()?.scrollSeekBar(targetTime)
+        val progress = targetTime.toFloat() / totalTime.toFloat()
+        mContainer?.getControlWrapper()?.apply {
+            setTrackingSeekBar(true)
+            updateSeekBar(progress)
+            updateTime(targetTime, totalTime)
+            showMenu()
         }
+    }
 
     fun onLeftVerticalDistance(donwY: Float, nowY: Float){
+        isLeftVerticalDistance = true
+
         mContainer?.getControlWrapper()?.hideMenu()
 
         val deltaX = donwY - nowY
@@ -120,6 +127,8 @@ class GestureController() : IController {
     }
 
     fun onRightVerticalDistance(donwY: Float, nowY: Float){
+        isRightVerticalDistance = true
+
         mContainer?.getControlWrapper()?.hideMenu()
 
         val deltaX = donwY - nowY
@@ -129,8 +138,15 @@ class GestureController() : IController {
     }
 
     fun onGestureEnd(){
-        mContainer?.getVolumeController()?.hide()
-        mContainer?.getBrightController()?.hide()
+        if(isRightVerticalDistance){
+            mContainer?.getVolumeController()?.hide()
+        }
+        if(isLeftVerticalDistance){
+            mContainer?.getBrightController()?.hide()
+        }
+        if(isHorizenalDistance){
+            mContainer?.getControlWrapper()?.setTrackingSeekBar(false)
+        }
     }
 
     private fun isLeft(x: Number): Boolean{
@@ -149,10 +165,10 @@ class GestureController() : IController {
             when(event.action){
                 MotionEvent.ACTION_UP,
                 MotionEvent.ACTION_CANCEL ->{
+                    onGestureEnd()
                     isHorizenalDistance = false
                     isRightVerticalDistance = false
                     isLeftVerticalDistance = false
-                    onGestureEnd()
                 }
             }
             mGestureDetector.onTouchEvent(event)

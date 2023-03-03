@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Build
 import android.view.SurfaceView
 import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
-import com.tdxtxt.video.utils.PlayerConstant
 
 /**
  * <pre>
@@ -119,6 +118,11 @@ class AndroidMediaPlayer constructor(val context: Context?) : AbstractVideoPlaye
         mMediaPlayer?.setOnPreparedListener(null)
         mMediaPlayer?.setOnVideoSizeChangedListener(null)
         mMediaPlayer?.release()//是否需要再子线程中释放呢？
+        mMediaPlayer = null
+    }
+
+    override fun isRelease(): Boolean {
+        return mMediaPlayer == null
     }
 
     override fun getCurrentDuration(): Long {
@@ -179,7 +183,7 @@ class AndroidMediaPlayer constructor(val context: Context?) : AbstractVideoPlaye
                 mMediaPlayer?.playbackParams?.apply {
                     setSpeed(speed)
                     mMediaPlayer?.playbackParams = this
-                    shendMultipleChangeEvent(speed)
+                    sendMultipleChangeEvent(speed)
                 }
             } catch (e: Exception) {
                 sendErrorEvent(e.message)

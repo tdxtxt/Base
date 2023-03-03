@@ -1,6 +1,7 @@
 package com.tdxtxt.video.player
 
 import android.view.View
+import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 
 /**
@@ -11,6 +12,10 @@ import com.tdxtxt.video.kernel.inter.IVideoPlayer
  * </pre>
  */
 interface IVideoView : IVideoPlayer {
+    /**
+     * 设置播放内核
+     */
+    fun setVideoPlayer(player: AbstractVideoPlayer)
 
     /**
      * 显示自定义view

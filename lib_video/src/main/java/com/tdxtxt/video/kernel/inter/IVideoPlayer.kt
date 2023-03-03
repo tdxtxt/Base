@@ -73,6 +73,12 @@ interface IVideoPlayer {
      */
     fun release()
 
+
+    /**
+     * 是否释放
+     */
+    fun isRelease(): Boolean
+
     /**
      * 获取当前播放的位置
      * @return  获取当前播放的位置
@@ -84,6 +90,17 @@ interface IVideoPlayer {
      * @return  获取视频总时长
      */
     fun getDuration(): Long
+
+    /**
+     * 获取当前播放百分比
+     */
+    fun getCurrentPercent(): Float {
+        val totalTime = getDuration()
+        if(totalTime == 0L) return 0f
+        val percent = getCurrentDuration() / totalTime.toFloat()
+        if(percent > 1) return 1f
+        return percent
+    }
 
     /**
      * 获取缓冲百分比

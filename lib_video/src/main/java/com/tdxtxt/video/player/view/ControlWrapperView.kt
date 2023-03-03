@@ -32,18 +32,19 @@ class ControlWrapperView : FrameLayout,
     private fun initView(){
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         LayoutInflater.from(context).inflate(R.layout.libvideo_view_control_wrapper, this, true)
-
+        if(isInEditMode) setBackgroundResource(android.R.color.black)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+
             override fun onProgressChanged(skb: SeekBar?, progress: Int, fromUser: Boolean) {
-                scrollValueProgress(progress)
+                if(mIsTrackingSeekBar) scrollValueProgress(progress)
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 removeCallbacks(mFadeRunnable)
-                mIsTrackingSeekBar = true
+                setTrackingSeekBar(true)
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 postDelayed(mFadeRunnable, mDefaultFadeTimeout)
-                mIsTrackingSeekBar = false
+                setTrackingSeekBar(false)
             }
         })
 
@@ -56,21 +57,17 @@ class ControlWrapperView : FrameLayout,
         clickView(wrapper_multiple)
 
         updateTogglePlay(mContainer?.isPlaying() == true)
-        toggleMenu()
+        if(!isInEditMode){
+            toggleMenu()
+        }
     }
 
     private fun scrollValueProgress(progress: Int){
-        val rate = progress.toFloat() / seekBar.max.toFloat()
+        val percent = progress.toFloat() / seekBar.max.toFloat()
         val totalTime = mContainer?.getDuration()?: 0
-        val nowTime = totalTime * rate
-        scrollTimeProgress(nowTime.toLong())
-    }
-
-    private fun scrollTimeProgress(time: Long){
-        mContainer?.seekTo(time)
-        if(mIsTrackingSeekBar){
-            changeProgress(time)
-        }
+        val nowTime = (totalTime * percent).toLong()
+        mContainer?.seekTo(nowTime)
+        updateTime(nowTime)
     }
 
     private fun clickView(view: View?){
@@ -116,21 +113,25 @@ class ControlWrapperView : FrameLayout,
         }
     }
 
-    override fun scrollSeekBar(time: Long){
-        val totalTime = mContainer?.getDuration()?: 0
-        val rate = time.toFloat() / totalTime.toFloat()
-        val progress = seekBar.max * rate
-        seekBar.progress = progress.toInt()
-        changeProgress(time)
-        showMenu()
-    }
-
     override fun toggleMenu(){
         removeCallbacks(mFadeRunnable)
         if(wrapper_menu.visibility == View.VISIBLE){
             hideMenu()
         }else{
             showMenu()
+        }
+    }
+
+    var isPlayingTrackingSeekBar: Boolean? = null
+    override fun setTrackingSeekBar(isTrackingSeekBar: Boolean) {
+        if(isPlayingTrackingSeekBar == isTrackingSeekBar) return
+        this.mIsTrackingSeekBar = isTrackingSeekBar
+        if(isTrackingSeekBar){
+            isPlayingTrackingSeekBar = mContainer?.isPlaying()
+            if(isPlayingTrackingSeekBar == true) mContainer?.pause()
+        }else{
+            if(isPlayingTrackingSeekBar == true) mContainer?.start()
+            isPlayingTrackingSeekBar = null
         }
     }
 
@@ -145,6 +146,14 @@ class ControlWrapperView : FrameLayout,
         mFadeRunnable.run()
     }
 
+    override fun bindSurface() {
+        mContainer?.getVideoPlayer()?.bindSurface(wrapper_surface)
+    }
+
+    override fun unBindSurface() {
+        mContainer?.getVideoPlayer()?.unbindSurface()
+    }
+
     override fun getViewWidth(): Int {
         return width
     }
@@ -155,12 +164,12 @@ class ControlWrapperView : FrameLayout,
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        mContainer?.getVideoPlayer()?.bindSurface(wrapper_surface)
+        bindSurface()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        mContainer?.getVideoPlayer()?.unbindSurface()
+        unBindSurface()
     }
 
     override fun attach(container: VideoPlayerView) {
@@ -169,7 +178,7 @@ class ControlWrapperView : FrameLayout,
     }
 
     override fun detach() {
-
+        unBindSurface()
     }
 
     override fun updateTogglePlay(isPlaying: Boolean) {
@@ -198,21 +207,23 @@ class ControlWrapperView : FrameLayout,
         wrapper_buffer.visibility = if(rate < 1) View.VISIBLE else View.GONE
     }
 
-    override fun changeVideoSize(widthSize: Int, heightSize: Int) {
+    override fun changeVideoSize(widthSize: Int?, heightSize: Int?) {
         wrapper_surface.setVideoSize(widthSize, heightSize)
     }
 
-    override fun changeMultiple(value: Float) {
+    override fun updateMultiple(value: Float) {
         wrapper_multiple.text = PlayerUtils.formatMultiple(value)
     }
 
-    override fun changeProgress(current: Long) {
-        wrapper_current_time.text = PlayerUtils.formatTime(current)
+    override fun updateTime(current: Long?, total: Long?) {
+        wrapper_current_time.text = PlayerUtils.formatTime(current?: 0)
+        if(total != null) wrapper_total_time.text = PlayerUtils.formatTime(total)
     }
 
-    override fun updateTime(current: Long, total: Long) {
-        wrapper_current_time.text = PlayerUtils.formatTime(current)
-        wrapper_total_time.text = PlayerUtils.formatTime(total)
+    override fun updateSeekBar(progress: Float?) {
+        progress?.apply {
+            seekBar.progress = (seekBar.max * this).toInt()
+        }
     }
 
 }

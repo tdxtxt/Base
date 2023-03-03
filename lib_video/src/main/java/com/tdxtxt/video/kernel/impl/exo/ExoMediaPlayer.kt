@@ -22,8 +22,9 @@ import com.tdxtxt.video.utils.PlayerUtils
  *     desc   :
  * </pre>
  */
-class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Listener {
+class ExoMediaPlayer(val context: Context?) : AbstractVideoPlayer(), Player.Listener {
     private var mMediaPlayer: ExoPlayer? = null
+    private var mPath: String? = null
     private var multiple = 1f
     private var mLastSecond = 0
     private val mIntervalTime = 1000L
@@ -41,9 +42,12 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     }
 
     override fun initPlayer() {
-        mMediaPlayer = ExoPlayer.Builder(context)
-            .setMediaSourceFactory(DefaultMediaSourceFactory(context))
-            .build()
+        try{
+            if(context == null) return
+            mMediaPlayer = ExoPlayer.Builder(context)
+                .setMediaSourceFactory(DefaultMediaSourceFactory(context))
+                .build()
+        }catch (e: Exception){}
 
         mMediaPlayer?.addListener(this)
         mMediaPlayer?.addAnalyticsListener(EventLogger(null, "video"))
@@ -62,7 +66,7 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
 
     override fun onPlaybackStateChanged(playbackState: Int) {
         when(playbackState){
-            Player.STATE_IDLE -> sendIdleEvent() //这是初始状态，即播放器停止和播放失败时的状态。
+            Player.STATE_IDLE -> sendStopEvent() //这是初始状态，即播放器停止和播放失败时的状态。
             Player.STATE_BUFFERING -> sendBufferEvent(0f) //由于需要加载更多数据，播放器无法立即从当前位置播放
             Player.STATE_READY -> {//播放器可以立即从当前位置播放。
                 sendBufferEvent(1f)
@@ -84,6 +88,7 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     }
 
     override fun bindSurface(surfaceView: SurfaceView) {
+        unbindSurface()
          mMediaPlayer?.setVideoSurfaceView(surfaceView)
     }
 
@@ -100,7 +105,10 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     }
 
     override fun setDataSource(path: String?) {
+        if(mPath == path) return
+
         path?.let {
+            mPath = it
             mMediaPlayer?.setMediaItem(MediaItem.fromUri(path))
             mMediaPlayer?.setVideoScalingMode(MediaCodec.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
         }
@@ -151,7 +159,7 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     override fun stop() {
         mMediaPlayer?.stop()
         mMediaPlayer?.clearMediaItems()
-        sendIdleEvent()
+        sendStopEvent()
         stopProgress()
     }
 
@@ -181,11 +189,16 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
 
     override fun release() {
         stopProgress()
-        mMediaPlayer?.pause()
+        stop()
+        sendReleaseEvent()
         mMediaPlayer?.release()
-        mMediaPlayer == null
+        mMediaPlayer = null
         setPlayerEventListener(null)
         removePlayerEventListener()
+    }
+
+    override fun isRelease(): Boolean {
+        return mMediaPlayer == null
     }
 
     override fun getCurrentDuration(): Long {
@@ -219,7 +232,7 @@ class ExoMediaPlayer(val context: Context) : AbstractVideoPlayer(), Player.Liste
     override fun setSpeed(speed: Float) {
         multiple = speed
         mMediaPlayer?.setPlaybackSpeed(speed)
-        shendMultipleChangeEvent(speed)
+        sendMultipleChangeEvent(speed)
     }
 
     override fun getSpeed(): Float {

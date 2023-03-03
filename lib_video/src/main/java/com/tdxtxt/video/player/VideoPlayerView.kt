@@ -3,12 +3,13 @@ package com.tdxtxt.video.player
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.content.res.AssetFileDescriptor
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
-import com.tdxtxt.video.VideoPlayerManager
+import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 import com.tdxtxt.video.kernel.inter.VideoPlayerListener
 import com.tdxtxt.video.player.controller.GestureController
@@ -29,90 +30,45 @@ import com.tdxtxt.video.utils.PlayerUtils
  */
 class VideoPlayerView constructor(
     context: Context,
-    val mManager: VideoPlayerManager,
     attributeSet: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayout(context, attributeSet, defStyleAttr), IVideoPlayer by mManager.player,
+) : FrameLayout(context, attributeSet, defStyleAttr), IVideoPlayer,
     IVideoView, VideoPlayerListener {
     private var mWrapperView: ControlWrapperView
-    private var mOrientationController: OrientationController
-    private var mGestureController: GestureController
-    private var mMultipleControllerView: MultipleControllerView
-    private var mVolumeControllerView: VolumeControllerView
-    private var mBrightControllerView: BrightControllerView
+    private var mVideoPlayer: AbstractVideoPlayer? = null
+    private lateinit var mOrientationController: OrientationController
+    private lateinit var mGestureController: GestureController
+    private lateinit var mMultipleControllerView: MultipleControllerView
+    private lateinit var mVolumeControllerView: VolumeControllerView
+    private lateinit var mBrightControllerView: BrightControllerView
 
     private var mOrientationType = PlayerConstant.VERITCAL
 
-    constructor(context: Context) : this(context, VideoPlayerManager.newInstance(), null, 0)
-    constructor(context: Context, attributeSet: AttributeSet) : this(context, VideoPlayerManager.newInstance(), attributeSet, 0)
+    constructor(context: Context) : this(context, null, 0)
+    constructor(context: Context, attributeSet: AttributeSet) : this(context, attributeSet, 0)
 
     init{
-        mManager.player.setPlayerEventListener(this)
         mWrapperView = ControlWrapperView(context)
             .apply { attach(this@VideoPlayerView) }
-        mGestureController = GestureController()
-            .apply { attach(this@VideoPlayerView) }
-        mOrientationController = OrientationController()
-            .apply { attach(this@VideoPlayerView) }
-        mMultipleControllerView = MultipleControllerView(context)
-            .apply { attach(this@VideoPlayerView) }
-        mVolumeControllerView = VolumeControllerView(context)
-            .apply { attach(this@VideoPlayerView) }
-        mBrightControllerView = BrightControllerView(context)
-            .apply { attach(this@VideoPlayerView) }
-
+        if(!isInEditMode){
+            mGestureController = GestureController()
+                .apply { attach(this@VideoPlayerView) }
+            mOrientationController = OrientationController()
+                .apply { attach(this@VideoPlayerView) }
+            mMultipleControllerView = MultipleControllerView(context)
+                .apply { attach(this@VideoPlayerView) }
+            mVolumeControllerView = VolumeControllerView(context)
+                .apply { attach(this@VideoPlayerView) }
+            mBrightControllerView = BrightControllerView(context)
+                .apply { attach(this@VideoPlayerView) }
+        }
     }
 
-    fun getVideoPlayerManager() = mManager
-    fun getVideoPlayer() = mManager.getVideoPlayer()
+    fun getVideoPlayer() = mVideoPlayer
     fun getControlWrapper() = mWrapperView
     fun getMultipleContronller() = mMultipleControllerView
     fun getVolumeController() = mVolumeControllerView
     fun getBrightController() = mBrightControllerView
-
-    override fun showCustomView(view: View) {
-        TODO("Not yet implemented")
-    }
-
-    override fun hideCustomView() {
-        TODO("Not yet implemented")
-    }
-
-    override fun setCover(resId: Int) {
-        mWrapperView.updateCover(resId)
-    }
-
-    override fun setRound(round: Float) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPlayStateChanged(@PlayerConstant.PlaylerState state: Int, value: Any?) {
-        when(state){
-            PlayerConstant.PlaylerState.STATE_PREPARED -> {
-                mWrapperView.updateTime(getVideoPlayer().getCurrentDuration(), getVideoPlayer().getDuration())
-            }
-            PlayerConstant.PlaylerState.STATE_START -> {
-                keepScreenOn = true
-                mWrapperView.updateTogglePlay(false)
-            }
-            PlayerConstant.PlaylerState.STATE_PAUSED -> {
-                keepScreenOn = false
-                mWrapperView.updateTogglePlay(true)
-            }
-            PlayerConstant.PlaylerState.STATE_BUFFERING -> {
-                mWrapperView.updateBufferProgress(if (value is Float) value else 1f)
-            }
-            PlayerConstant.PlaylerState.STATE_PLAYING -> {
-                mWrapperView.changeProgress(getVideoPlayer().getCurrentDuration())
-            }
-            PlayerConstant.PlaylerState.CHANGE_VIDEO_SIZE -> {
-                mWrapperView.changeVideoSize(getVideoPlayer().getVideoWidth(), getVideoPlayer().getVideoHeight())
-            }
-            PlayerConstant.PlaylerState.CHANGE_MULTIPLE -> {
-                mWrapperView.changeMultiple(if(value is Float) value else 1f)
-            }
-        }
-    }
 
     fun isFullScreen() = isReverseFullScreen() || isForwardFullScreen()
     fun isReverseFullScreen() = mOrientationType == PlayerConstant.HORIZONTA_REVERSE
@@ -181,10 +137,149 @@ class VideoPlayerView constructor(
         }
     }
 
+    override fun setVideoPlayer(player: AbstractVideoPlayer) {
+        this.mVideoPlayer = player
+        mVideoPlayer?.setPlayerEventListener(this)
+        mWrapperView.bindSurface()
+        mWrapperView.updateMultiple(mVideoPlayer?.getSpeed()?: 1f)
+    }
+
+    override fun showCustomView(view: View) {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideCustomView() {
+        TODO("Not yet implemented")
+    }
+
+    override fun setCover(resId: Int) {
+        mWrapperView.updateCover(resId)
+    }
+
+    override fun setRound(round: Float) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setDataSource(path: String?) {
+        mVideoPlayer?.setDataSource(path)
+    }
+
+    override fun setDataSource(fd: AssetFileDescriptor?) {
+        mVideoPlayer?.setDataSource(fd)
+    }
+
+    override fun prepare() {
+        mVideoPlayer?.prepare()
+    }
+
+    override fun start() {
+        mVideoPlayer?.start()
+    }
+
+    override fun reStart() {
+        mVideoPlayer?.reStart()
+    }
+
+    override fun pause() {
+        mVideoPlayer?.pause()
+    }
+
+    override fun togglePlay() {
+        mVideoPlayer?.togglePlay()
+    }
+
+    override fun stop() {
+        mVideoPlayer?.stop()
+    }
+
+    override fun isPlaying(): Boolean {
+        return mVideoPlayer?.isPlaying()?: false
+    }
+
+    override fun seekTo(time: Long) {
+        mVideoPlayer?.seekTo(time)
+    }
+
+    override fun accurateSeekTo(time: Long) {
+        mVideoPlayer?.accurateSeekTo(time)
+    }
+
+    override fun onPlayStateChanged(@PlayerConstant.PlaylerState state: Int, value: Any?) {
+        when(state){
+            PlayerConstant.PlaylerState.STATE_PREPARED -> {
+                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercent())
+                mWrapperView.updateTime(getVideoPlayer()?.getCurrentDuration(), getVideoPlayer()?.getDuration())
+            }
+            PlayerConstant.PlaylerState.STATE_START -> {
+                keepScreenOn = true
+                mWrapperView.updateTogglePlay(false)
+            }
+            PlayerConstant.PlaylerState.STATE_PAUSED -> {
+                keepScreenOn = false
+                mWrapperView.updateTogglePlay(true)
+            }
+            PlayerConstant.PlaylerState.STATE_BUFFERING -> {
+                mWrapperView.updateBufferProgress(if (value is Float) value else 1f)
+            }
+            PlayerConstant.PlaylerState.STATE_PLAYING -> {
+                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercent())
+                mWrapperView.updateTime(getVideoPlayer()?.getCurrentDuration(), getVideoPlayer()?.getDuration())
+            }
+            PlayerConstant.PlaylerState.CHANGE_VIDEO_SIZE -> {
+                mWrapperView.changeVideoSize(getVideoPlayer()?.getVideoWidth(), getVideoPlayer()?.getVideoHeight())
+            }
+            PlayerConstant.PlaylerState.CHANGE_MULTIPLE -> {
+                mWrapperView.updateMultiple(if(value is Float) value else 1f)
+            }
+            PlayerConstant.PlaylerState.STATE_RELEASE ->{
+                mOrientationController.detach()
+                mGestureController.detach()
+                mMultipleControllerView.detach()
+            }
+        }
+    }
+
     override fun release() {
-        mManager.release()
-        mOrientationController.detach()
-        mGestureController.detach()
-        mMultipleControllerView.detach()
+        mVideoPlayer?.release()
+    }
+
+    override fun isRelease(): Boolean {
+        return mVideoPlayer?.isRelease()?: true
+    }
+
+    override fun getCurrentDuration(): Long {
+        return mVideoPlayer?.getCurrentDuration()?: 0
+    }
+
+    override fun getDuration(): Long {
+        return mVideoPlayer?.getDuration()?: 0
+    }
+
+    override fun getBufferedPercentage(): Int {
+        return mVideoPlayer?.getBufferedPercentage()?: 0
+    }
+
+    override fun setVolume(volume: Float) {
+        mVideoPlayer?.setVolume(volume)
+    }
+
+    override fun getVolume(): Float {
+        return mVideoPlayer?.getVolume()?: 0f
+    }
+
+    override fun setLooping(isLooping: Boolean) {
+        mVideoPlayer?.setLooping(isLooping)
+    }
+
+    override fun setSpeed(speed: Float) {
+        mVideoPlayer?.setSpeed(speed)
+    }
+
+    override fun getSpeed(): Float {
+        return mVideoPlayer?.getSpeed()?: 1f
+    }
+
+    override fun getTcpSpeed(): Long {
+        return mVideoPlayer?.getTcpSpeed()?: 0
     }
 }

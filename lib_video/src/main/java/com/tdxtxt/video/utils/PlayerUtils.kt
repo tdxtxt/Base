@@ -1,9 +1,11 @@
 package com.tdxtxt.video.utils
 
 import android.app.Activity
+import android.app.Application
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import java.util.concurrent.TimeUnit
@@ -17,6 +19,44 @@ import java.util.concurrent.TimeUnit
  */
 object PlayerUtils {
     private val mHandler = Handler(Looper.getMainLooper())
+
+
+    fun getApplicationByReflect(): Application? {
+        try {
+            val activityThreadClass =
+                Class.forName("android.app.ActivityThread")
+            val thread: Any = getActivityThread() ?: return null
+            val app = activityThreadClass.getMethod("getApplication").invoke(thread) ?: return null
+            return app as Application
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun getActivityThread(): Any? {
+        var activityThread = try {
+            val activityThreadClass = Class.forName("android.app.ActivityThread")
+            activityThreadClass.getMethod("currentActivityThread").invoke(null)
+        } catch (e: java.lang.Exception) {
+            Log.e(
+                "UtilsActivityLifecycle", "getActivityThreadInActivityThreadStaticMethod: " + e.message)
+            null
+        }
+        if(activityThread == null){
+            activityThread = try {
+                val activityThreadClass = Class.forName("android.app.ActivityThread")
+                val sCurrentActivityThreadField =
+                    activityThreadClass.getDeclaredField("sCurrentActivityThread")
+                sCurrentActivityThreadField.isAccessible = true
+                sCurrentActivityThreadField[null]
+            } catch (e: java.lang.Exception) {
+                Log.e("UtilsActivityLifecycle", "getActivityThreadInActivityThreadStaticField: " + e.message)
+                null
+            }
+        }
+        return activityThread
+    }
 
     fun postRunnable(runnable: Runnable, delayMillis: Long){
         mHandler.postDelayed(runnable, delayMillis)
@@ -42,7 +82,8 @@ object PlayerUtils {
         return "${hoursStr}${minutesStr}${secsStr}"
     }
 
-    fun formatMultiple(value: Float): String{
+    fun formatMultiple(value: Float?): String{
+        if(value == null) return "1X"
         val multe = (value * 100).toInt() % 10
         if(multe == 0){
             return String.format("%.1fX", value)

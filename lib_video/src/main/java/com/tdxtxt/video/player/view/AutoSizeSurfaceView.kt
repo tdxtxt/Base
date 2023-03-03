@@ -19,9 +19,9 @@ class AutoSizeSurfaceView  : SurfaceView {
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    fun setVideoSize(videoWidth: Int, videoHeight: Int) {
-        mVideoWidth = videoWidth
-        mVideoHeight = videoHeight
+    fun setVideoSize(videoWidth: Int?, videoHeight: Int?) {
+        mVideoWidth = videoWidth?: 0
+        mVideoHeight = videoHeight?: 0
         requestLayout()
     }
 

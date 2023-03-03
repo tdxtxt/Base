@@ -21,17 +21,19 @@ interface IControllerWrapper : IController {
     fun getViewWidth(): Int
     fun getViewHeight(): Int
     fun toggleMenu()
+    fun setTrackingSeekBar(isTrackingSeekBar: Boolean)
     fun showMenu()
     fun hideMenu()
-    fun scrollSeekBar(time: Long)
+    fun bindSurface()
+    fun unBindSurface()
+    fun updateSeekBar(progress: Float?)
     fun updateTogglePlay(isPlaying: Boolean)
     fun updateFullScreen(isFullScreen: Boolean?)
     fun updateCover(resId: Int)
     fun updateBufferProgress(rate: Float)
-    fun updateTime(current: Long, total: Long)
-    fun changeVideoSize(widthSize: Int, heightSize: Int)
-    fun changeProgress(current: Long)
-    fun changeMultiple(value: Float)
+    fun updateTime(current: Long?, total: Long? = null)
+    fun changeVideoSize(widthSize: Int?, heightSize: Int?)
+    fun updateMultiple(value: Float)
 }
 
 interface IControllerMultiple : IController {
