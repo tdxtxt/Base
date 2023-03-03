@@ -5,11 +5,7 @@ import android.content.Context
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.pingerx.socialgo.ali.alipay.AliPlatform
-import com.pingerx.socialgo.core.SocialGo
-import com.pingerx.socialgo.core.SocialGoConfig
 import com.pingerx.socialgo.core.SocialSdk
-import com.pingerx.socialgo.core.adapter.impl.DefaultGsonAdapter
-import com.pingerx.socialgo.core.adapter.impl.DefaultRequestAdapter
 import com.pingerx.socialgo.qq.QQPlatform
 import com.pingerx.socialgo.wechat.WxPlatform
 import com.tdxtxt.base.net.AppNetProvider
@@ -17,7 +13,6 @@ import com.tdxtxt.baselib.app.ApplicationDelegate
 import com.tdxtxt.baselib.tools.CacheHelper
 import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.net.NetMgr
-import com.tdxtxt.video.VideoPlayerManager
 
 
 /**
@@ -45,7 +40,6 @@ class ApplicationDelegateImpl constructor(val context: Application) : Applicatio
     }
 
     override fun onPrivacyBefore(context: Context) {
-        VideoPlayerManager.init(context)
         CacheHelper.init(context)
         NetMgr.registerProvider(AppNetProvider())
         if(BuildConfig.DEBUG){

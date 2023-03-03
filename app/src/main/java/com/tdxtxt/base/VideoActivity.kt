@@ -2,6 +2,7 @@ package com.tdxtxt.base
 
 import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.ui.CommToolBarActivity
+import com.tdxtxt.video.VideoPlayerManager
 import kotlinx.android.synthetic.main.activity_video_test.*
 
 /**
@@ -19,6 +20,7 @@ class VideoActivity : CommToolBarActivity(){
     }
 
     override fun initUi() {
+        videoPlayer.setVideoPlayer(VideoPlayerManager.newInstance().getVideoPlayer())
         videoPlayer.setDataSource("https://mediaapi.juexiaotime.com/1111112023年法考资料/肖沛权/内部课/40diwuzhang.mp4")
         videoPlayer.start()
     }
