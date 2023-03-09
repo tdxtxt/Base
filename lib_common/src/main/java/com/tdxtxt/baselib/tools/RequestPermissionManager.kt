@@ -3,6 +3,9 @@ package com.tdxtxt.baselib.tools
 import android.Manifest
 import androidx.fragment.app.FragmentActivity
 import com.permissionx.guolindev.PermissionX
+import com.permissionx.guolindev.callback.ForwardToSettingsCallback
+import com.permissionx.guolindev.callback.RequestCallback
+import com.permissionx.guolindev.request.ForwardScope
 import com.tdxtxt.baselib.callback.Action
 import com.tdxtxt.baselib.callback.MenuCallBack
 
@@ -24,16 +27,14 @@ object RequestPermissionManager{
 //                .onExplainRequestReason { scope, deniedList ->
 //                    scope.showRequestReasonDialog(deniedList, "xxx", "明白", "取消")
 //                }
-                .onForwardToSettings{scope, deniedList ->//永远被拒绝后，下次申请权限没有系统提示了，此时需要自定义弹窗提示让用户去设置中开启权限
-                    if(isToSettings) scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限", "去设置", "取消")
+            .onForwardToSettings(ForwardToSettingsCallback { scope, deniedList -> if(isToSettings) scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限", "去设置", "取消") })
+            .request(RequestCallback { allGranted, grantedList, deniedList ->
+                if (allGranted) {//允许的权限 grantedList
+                    callback?.onGranted?.invoke(grantedList)
+                } else {//被拒绝的权限 deniedList
+                    callback?.onDenied?.invoke(deniedList)
                 }
-                .request { allGranted, grantedList, deniedList ->
-                    if (allGranted) {//允许的权限 grantedList
-                        callback?.onGranted?.invoke(grantedList)
-                    } else {//被拒绝的权限 deniedList
-                        callback?.onDenied?.invoke(deniedList)
-                    }
-                }
+            })
     }
     fun requestPermission(activity: FragmentActivity?, permissions: List<String>, requestReason: String, isToSettings: Boolean, listener: (PermissionListener.() -> Unit)?){
         if(activity == null) return

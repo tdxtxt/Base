@@ -53,12 +53,28 @@ abstract class CommToolBarActivity : BaseActivity() {
     open fun setTitleBar(title: String?, rightMenu: (MenuCallBack.() -> Unit)? = null) {
         getTitleBar()?.apply {
             this.title = title
-            rightMenu?.apply {
+            if(rightMenu == null && rightView.visibility == View.VISIBLE){
+                return
+            }
+            setTitleBarRight(rightMenu)
+        }
+    }
+
+    open fun setTitleBarRight(rightMenu: (MenuCallBack.() -> Unit)? = null){
+        getTitleBar()?.apply {
+            if(rightMenu == null){
+                rightView.visibility = View.GONE
+            }else{
                 realMenuCallBack = object : MenuCallBack(){ }
                 realMenuCallBack?.apply {
                     rightMenu()
-                    if(isTextMenu()) setRightTitle(menuText)
-                    else if(isIconMenu()) setRightIcon(icon)
+                    if(isTextMenu()){
+                        rightView.visibility = View.VISIBLE
+                        rightTitle = menuText
+                    }else if(isIconMenu()){
+                        rightView.visibility = View.VISIBLE
+                        setRightIcon(icon)
+                    }
                 }
             }
         }
