@@ -41,14 +41,14 @@ object StatusBarHelper {
     }
 
     /**
-     * 设置状态栏图标白色主题【白色文字】
+     * 设置状态栏图标白色主题【白色背景；黑色文字】
      */
     fun setLightMode(activity: Activity?){
         if(activity == null) return
         setStatusBar(activity, Color.WHITE)
     }
     /**
-     * 设置状态栏图片黑色主题【黑色文字】
+     * 设置状态栏图片黑色主题【黑色背景；白色文字】
      */
     fun setDarkMode(activity: Activity?){
         if(activity == null) return
