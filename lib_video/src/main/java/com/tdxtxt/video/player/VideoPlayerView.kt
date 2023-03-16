@@ -44,6 +44,8 @@ class VideoPlayerView constructor(
 
     private var mOrientationType = PlayerConstant.VERITCAL
 
+    private var mFullChangelisenter: ((isFullScreen: Boolean) -> Unit)? = null
+
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attributeSet: AttributeSet) : this(context, attributeSet, 0)
 
@@ -74,6 +76,10 @@ class VideoPlayerView constructor(
     fun isReverseFullScreen() = mOrientationType == PlayerConstant.HORIZONTA_REVERSE
     fun isForwardFullScreen() = mOrientationType == PlayerConstant.HORIZONTA_FORWARD
 
+    fun setFullChangeLisenter(lisenter: (isFullScreen: Boolean) -> Unit){
+        this.mFullChangelisenter = lisenter
+    }
+
     fun stopFullScreen(){
         if(!isFullScreen()) return
         val activity = context
@@ -83,8 +89,11 @@ class VideoPlayerView constructor(
             if (activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                 activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             }
-
             mOrientationType = PlayerConstant.VERITCAL
+
+            PlayerUtils.showSysBar(activity)
+            mFullChangelisenter?.invoke(isFullScreen())
+
             mWrapperView.updateFullScreen(isFullScreen())
             val parentView = mWrapperView.parent
             if(parentView is ViewGroup){
@@ -113,6 +122,7 @@ class VideoPlayerView constructor(
             }
 
             PlayerUtils.hideSysBar(activity)
+            mFullChangelisenter?.invoke(isFullScreen())
 
             mWrapperView.updateFullScreen(isFullScreen())
             val parentView = mWrapperView.parent
@@ -232,15 +242,21 @@ class VideoPlayerView constructor(
                 mWrapperView.updateMultiple(if(value is Float) value else 1f)
             }
             PlayerConstant.PlaylerState.STATE_RELEASE ->{
-                mOrientationController.detach()
-                mGestureController.detach()
-                mMultipleControllerView.detach()
+                destory()
             }
         }
     }
 
     override fun release() {
         mVideoPlayer?.release()
+    }
+
+    fun destory(){
+        mFullChangelisenter = null
+
+        mOrientationController.detach()
+        mGestureController.detach()
+        mMultipleControllerView.detach()
     }
 
     override fun isRelease(): Boolean {

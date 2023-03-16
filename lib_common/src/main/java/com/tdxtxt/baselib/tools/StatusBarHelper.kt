@@ -101,4 +101,22 @@ object StatusBarHelper {
     private fun isLightColor(@ColorInt color: Int): Boolean {
         return ColorUtils.calculateLuminance(color) >= 0.5
     }
+
+    fun hideSysBar(activity: Activity?) {
+        activity?.window?.apply {
+            var uiOptions = decorView.systemUiVisibility
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            }
+
+            decorView.systemUiVisibility = uiOptions
+            setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+    }
 }

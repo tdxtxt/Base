@@ -9,11 +9,13 @@ import com.tdxtxt.net.model.AbsResponse
  *     desc   :
  * </pre>
  */
-data class BaseResponse <T> constructor(val msg: String?, val code: Int, val data: T?) : AbsResponse<T> {
+data class BaseResponse <T> constructor(val msg: String?, val code: Int, val data: T?) : AbsResponse {
 
     override fun isSuccess() = code == 0
 
     override fun getMessage() = msg
 
     override fun getCode() = code
+
+    override fun getMeta() = data
 }

@@ -1,5 +1,6 @@
 package com.tdxtxt.net.observer
 
+import com.tdxtxt.net.model.AbsResponse
 import com.tdxtxt.net.NetMgr
 import io.reactivex.observers.DisposableObserver
 
@@ -10,7 +11,7 @@ import io.reactivex.observers.DisposableObserver
  *     desc   :
  * </pre>
  */
-abstract class AbsObserverNetapi <R> : DisposableObserver<R>() {
+abstract class AbsObserverNetapiResponse <R : AbsResponse> : DisposableObserver<R>() {
     abstract fun host(): String
 
     abstract fun onSuccess(response: R)
@@ -18,7 +19,11 @@ abstract class AbsObserverNetapi <R> : DisposableObserver<R>() {
     abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorData: Any?)
 
     override fun onNext(response: R) {
-        onSuccess(response)
+        if(filter(response)){
+            onSuccess(response)
+        }else{
+            onFailure(response.getCode(), response.getMessage(), response.getMeta())
+        }
 
         onComplete()
     }
@@ -33,8 +38,20 @@ abstract class AbsObserverNetapi <R> : DisposableObserver<R>() {
         onComplete()
     }
 
+    private fun getProvider() = NetMgr.getProvider(host())
+
     override fun onComplete() {
+
     }
 
-    fun getProvider() = NetMgr.getProvider(host())
+    fun filter(response: R?): Boolean{
+        if(response == null) return false
+
+        if(response.isSuccess()){
+            return true
+        }
+
+        getProvider().handleError(response, response.getCode(), response.getMessage())
+        return false
+    }
 }

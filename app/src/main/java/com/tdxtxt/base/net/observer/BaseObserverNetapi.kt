@@ -2,7 +2,7 @@ package com.tdxtxt.base.net.observer
 
 import com.tdxtxt.base.AppConstant
 import com.tdxtxt.base.net.data.BaseResponse
-import com.tdxtxt.net.observer.AbsObserverNetapi
+import com.tdxtxt.net.observer.AbsObserverNetapiResponse
 
 /**
  * <pre>
@@ -11,7 +11,7 @@ import com.tdxtxt.net.observer.AbsObserverNetapi
  *     desc   :
  * </pre>
  */
-abstract class BaseObserverNetapi<T> : AbsObserverNetapi<T, BaseResponse<T>>() {
+abstract class BaseObserverNetapi<T> : AbsObserverNetapiResponse<BaseResponse<T>>() {
     override fun host() = AppConstant.HOST
 
 }

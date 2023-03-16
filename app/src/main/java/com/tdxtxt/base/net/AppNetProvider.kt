@@ -3,6 +3,7 @@ package com.tdxtxt.base.net
 import com.tdxtxt.base.AppConstant
 import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.net.config.DefaultNetProvider
+import com.tdxtxt.net.model.AbsResponse
 
 /**
  * <pre>
@@ -12,6 +13,9 @@ import com.tdxtxt.net.config.DefaultNetProvider
  * </pre>
  */
 class AppNetProvider : DefaultNetProvider() {
+    override fun handleError(response: AbsResponse?, errorCode: Int?, errorMsg: String?) {
+    }
+
     override fun printLog(message: String) {
         LogA.i("http::tdx", message)
     }

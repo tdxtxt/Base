@@ -27,7 +27,7 @@ abstract class DefaultNetProvider : NetProvider {
     private var READ_TIME_OUT: Long = 180
     private var WRITE_TIME_OUT: Long = 30
 
-    override fun handleError(response: AbsResponse<*>?, errorCode: Int?, errorMsg: String?) {
+    override fun handleError(response: AbsResponse?, errorCode: Int?, errorMsg: String?) {
 
     }
 
@@ -46,6 +46,18 @@ abstract class DefaultNetProvider : NetProvider {
     override fun throwable2Code(e: Throwable?): Int {
         if(e is HttpException) return e.code()
         return -888
+    }
+
+    override fun throwable2Response(e: Throwable?): AbsResponse? {
+//        when(e){
+//            is HttpException ->{
+//                val errorBody = e.response().errorBody()
+//                val json = errorBody?.string()
+//                return Gson().fromJson(json, T::class.java)
+//            }
+//            else -> return null
+//        }
+        return null
     }
 
     override fun createOkHttpClient(builder: OkHttpClient.Builder): OkHttpClient {
