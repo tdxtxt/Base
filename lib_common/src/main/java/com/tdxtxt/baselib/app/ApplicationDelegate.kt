@@ -1,9 +1,12 @@
 package com.tdxtxt.baselib.app
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.os.Bundle
 import androidx.multidex.MultiDex
 import com.tdxtxt.baselib.tools.CacheHelper
+import java.lang.ref.WeakReference
 
 /**
  * <pre>
@@ -24,10 +27,48 @@ abstract class ApplicationDelegate constructor(val app: Application) {
     fun onCreate(){
         context = app
         delegateApp = this
+        initActivityLifecycleCallbacks()
         onPrivacyBefore(app)
         if(CacheHelper.isAgreePrivacy()){
             onPrivacyAfter(app)
         }
+    }
+
+    private fun initActivityLifecycleCallbacks(){
+        app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks{
+            override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+                mAct.add(WeakReference(activity))
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, bundle: Bundle) {
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                val iterator = mAct.iterator()
+                while (iterator.hasNext()){
+                    val actRef = iterator.next()
+                    val act = actRef.get()
+                    if(act == null || act.isFinishing || act.isDestroyed){
+                        iterator.remove()
+                    }else if(act == activity){
+                        iterator.remove()
+                        break
+                    }
+                }
+            }
+        })
     }
 
     companion object{
@@ -35,5 +76,17 @@ abstract class ApplicationDelegate constructor(val app: Application) {
         var context: Context? = null
         @JvmStatic
         var delegateApp: ApplicationDelegate? = null
+
+        var mAct = mutableListOf<WeakReference<Activity?>>()
+
+        fun getTopActivity(): Activity?{
+            mAct.forEach {
+                val act = it.get()
+                if(act != null && !act.isFinishing && !act.isDestroyed){
+                    return act
+                }
+            }
+            return null
+        }
     }
 }

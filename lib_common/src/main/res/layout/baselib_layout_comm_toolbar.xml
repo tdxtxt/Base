@@ -17,7 +17,6 @@
     app:titleSize="18dp"
     app:rightSize="16dp"
     tools:rightTitle="菜单"
-    tools:rightIcon="@drawable/msg_black"
     app:titleColor="@color/black_111111" />
 
     <!--

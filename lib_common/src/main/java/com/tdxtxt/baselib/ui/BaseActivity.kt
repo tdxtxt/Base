@@ -3,15 +3,13 @@ package com.tdxtxt.baselib.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.KeyEvent
 import android.view.View
-import android.view.WindowManager
 import androidx.fragment.app.FragmentActivity
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
-import com.juexiao.widget.viewstate.StateLayout
+import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
@@ -98,7 +96,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
      * 状态栏
      */
     open fun initStatusBar(){
-        StatusBarHelper.setStatusBar(this, Color.WHITE)
+        StatusBarHelper.setStatusBarFullTransparent(this, false)
     }
 
     override fun getProgressBar(): ProgressDialog? {

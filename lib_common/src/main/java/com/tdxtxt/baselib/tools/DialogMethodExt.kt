@@ -70,12 +70,12 @@ object DialogMethodExt {
                 }.show()
     }
 
-    fun showFullScreenDialog(activity: FragmentActivity?, cancelable: Boolean, popupView: FullScreenPopupView){
+    fun showFullScreenDialog(activity: FragmentActivity?, popupView: FullScreenPopupView, cancelable: Boolean = true, openSoftInput : Boolean = false){
         if(activity == null) return
         XPopup.Builder(activity)
                 .hasStatusBarShadow(true)
                 .isDestroyOnDismiss(true) //对于只使用一次的弹窗，推荐设置这个
-                .autoOpenSoftInput(true)
+                .autoOpenSoftInput(openSoftInput)
                 .dismissOnBackPressed(cancelable)
                 .asCustom(popupView)
                 .show()

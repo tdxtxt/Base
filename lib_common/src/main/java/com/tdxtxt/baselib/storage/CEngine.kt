@@ -17,8 +17,8 @@ interface CEngine {
     fun putFloat(key: String, value: Float): Boolean?
     fun putDouble(key: String, value: Double): Boolean?
     fun putBoolean(key: String, value: Boolean): Boolean?
-    fun <T> putParcelable(key: String, value: Parcelable?): Boolean?
-    fun <T> putJson(key : String, value: T?): Boolean?
+    fun putParcelable(key: String, value: Parcelable?): Boolean?
+    fun putJson(key : String, value: Any?): Boolean?
 
     fun getString(key: String, defaultValue: String = ""): String?
     fun getInt(key: String, defaultValue: Int = 0): Int

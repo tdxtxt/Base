@@ -8,12 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import com.juexiao.widget.viewstate.StateLayout
+import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.tdxtxt.baselib.R
+import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
 import com.tdxtxt.baselib.tools.DialogMethodExt
+import com.tdxtxt.baselib.view.titlebar.OnTitleBarListener
+import com.tdxtxt.baselib.view.titlebar.TitleBar
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.FragmentEvent
 import com.trello.rxlifecycle3.components.support.RxFragment
@@ -25,8 +28,16 @@ abstract class BaseFragment : RxFragment(), IView {
 //    private var stateLayout: StateLayout? = null
     private var stateLayouts = SparseArray<StateLayout>()
     private var mProgressDialog: ProgressDialog? = null
+    private var mTitleBar: TitleBar? = null
+    private var realMenuCallBack: MenuCallBack? = null
+    protected var interceptBackEvent = false
+    protected var interceptCallBack: (() -> Unit)? = null
 
     protected abstract fun getLayoutId(): Int
+    /**
+     * 布局中TitleBar控件id默认R.id.titlebar，若自定义id，需要重写此方法
+     */
+    open fun getToolBarResId() = R.id.titlebar
 
     open fun initUi(){}
 
@@ -157,6 +168,79 @@ abstract class BaseFragment : RxFragment(), IView {
 
     fun <T : Activity> getParentActivity() : T?{
         return fragmentActivity as T?
+    }
+
+    open fun setTitleBar(title: String?) {
+        getTitleBar()?.apply {
+            this.title = title
+        }
+    }
+
+    /**
+     * 初始化TitleBar
+     */
+    fun initTitleBar(){
+        getTitleBar()?.setOnTitleBarListener(object : OnTitleBarListener {
+            override fun onLeftClick(v: View) {
+                interceptCallBack?.invoke()
+                if (!interceptBackEvent) fragmentActivity?.onBackPressed()
+            }
+            override fun onTitleClick(v: View) {
+            }
+            override fun onRightClick(v: View) {
+                realMenuCallBack?.click?.invoke()
+            }
+        })
+    }
+
+    /**
+     * 使用前须调用初始化方法{initTitleBar}
+     */
+    open fun setTitleBar(title: String?, rightMenu: (MenuCallBack.() -> Unit)) {
+        setTitleBar(title)
+        setTitleBarRight(rightMenu)
+    }
+
+    /**
+     * 使用前须调用初始化方法{initTitleBar}
+     */
+    open fun setTitleBarRight(rightMenu: (MenuCallBack.() -> Unit)? = null){
+        getTitleBar()?.apply {
+            if(rightMenu == null){
+                rightView.visibility = View.GONE
+            }else{
+                realMenuCallBack = object : MenuCallBack(){ }
+                realMenuCallBack?.apply {
+                    rightMenu()
+                    if(isTextMenu()){
+                        rightView.visibility = View.VISIBLE
+                        rightTitle = menuText
+                    }else if(isIconMenu()){
+                        rightView.visibility = View.VISIBLE
+                        setRightIcon(icon)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 拦截返回事件
+     */
+    fun setInterceptBackEvent(
+        interceptBackEvent: Boolean,
+        interceptCallBack: (() -> Unit)? = null
+    ) {
+        this.interceptBackEvent = interceptBackEvent
+        this.interceptCallBack = interceptCallBack
+    }
+
+    /**
+     * 获取TitleBar控件
+     */
+    fun getTitleBar(): TitleBar? {
+        if(mTitleBar == null) mTitleBar = findView(getToolBarResId())
+        return mTitleBar
     }
 
 }

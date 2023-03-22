@@ -1,9 +1,9 @@
-package com.baselib.rx.event
+package com.tdxtxt.baselib.rx.event
 
 abstract class RxEventCode constructor(val code: Int) {
     private var data: Any? = null
 
-    fun setData(data: Any): RxEventCode{
+    fun setData(data: Any): RxEventCode {
         this.data = data
         return this
     }

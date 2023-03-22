@@ -1,4 +1,4 @@
-package com.baselib.helper.image.glide
+package com.tdxtxt.baselib.image.glide
 
 import android.content.Context
 import android.util.Log

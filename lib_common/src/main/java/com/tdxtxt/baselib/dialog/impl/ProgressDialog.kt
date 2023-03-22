@@ -2,9 +2,11 @@ package com.tdxtxt.baselib.dialog.impl
 
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import com.lxj.xpopup.enums.PopupAnimation
 import com.tdxtxt.baselib.dialog.CenterBaseDialog
 import com.tdxtxt.baselib.dialog.IBDialog
 import com.tdxtxt.baselib.R
+import com.tdxtxt.baselib.tools.lifecycleOwner
 
 /**
  * @作者： 唐德祥
@@ -17,11 +19,23 @@ class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
     private var tvDesc: TextView? = null
 
     fun setDesc(desc: String?): ProgressDialog = tvDesc?.run { text = desc?: ""; this@ProgressDialog }?: this
+
     override fun getLayoutId() = R.layout.baselib_dialog_commprogress_view
 
     override fun onCreate(dialog: IBDialog) {
         tvDesc = dialog.findViewById(R.id.tv_desc)
         setDesc("加载中...")
+    }
+
+    override fun show(): CenterBaseDialog {
+        popupView?.dismiss()
+        return builder
+            .hasShadowBg(false)
+            .popupAnimation(PopupAnimation.ScaleAlphaFromCenter)
+            .isLightStatusBar(true)
+            .isLightNavigationBar(true)
+            .asCustom(dialog).apply { popupView = this }.show().lifecycleOwner(context)
+            .run { this@ProgressDialog }
     }
 
 }

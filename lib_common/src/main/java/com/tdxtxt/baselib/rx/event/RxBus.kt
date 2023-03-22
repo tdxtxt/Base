@@ -1,4 +1,4 @@
-package com.baselib.rx.event
+package com.tdxtxt.baselib.rx.event
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject

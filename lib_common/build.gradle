@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.7"
+        versionName "0.0.10"
     }
 
     lintOptions {
@@ -46,10 +46,12 @@ dependencies {
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
     implementation rootProject.ext.fastLibs
-    implementation (rootProject.ext.statusBarLibs) { exclude group : "androidx.appcompat"}
+    implementation (rootProject.ext.statusBarLibs) { exclude group : "androidx.appcompat" }
 
     implementation(rootProject.ext.imageLibs.glide) { exclude group: "com.android.support" }
     implementation rootProject.ext.imageLibs.glideOkhttp
+
+    implementation (rootProject.ext.imageLibs.transform) { exclude group : "glide" }
 //    kapt rootProject.ext.image.glideCompiler
 }
 

@@ -1,4 +1,4 @@
-package com.juexiao.base.adapter
+package com.tdxtxt.baselib.adapter.recycle
 
 import com.chad.library.adapter.base.BaseNodeAdapter
 import com.chad.library.adapter.base.entity.node.BaseExpandNode

@@ -83,8 +83,7 @@ abstract class CommToolBarActivity : BaseActivity() {
 
 
      override fun initStatusBar() {
-         super.initStatusBar()
-        StatusBarHelper.setPaddingStatusBarHeight(getTitleBar())
+         StatusBarHelper.setLightMode(this)
     }
 
 

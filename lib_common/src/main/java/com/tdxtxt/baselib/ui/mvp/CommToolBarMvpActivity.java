@@ -1,5 +1,6 @@
 package com.tdxtxt.baselib.ui.mvp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -63,5 +64,9 @@ public abstract class CommToolBarMvpActivity extends CommToolBarActivity {
     protected void onDestroy() {
         super.onDestroy();
         mvpDelegate.detach();
+    }
+
+    public <T extends Activity> T getMVPActivity(){
+        return (T) fragmentActivity;
     }
 }

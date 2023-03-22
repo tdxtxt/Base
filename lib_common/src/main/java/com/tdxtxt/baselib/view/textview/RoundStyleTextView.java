@@ -15,6 +15,7 @@ import com.tdxtxt.baselib.R;
 
 public class RoundStyleTextView extends AppCompatTextView {
     private int rtvBorderWidth;
+    private boolean rtvUseEnableAlpha = false;
 
     public RoundStyleTextView(Context context) {
         this(context, null);
@@ -28,6 +29,7 @@ public class RoundStyleTextView extends AppCompatTextView {
             TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.RoundStyleTextView);
 
             rtvBorderWidth = attributes.getDimensionPixelSize(R.styleable.RoundStyleTextView_strokeWidth, 0);
+            rtvUseEnableAlpha = attributes.getBoolean(R.styleable.RoundStyleTextView_useEnableAlpha, false);
             int rtvBorderColor = attributes.getColor(R.styleable.RoundStyleTextView_strokeColor, Color.BLACK);
             float radius = attributes.getDimension(R.styleable.RoundStyleTextView_radius, 0);
             float leftRadius = attributes.getDimension(R.styleable.RoundStyleTextView_leftRadius, 0);
@@ -80,5 +82,13 @@ public class RoundStyleTextView extends AppCompatTextView {
         if(rtvBorderWidth <= 0) return;
         GradientDrawable myGrad = (GradientDrawable) getBackground();
         if(myGrad != null) myGrad.setStroke(rtvBorderWidth, color);
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+        if(rtvUseEnableAlpha){
+            if(enabled) setAlpha(1f); else setAlpha(0.5f);
+        }
     }
 }

@@ -57,6 +57,7 @@ object StatusBarHelper {
 
     /**
      * 设置状态栏透明【内容全入侵】
+     * @param isLight: true-白色文字；false-黑色文字
      */
     fun setStatusBarFullTransparent(activity: Activity?, isLight: Boolean) {
         if (activity == null) return
@@ -66,9 +67,9 @@ object StatusBarHelper {
                 clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 decorView.apply {
                     if(isLight){
-                        systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-                    }else{
                         systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+                    }else{
+                        systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
                     }
                 }
                 addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

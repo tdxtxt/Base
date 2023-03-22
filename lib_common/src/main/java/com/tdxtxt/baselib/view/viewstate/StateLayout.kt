@@ -1,4 +1,4 @@
-package com.juexiao.widget.viewstate
+package com.tdxtxt.baselib.view.viewstate
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -43,18 +43,38 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
 
     init {
         val ta = context.obtainStyledAttributes(attributeSet, R.styleable.StateLayout)
-        loadingLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_loadingLayoutId, StateLayoutConfig.loadingLayoutId)
-        emptyLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_emptyLayoutId, StateLayoutConfig.emptyLayoutId)
-        errorLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_errorLayoutId, StateLayoutConfig.errorLayoutId)
+        loadingLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_loadingLayoutId,
+            StateLayoutConfig.loadingLayoutId
+        )
+        emptyLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_emptyLayoutId,
+            StateLayoutConfig.emptyLayoutId
+        )
+        errorLayoutId = ta.getResourceId(R.styleable.StateLayout_sl_errorLayoutId,
+            StateLayoutConfig.errorLayoutId
+        )
         animDuration = ta.getInt(R.styleable.StateLayout_sl_animDuration, StateLayoutConfig.animDuration.toInt()).toLong()
-        useContentBgWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_useContentBgWhenLoading, StateLayoutConfig.useContentBgWhenLoading)
-        enableLoadingShadow = ta.getBoolean(R.styleable.StateLayout_sl_enableLoadingShadow, StateLayoutConfig.enableLoadingShadow)
-        enableTouchWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_enableTouchWhenLoading, StateLayoutConfig.enableTouchWhenLoading)
-        defaultShowLoading = ta.getBoolean(R.styleable.StateLayout_sl_defaultShowLoading, StateLayoutConfig.defaultShowLoading)
-        noEmptyAndError = ta.getBoolean(R.styleable.StateLayout_sl_noEmptyAndError, StateLayoutConfig.noEmptyAndError)
-        showLoadingOnce = ta.getBoolean(R.styleable.StateLayout_sl_showLoadingOnce, StateLayoutConfig.showLoadingOnce)
+        useContentBgWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_useContentBgWhenLoading,
+            StateLayoutConfig.useContentBgWhenLoading
+        )
+        enableLoadingShadow = ta.getBoolean(R.styleable.StateLayout_sl_enableLoadingShadow,
+            StateLayoutConfig.enableLoadingShadow
+        )
+        enableTouchWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_enableTouchWhenLoading,
+            StateLayoutConfig.enableTouchWhenLoading
+        )
+        defaultShowLoading = ta.getBoolean(R.styleable.StateLayout_sl_defaultShowLoading,
+            StateLayoutConfig.defaultShowLoading
+        )
+        noEmptyAndError = ta.getBoolean(R.styleable.StateLayout_sl_noEmptyAndError,
+            StateLayoutConfig.noEmptyAndError
+        )
+        showLoadingOnce = ta.getBoolean(R.styleable.StateLayout_sl_showLoadingOnce,
+            StateLayoutConfig.showLoadingOnce
+        )
         emptyText = ta.getString(R.styleable.StateLayout_sl_emptyText) ?: StateLayoutConfig.emptyText
-        emptyIcon = ta.getResourceId(R.styleable.StateLayout_sl_emptyIcon, StateLayoutConfig.emptyIcon)
+        emptyIcon = ta.getResourceId(R.styleable.StateLayout_sl_emptyIcon,
+            StateLayoutConfig.emptyIcon
+        )
 
         ta.recycle()
     }

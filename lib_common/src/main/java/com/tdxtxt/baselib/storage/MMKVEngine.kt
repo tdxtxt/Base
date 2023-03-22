@@ -29,9 +29,9 @@ abstract class MMKVEngine : CEngine {
 
     override fun putBoolean(key: String, value: Boolean) = MMKV.mmkvWithID(createMMKVFileKey()).encode(key, value)
 
-    override fun <T> putParcelable(key: String, value: Parcelable?) = MMKV.mmkvWithID(createMMKVFileKey()).encode(key, value)
+    override fun putParcelable(key: String, value: Parcelable?) = MMKV.mmkvWithID(createMMKVFileKey()).encode(key, value)
 
-    override fun <T> putJson(key: String, value: T?) =  putString(key, GsonUtils.toJson(value))
+    override fun putJson(key: String, value: Any?) =  putString(key, GsonUtils.toJson(value))
 
     override fun getString(key: String, defaultValue: String) = MMKV.mmkvWithID(createMMKVFileKey()).decodeString(key, defaultValue)
 
