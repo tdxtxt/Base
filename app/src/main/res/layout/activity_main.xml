@@ -34,7 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CommTextButtonStyle"
+        android:enabled="false"
         android:text="视频播放"
+        app:useEnableAlpha="true"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

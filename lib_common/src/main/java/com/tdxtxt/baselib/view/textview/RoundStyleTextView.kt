@@ -19,7 +19,7 @@ import com.tdxtxt.baselib.view.edit.CustomTextWatcher
  */
 class RoundStyleTextView : AppCompatTextView{
     private var rtvBorderWidth = 0
-    private var rtvUseEnableAlpha = false
+    private var rtvUseEnableAlpha = true
     private var rtvBorderColor = Color.BLACK
     private var radius = 0f
     private var leftRadius = 0f
@@ -42,7 +42,7 @@ class RoundStyleTextView : AppCompatTextView{
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.RoundStyleTextView)
 
         rtvBorderWidth = attributes.getDimensionPixelSize(R.styleable.RoundStyleTextView_strokeWidth, 0)
-        rtvUseEnableAlpha = attributes.getBoolean(R.styleable.RoundStyleTextView_useEnableAlpha, false)
+        rtvUseEnableAlpha = attributes.getBoolean(R.styleable.RoundStyleTextView_useEnableAlpha, true)
         rtvBorderColor = attributes.getColor(R.styleable.RoundStyleTextView_strokeColor, Color.BLACK)
         radius = attributes.getDimension(R.styleable.RoundStyleTextView_radius, 0f)
         leftRadius = attributes.getDimension(R.styleable.RoundStyleTextView_leftRadius, 0f)
