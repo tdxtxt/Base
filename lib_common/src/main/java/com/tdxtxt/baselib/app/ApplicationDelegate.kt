@@ -73,7 +73,7 @@ abstract class ApplicationDelegate constructor(val app: Application) {
 
     companion object{
         @JvmStatic
-        var context: Context? = null
+        var context: Application? = null
         @JvmStatic
         var delegateApp: ApplicationDelegate? = null
 
@@ -87,6 +87,52 @@ abstract class ApplicationDelegate constructor(val app: Application) {
                 }
             }
             return null
+        }
+
+        fun finishAllActivity(vararg keepActClass: Class<*>){
+            val iterator = mAct.iterator()
+            while (iterator.hasNext()){
+                val actRef = iterator.next()
+                val act = actRef.get()
+                if(keepActClass.isEmpty()){
+                    iterator.remove()
+                    act?.finish()
+                }else{
+                    if(act == null || act.isFinishing || act.isDestroyed){
+                        iterator.remove()
+                        act?.finish()
+                    }
+
+                    keepActClass.forEach {
+                        if(act?.javaClass?.name != it.name){
+                            iterator.remove()
+                            act?.finish()
+                        }
+                    }
+                }
+            }
+        }
+
+        fun finishActivity(vararg  finishClass: Class<*>){
+            if(finishClass.isEmpty()) return
+
+            val iterator = mAct.iterator()
+            while (iterator.hasNext()){
+                val actRef = iterator.next()
+                val act = actRef.get()
+
+                if(act == null || act.isFinishing || act.isDestroyed){
+                    iterator.remove()
+                    act?.finish()
+                }
+
+                finishClass.forEach {
+                    if(act?.javaClass?.name == it.name){
+                        iterator.remove()
+                        act?.finish()
+                    }
+                }
+            }
         }
     }
 }

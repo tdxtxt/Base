@@ -6,7 +6,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "baselib_beta"
+def modelName = "pickerview"
 def debugNum = 1
 
 android {
@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.11"
+        versionName "0.0.1"
     }
 
     lintOptions {
@@ -39,20 +39,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     //google官方lib
-    compileOnly rootProject.ext.multidex
     implementation rootProject.ext.supprotLibs
-    implementation rootProject.ext.netLibs
-    implementation rootProject.ext.fastLibs
-    implementation (rootProject.ext.statusBarLibs) { exclude group : "androidx.appcompat" }
-
-    implementation(rootProject.ext.imageLibs.glide) { exclude group: "com.android.support" }
-    implementation rootProject.ext.imageLibs.glideOkhttp
-
-    implementation (rootProject.ext.imageLibs.transform) { exclude group : "glide" }
-//    kapt rootProject.ext.image.glideCompiler
 }
 
 //上传到Maven仓库的task

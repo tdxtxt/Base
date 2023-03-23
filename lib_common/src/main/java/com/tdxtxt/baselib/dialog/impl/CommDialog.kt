@@ -24,6 +24,8 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
     var tvBtnLeft: TextView? = null
     var tvBtnCenter: TextView? = null
     var tvBtnRight: TextView? = null
+    var viewLine: View? = null
+    var layoutMenu: View? = null
 
     /**
      * 设置是否点击按钮会自动关闭弹框
@@ -113,17 +115,18 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
 
     private fun changeListener() {
         if (tvBtnLeft?.visibility == View.GONE &&
-                tvBtnCenter?.visibility == View.GONE &&
-                tvBtnRight?.visibility == View.GONE) {
-            findViewById<View>(R.id.view_line)?.visibility = View.GONE
-            findViewById<View>(R.id.layout_menu)?.visibility = View.GONE
+            tvBtnCenter?.visibility == View.GONE &&
+            tvBtnRight?.visibility == View.GONE
+        ) {
+            viewLine?.visibility = View.GONE
+            layoutMenu?.visibility = View.GONE
         } else {
-            findViewById<View>(R.id.view_line)?.visibility = View.VISIBLE
-            findViewById<View>(R.id.layout_menu)?.visibility = View.VISIBLE
+            viewLine?.visibility = View.VISIBLE
+            layoutMenu?.visibility = View.VISIBLE
         }
     }
 
-    override fun getLayoutId() = R.layout.baselib_dialog_commtips_view
+    override fun getLayoutId() = layoutResId
 
     override fun onCreate(dialog: IBDialog) {
         tvTitle = findViewById(R.id.tv_common_prompt_title)
@@ -131,6 +134,8 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         tvBtnLeft = findViewById(R.id.btn_common_prompt_left)
         tvBtnCenter = findViewById(R.id.btn_common_prompt_center)
         tvBtnRight = findViewById(R.id.btn_common_prompt_right)
+        viewLine = findViewById(R.id.view_line)
+        layoutMenu = findViewById(R.id.layout_menu)
 
         setTitle(title)
         setContent(content)
@@ -139,4 +144,12 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         setCenterMenu(centerMenu)
     }
 
+    companion object{
+        private var layoutResId = R.layout.baselib_dialog_commtips_view
+        fun setLayoutId(resId: Int){
+            if(resId > 0){
+                layoutResId = resId
+            }
+        }
+    }
 }

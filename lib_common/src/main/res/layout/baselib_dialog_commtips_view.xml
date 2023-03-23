@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.tdxtxt.baselib.view.container.RatioRoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_ffffff"
     android:orientation="vertical"
-    app:rRadius="8dp">
+    app:rRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        android:paddingVertical="16dp">
 
         <TextView
             android:id="@+id/tv_common_prompt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textColor="#000"
+            android:paddingHorizontal="10dp"
+            android:textColor="#151d33"
             android:textSize="16dp"
             android:textStyle="bold"
             android:visibility="gone"
@@ -34,15 +32,16 @@
             android:id="@+id/tv_common_prompt_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textColor="#000"
+            android:paddingHorizontal="24dp"
+            android:textColor="#505c73"
             android:textSize="14dp"
             tools:text="内容" />
     </LinearLayout>
+
     <View
         android:id="@+id/view_line"
         style="@style/line_horizontal" />
+
     <LinearLayout
         android:id="@+id/layout_menu"
         android:layout_width="match_parent"
