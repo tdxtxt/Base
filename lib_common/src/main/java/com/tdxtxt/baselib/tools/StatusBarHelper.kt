@@ -57,7 +57,7 @@ object StatusBarHelper {
 
     /**
      * 设置状态栏透明【内容全入侵】
-     * @param isLight: true-白色文字；false-黑色文字
+     * @param isLight: true-黑色文字；false-白色文字
      */
     fun setStatusBarFullTransparent(activity: Activity?, isLight: Boolean) {
         if (activity == null) return

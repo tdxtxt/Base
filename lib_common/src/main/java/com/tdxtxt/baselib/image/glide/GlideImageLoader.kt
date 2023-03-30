@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.widget.ImageView
-import com.tdxtxt.baselib.image.ILoader
 import com.blankj.utilcode.util.SizeUtils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
@@ -15,6 +14,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.load.resource.gif.GifOptions
 import com.bumptech.glide.request.RequestOptions
 import com.tdxtxt.baselib.R
+import com.tdxtxt.baselib.image.ILoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.io.File
 
@@ -70,6 +70,16 @@ object GlideImageLoader : ILoader {
 
     override fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float) {
         loadImage(view, url, R.drawable.baselib_image_placeholder, true, radiusdp)
+    }
+
+    override fun loadCircle(view: ImageView?, url: String?) {
+        if (view == null) return
+        if(url == null) return
+        val options = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .circleCrop()
+
+        Glide.with(view.context).load(url).apply(options).into(view)
     }
 
     @SuppressLint("ResourceType")

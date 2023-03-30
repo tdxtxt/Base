@@ -87,7 +87,7 @@ public class BaseWebViewClient extends WebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        final Uri uri = Uri.parse(url);;
+        final Uri uri = Uri.parse(url);
         final String scheme = uri.getScheme();
         if(scheme == null){
             if(url.startsWith("http")) view.loadUrl(url);

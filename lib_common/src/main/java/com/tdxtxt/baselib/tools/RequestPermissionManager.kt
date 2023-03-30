@@ -1,12 +1,11 @@
 package com.tdxtxt.baselib.tools
 
 import android.Manifest
+import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.permissionx.guolindev.PermissionX
 import com.permissionx.guolindev.callback.ForwardToSettingsCallback
 import com.permissionx.guolindev.callback.RequestCallback
-import com.permissionx.guolindev.request.ForwardScope
-import com.tdxtxt.baselib.callback.Action
 import com.tdxtxt.baselib.callback.MenuCallBack
 
 /**
@@ -56,9 +55,11 @@ object RequestPermissionManager{
         if(isGranted){
             callback?.onGranted?.invoke(permissions)
         }else{
-            DialogMethodExt.showCommDialog(activity, requestReason, MenuCallBack("取消"), MenuCallBack("确认"){
+            DialogMethodExt.showCommDialog(activity, requestReason, MenuCallBack("取消"){
+                callback?.onDenied?.invoke(permissions)
+            }, MenuCallBack("确认"){
                 directreQuestPermission(activity, permissions, isToSettings, listener)
-            })
+            })?.setCancelable(false)
         }
     }
     /**
@@ -80,6 +81,14 @@ object RequestPermissionManager{
      */
     fun requestLocalPermission(activity: FragmentActivity?, requestReason: String, listener: (PermissionListener.() -> Unit)?){
         requestPermission(activity, listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), requestReason, true, listener)
+    }
+
+    /**
+     * 权限是否打开
+     */
+    fun isGranted(context: Context?, permission: String): Boolean{
+        if(context == null) return false
+        return PermissionX.isGranted(context, permission)
     }
 }
 

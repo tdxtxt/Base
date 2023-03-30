@@ -68,7 +68,7 @@ public class TextSpanController {
     }
 
     public TextSpanController appendImage(int resId){
-        builder.append(" ");;//用于替换图片的占位字符
+        builder.append(" ");//用于替换图片的占位字符
         builder.setSpan(new VerticalImageSpan(Utils.getApp(), resId, DynamicDrawableSpan.ALIGN_CENTER), builder.length() - 1, builder.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
         return this;
     }

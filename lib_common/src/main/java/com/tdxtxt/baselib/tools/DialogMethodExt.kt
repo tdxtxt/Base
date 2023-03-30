@@ -22,16 +22,16 @@ object DialogMethodExt {
     fun showCommDialog(activity: FragmentActivity?, content: String?,
                        leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
         if (activity == null) return null
-        return createCommDialog(activity, null, content, leftMenu, rightMenu)?.apply { show() }
+        return createCommDialog(activity, "温馨提示", content, leftMenu, rightMenu)?.apply { show() }
     }
 
-    fun showCommDialog(activity: FragmentActivity?, title: String?, content: String?,
+    fun showCommDialog(activity: FragmentActivity?, title: String? = "温馨提示", content: String?,
                        leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
         if (activity == null) return null
         return createCommDialog(activity, title, content, leftMenu, rightMenu)?.apply { show() }
     }
 
-    fun createCommDialog(activity: FragmentActivity?, title: String?, content: String?,
+    fun createCommDialog(activity: FragmentActivity?, title: String? = "温馨提示", content: String?,
                          leftMenu: MenuCallBack? = null,
                          rightMenu: MenuCallBack? = null): CommDialog? {
         if (activity == null) return null
