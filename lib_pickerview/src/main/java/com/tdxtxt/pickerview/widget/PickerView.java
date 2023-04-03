@@ -32,15 +32,15 @@ public class PickerView<T> extends BasePickerView<T> {
 
   private TextPaint mPaint; //
   /** default out text size 18dp */
-  public static int sOutTextSize = 18; // dp
+  public static int sOutTextSize = 14; // dp
   /** default center text size 22dp */
-  public static int sCenterTextSize = 22; // dp
+  public static int sCenterTextSize = 18; // dp
   private int mOutTextSize; // 最小的字体
   private int mCenterTextSize; // 最大的字体
   /** default center text color */
-  public static int sCenterColor = Color.BLUE;
+  public static int sCenterColor = Color.parseColor("#5c96f0");
   /** default out text color */
-  public static int sOutColor = Color.GRAY;
+  public static int sOutColor = Color.parseColor("#919191");
   // 字体渐变颜色
   private int mCenterColor = sCenterColor; // 中间选中item的颜色
   private int mOutColor = sOutColor; // 上下两边的颜色

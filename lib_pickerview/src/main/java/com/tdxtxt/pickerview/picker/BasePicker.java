@@ -10,6 +10,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tdxtxt.pickerview.dialog.DefaultPickerDialog;
 import com.tdxtxt.pickerview.dialog.IGlobalDialogCreator;
@@ -105,7 +106,7 @@ public abstract class BasePicker {
   protected void initPickerView() {
     mPickerContainer = new LinearLayout(mContext);
     mPickerContainer.setOrientation(LinearLayout.HORIZONTAL);
-    mPickerContainer.setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
+    mPickerContainer.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     if (sDefaultPaddingRect != null) {
       setPadding(sDefaultPaddingRect.left, sDefaultPaddingRect.top, sDefaultPaddingRect.right,
         sDefaultPaddingRect.bottom);
@@ -250,6 +251,16 @@ public abstract class BasePicker {
   public void show() {
     if (/*!needDialog || */iPickerDialog == null) return;
     iPickerDialog.showDialog();
+  }
+
+  /**
+   * 设置title
+   */
+  public void setTitle(String title){
+    if(iPickerDialog instanceof DefaultPickerDialog){
+      TextView textView = ((DefaultPickerDialog) iPickerDialog).getTitleView();
+      if(textView != null) textView.setText(title);
+    }
   }
 
   /**

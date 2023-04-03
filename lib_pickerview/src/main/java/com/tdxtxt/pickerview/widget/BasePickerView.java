@@ -38,7 +38,7 @@ public abstract class BasePickerView<T> extends View {
   public static int sDefaultVisibleItemCount = 5;
   private int mVisibleItemCount = sDefaultVisibleItemCount; // 可见的item数量
   /** 默认itemSize：50dp */
-  public static int sDefaultItemSize = 50; //dp
+  public static int sDefaultItemSize = 44; //dp
   /** 默认是否循环：false */
   public static boolean sDefaultIsCirculation = false;
   /** 默认值：是否绘制 CenterDecoration */

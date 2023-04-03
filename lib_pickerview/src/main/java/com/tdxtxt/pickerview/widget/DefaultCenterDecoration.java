@@ -20,9 +20,9 @@ import com.tdxtxt.pickerview.util.Util;
 
 public class DefaultCenterDecoration implements BasePickerView.CenterDecoration {
   /** default line color */
-  public static int sDefaultLineColor = Color.BLUE;
+  public static int sDefaultLineColor = Color.parseColor("#e5e5e5");
   /** default line width */
-  public static float sDefaultLineWidth = 1;
+  public static float sDefaultLineWidth = 0.5f;
   /** default item background drawable */
   public static Drawable sDefaultDrawable;
   /** default line margin */

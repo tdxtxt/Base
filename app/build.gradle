@@ -52,6 +52,7 @@ dependencies {
     implementation project(':lib_common')
     implementation project(':lib_net')
     implementation project(':lib_video')
+    implementation project(':lib_pickerview')
     implementation project(':lib_socialcore')
     implementation project(':lib_socialwechat')
     implementation project(':lib_socialqq')

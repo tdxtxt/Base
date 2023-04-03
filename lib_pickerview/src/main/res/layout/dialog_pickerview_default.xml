@@ -8,7 +8,7 @@
   <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@android:color/white">
+    android:background="@drawable/bg_pickerview_default">
 
     <TextView
       android:id="@+id/btn_cancel"
@@ -41,15 +41,15 @@
       android:paddingLeft="20dp"
       android:paddingRight="20dp"
       android:text="确定"
-      android:textColor="#41bc6a"
+      android:textColor="#5c96f0"
       android:textSize="16dp" />
 
-    <View
+    <!--<View
       android:id="@+id/divider"
       android:layout_width="match_parent"
       android:layout_height="0.5dp"
       android:layout_gravity="bottom"
-      android:background="#e5e5e5" />
+      android:background="#e5e5e5" />-->
   </FrameLayout>
 
 </LinearLayout>
