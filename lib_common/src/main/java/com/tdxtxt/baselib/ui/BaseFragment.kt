@@ -167,7 +167,8 @@ abstract class BaseFragment : RxFragment(), IView {
     }
 
     fun <T : Activity> getParentActivity() : T?{
-        return fragmentActivity as T?
+        if(fragmentActivity == null) return null
+        return fragmentActivity as T
     }
 
     open fun setTitleBar(title: String?) {

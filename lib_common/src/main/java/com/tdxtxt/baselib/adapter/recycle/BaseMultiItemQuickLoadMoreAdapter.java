@@ -19,19 +19,19 @@ public abstract class BaseMultiItemQuickLoadMoreAdapter<T extends MultiItemEntit
         return super.getDefItemViewType(position);
     }
 
-    public void updateData(boolean isFirstPage, BaseListBody<T> data){
+    public <R extends BaseListBody<T>> void updateData(boolean isFirstPage, R data){
         updateData(isFirstPage, data, true);
     }
 
-    public void updateData(boolean isFirstPage, BaseListBody<T> data, boolean showLoadMoreView){
-        if(data == null || data.list == null) return;
+    public <R extends BaseListBody<T>> void updateData(boolean isFirstPage, R data, boolean showLoadMoreView){
+        if(data == null || data.getDataList() == null) return;
         if(isFirstPage){//下拉刷新
-            setNewInstance(data.list);
+            setNewInstance(data.getDataList());
         }else{//加载更多
-            addData(data.list);
+            addData(data.getDataList());
         }
         getLoadMoreModule().loadMoreComplete();
-        if(!data.isNextPage()) getLoadMoreModule().loadMoreEnd(!showLoadMoreView);
+        if(!data.hasNextPage()) getLoadMoreModule().loadMoreEnd(!showLoadMoreView);
     }
 
     public void refreshItem(T item){

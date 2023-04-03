@@ -73,13 +73,25 @@ object GlideImageLoader : ILoader {
     }
 
     override fun loadCircle(view: ImageView?, url: String?) {
+        loadCircle(view, url, R.drawable.baselib_image_placeholder)
+    }
+
+    override fun loadCircle(view: ImageView?, url: String?, placeholderResId: Int) {
         if (view == null) return
-        if(url == null) return
+
+        if(TextUtils.isEmpty(url)){
+            if (placeholderResId > 0) view.setImageResource(placeholderResId)
+            return
+        }
         val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .circleCrop()
 
-        Glide.with(view.context).load(url).apply(options).into(view)
+        val request = Glide.with(view.context).load(url).apply(options)
+        if(placeholderResId > 0){
+            val new = request.placeholder(placeholderResId)
+        }
+        request.into(view)
     }
 
     @SuppressLint("ResourceType")

@@ -18,6 +18,7 @@ interface ILoader {
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float)
     fun loadImage(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int, isCache: Boolean, radiusdp: Float = 0f)
     fun loadCircle(view: ImageView?, url: String?)
+    fun loadCircle(view: ImageView?, url: String?, placeholderResId: Int)
     fun saveImage(url: String?, destFile: File, callback: (isSuccess: Boolean, msg: String) -> Unit)
 
     fun clearMemoryCache()
