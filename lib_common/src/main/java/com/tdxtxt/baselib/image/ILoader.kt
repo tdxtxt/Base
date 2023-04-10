@@ -16,6 +16,7 @@ interface ILoader {
     fun loadImage(view: ImageView?, url: String?)
     fun loadImage(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int)
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float)
+    fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float, @DrawableRes placeholderResId: Int)
     fun loadImage(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int, isCache: Boolean, radiusdp: Float = 0f)
     fun loadCircle(view: ImageView?, url: String?)
     fun loadCircle(view: ImageView?, url: String?, placeholderResId: Int)

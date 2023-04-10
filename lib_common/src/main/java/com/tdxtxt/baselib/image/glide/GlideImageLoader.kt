@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.gif.GifOptions
 import com.bumptech.glide.request.RequestOptions
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.image.ILoader
+import com.tdxtxt.baselib.image.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.io.File
 
@@ -61,7 +62,7 @@ object GlideImageLoader : ILoader {
     }
 
     override fun loadImage(view: ImageView?, url: String?) {
-        loadImage(view, url, R.drawable.baselib_image_placeholder, true)
+        loadImage(view, url, ImageLoader.placeholderResId, true)
     }
 
     override fun loadImage(view: ImageView?, url: String?, placeholderResId: Int) {
@@ -69,39 +70,37 @@ object GlideImageLoader : ILoader {
     }
 
     override fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float) {
-        loadImage(view, url, R.drawable.baselib_image_placeholder, true, radiusdp)
+        loadImageRoundRect(view, url, radiusdp, ImageLoader.placeholderResId)
+    }
+
+    override fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float, placeholderResId: Int) {
+        loadImage(view, url, placeholderResId, true, radiusdp)
     }
 
     override fun loadCircle(view: ImageView?, url: String?) {
-        loadCircle(view, url, R.drawable.baselib_image_placeholder)
+        loadCircle(view, url, ImageLoader.placeholderResId)
     }
 
     override fun loadCircle(view: ImageView?, url: String?, placeholderResId: Int) {
         if (view == null) return
 
-        if(TextUtils.isEmpty(url)){
-            if (placeholderResId > 0) view.setImageResource(placeholderResId)
-            return
-        }
         val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .circleCrop()
-
-        val request = Glide.with(view.context).load(url).apply(options)
-        if(placeholderResId > 0){
+        val request =
+            if (TextUtils.isEmpty(url)) {
+                Glide.with(view.context).load(placeholderResId).apply(options)
+            } else {
+                Glide.with(view.context).load(url).apply(options)
+            }
+        if (placeholderResId > 0) {
             val new = request.placeholder(placeholderResId)
         }
         request.into(view)
     }
 
     @SuppressLint("ResourceType")
-    override fun loadImage(
-        view: ImageView?,
-        url: String?,
-        placeholderResId: Int,
-        isCache: Boolean,
-        radiusdp: Float
-    ) {
+    override fun loadImage(view: ImageView?, url: String?, placeholderResId: Int, isCache: Boolean,radiusdp: Float) {
         if (view == null) return
         if(isDestory(view.context)) return
         if (TextUtils.isEmpty(url)) {
@@ -132,11 +131,7 @@ object GlideImageLoader : ILoader {
     }
 
 
-    override fun saveImage(
-        url: String?,
-        destFile: File,
-        callback: (isSuccess: Boolean, msg: String) -> Unit
-    ) {
+    override fun saveImage(url: String?, destFile: File, callback: (isSuccess: Boolean, msg: String) -> Unit) {
     }
 
 

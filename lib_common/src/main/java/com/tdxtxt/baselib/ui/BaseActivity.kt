@@ -38,7 +38,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         super.onCreate(savedInstanceState)
         fragmentActivity = this
         parseParams(intent) //解析参数
-        setContentView(getLayoutResId())
+        if(getLayoutResId() != 0) setContentView(getLayoutResId())
         initStatusBar()
         initUi()
     }

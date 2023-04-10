@@ -7,6 +7,7 @@ import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.tdxtxt.baselib.R
@@ -24,6 +25,7 @@ import com.trello.rxlifecycle3.components.support.RxFragment
 abstract class BaseFragment : RxFragment(), IView {
     open var fragmentActivity: FragmentActivity? = null
     protected lateinit var mRootView: View
+    private var mContainer: ViewGroup? = null
     //    private var unbinder: Unbinder? = null
 //    private var stateLayout: StateLayout? = null
     private var stateLayouts = SparseArray<StateLayout>()
@@ -58,8 +60,8 @@ abstract class BaseFragment : RxFragment(), IView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mRootView = inflater.inflate(getLayoutId(),container, false)?:
-                View.inflate(fragmentActivity,getLayoutId(),container)
+        mContainer = container
+        mRootView = inflater.inflate(getLayoutId(), container, false)
         mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
 //        unbinder = ButterKnife.bind(this, mRootView)
         return mRootView //initStateView().apply { stateLayout = this }
@@ -73,7 +75,7 @@ abstract class BaseFragment : RxFragment(), IView {
         return mRootView.findViewById<View>(resId) as T
     }
 
-    fun getStateView(resId: Int) : StateLayout?{
+    fun getStateView(resId: Int) : StateLayout{
         var stateLayout: StateLayout? = stateLayouts.get(resId)
 
         if(stateLayout != null) return stateLayout
@@ -243,5 +245,25 @@ abstract class BaseFragment : RxFragment(), IView {
         if(mTitleBar == null) mTitleBar = findView(getToolBarResId())
         return mTitleBar
     }
+
+    fun addContentView(view: View){
+        if(mRootView is FrameLayout){
+            (mRootView as FrameLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }else if(mContainer is FrameLayout){
+            (mContainer as FrameLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }
+    }
+
+    fun removeContentView(view: View){
+        if(mRootView is FrameLayout){
+            (mRootView as FrameLayout).removeView(view)
+        }else if(mContainer is FrameLayout){
+            (mContainer as FrameLayout).removeView(view)
+        }
+    }
+
+    fun getRootView() = mRootView
+
+    fun getContainer() = mContainer
 
 }

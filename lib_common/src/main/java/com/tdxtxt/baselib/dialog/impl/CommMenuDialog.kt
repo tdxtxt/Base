@@ -2,6 +2,7 @@ package com.tdxtxt.baselib.dialog.impl
 
 import android.graphics.Color
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +25,13 @@ import com.tdxtxt.baselib.view.recycler.divider.LinerItemDecoration
 class CommMenuDialog constructor(activity: FragmentActivity): BottomBaseDialog(activity){
     var mAdapter: BaseQuickAdapter<MenuCallBack, BaseViewHolder>? = null
     var mData: MutableList<MenuCallBack>? = null
+    var mTitle: String? = null
 
     override fun getLayoutId() = R.layout.baselib_dialog_menu_view
 
     override fun onCreate(dialog: IBDialog) {
+        if(mTitle != null) findViewById<TextView>(R.id.tv_title)?.text = mTitle
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         findViewById<View>(R.id.iv_close)?.setOnClickListener {
             dismiss()
@@ -57,6 +61,11 @@ class CommMenuDialog constructor(activity: FragmentActivity): BottomBaseDialog(a
     fun addMenu(menu: MenuCallBack): CommMenuDialog{
         if(mData == null) mData = mutableListOf()
         mData?.add(menu)
+        return this
+    }
+
+    fun setTitle(title: String?): CommMenuDialog {
+        mTitle = title
         return this
     }
 }

@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
-import com.tdxtxt.baselib.adapter.recycle.bean.BaseListBody;
+import com.tdxtxt.baselib.adapter.recycle.bean.AbsListBody;
 
 public abstract class BaseMultiItemQuickLoadMoreAdapter<T extends MultiItemEntity, VH extends BaseViewHolder> extends BaseMultiItemQuickAdapter<T, VH> implements LoadMoreModule {
     public BaseMultiItemQuickLoadMoreAdapter(){
@@ -19,11 +19,11 @@ public abstract class BaseMultiItemQuickLoadMoreAdapter<T extends MultiItemEntit
         return super.getDefItemViewType(position);
     }
 
-    public <R extends BaseListBody<T>> void updateData(boolean isFirstPage, R data){
+    public <R extends AbsListBody<T>> void updateData(boolean isFirstPage, R data){
         updateData(isFirstPage, data, true);
     }
 
-    public <R extends BaseListBody<T>> void updateData(boolean isFirstPage, R data, boolean showLoadMoreView){
+    public <R extends AbsListBody<T>> void updateData(boolean isFirstPage, R data, boolean showLoadMoreView){
         if(data == null || data.getDataList() == null) return;
         if(isFirstPage){//下拉刷新
             setNewInstance(data.getDataList());

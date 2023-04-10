@@ -1,5 +1,6 @@
 package com.tdxtxt.baselib.image
 
+import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.image.glide.GlideImageLoader
 
 /**
@@ -9,4 +10,6 @@ import com.tdxtxt.baselib.image.glide.GlideImageLoader
  *     desc   :
  * </pre>
  */
-object ImageLoader : ILoader by GlideImageLoader
+object ImageLoader : ILoader by GlideImageLoader{
+    var placeholderResId: Int = R.drawable.baselib_image_placeholder
+}
