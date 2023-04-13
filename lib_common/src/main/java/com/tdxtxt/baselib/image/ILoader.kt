@@ -14,6 +14,7 @@ interface ILoader {
     fun toggleGif(view: ImageView?, @DrawableRes resId: Int, resume: Boolean)
     fun loadImage(view: ImageView?, @DrawableRes resId: Int)
     fun loadImage(view: ImageView?, url: String?)
+    fun loadImage(view: ImageView?, url: String?, isCache: Boolean)
     fun loadImage(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int)
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float)
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float, @DrawableRes placeholderResId: Int)

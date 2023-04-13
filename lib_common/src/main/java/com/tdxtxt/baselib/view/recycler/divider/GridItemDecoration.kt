@@ -29,11 +29,8 @@ import java.util.*
     空格分割线
     recyclerView.addItemDecoration(
         GridItemDecoration.Builder(this, OrientationHelper.VERTICAL)
-        .setDividerWidthPx(20)
-        .showTopDivider(true)
-        .setTopDividerWidthPx(50)
-        .setBottomDividerWidthPx(50)
-        .showLastDivider(true)
+        .setDividerWidthPx(10)
+        .setDividerMarginPx(10, 10, 10, 10)
         .build()
     )
 

@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.load.resource.gif.GifOptions
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.image.ILoader
 import com.tdxtxt.baselib.image.ImageLoader
@@ -65,6 +66,10 @@ object GlideImageLoader : ILoader {
         loadImage(view, url, ImageLoader.placeholderResId, true)
     }
 
+    override fun loadImage(view: ImageView?, url: String?, isCache: Boolean) {
+        loadImage(view, url, ImageLoader.placeholderResId, isCache)
+    }
+
     override fun loadImage(view: ImageView?, url: String?, placeholderResId: Int) {
         loadImage(view, url, placeholderResId, true)
     }
@@ -114,7 +119,9 @@ object GlideImageLoader : ILoader {
             options.transform(RoundedCornersTransformation(SizeUtils.dp2px(radiusdp), 0))
             request.apply(options)
         }
-        request.transition(DrawableTransitionOptions().crossFade())
+        //如果占位图(placeHolder)比请求加载的url图要大，或者实际加载图是有透明部分未把占位图遮挡，就会看到占位图，占位图被当作加载成功后的图的背景展示
+//        request.transition(DrawableTransitionOptions().crossFade())
+        request.transition(DrawableTransitionOptions.with(DrawableCrossFadeFactory.Builder(300).setCrossFadeEnabled(true).build()))
         when {
             placeholderResId > 0 -> {
                 request.placeholder(placeholderResId)

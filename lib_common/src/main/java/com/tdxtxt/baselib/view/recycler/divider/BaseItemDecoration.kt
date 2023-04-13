@@ -21,6 +21,7 @@ import java.util.*
  * 该分割线需要支持 网格 线性 瀑布布局
  * 分割线的种类 颜色 单纯的空格 drawable
  * 支持在不同的分割线位置绘制不同的视图
+ * https://github.com/wkkun/DividerDecoration
  **/
 abstract class BaseItemDecoration constructor(build: Builder) : RecyclerView.ItemDecoration() {
 
