@@ -26,11 +26,12 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     private var enableLoadingShadow = false //是否启用加载状态时的半透明阴影
     private var emptyText: String = ""
     private var emptyIcon: Int = 0
+    private var errorText: String = ""
+    private var errorIcon: Int = 0
     private var enableTouchWhenLoading = false
     private var defaultShowLoading = false
     private var noEmptyAndError = false //是否去除empty和error状态，有时候只需要一个loading状态，这样减少内存
     private var showLoadingOnce = false //是否只显示一次Loading
-    private var retryBtnId: Int = 0  //错误点击重试按钮id
     private var retryAutoLoading: Boolean = true // 错误重试是否自动显示loadding
     private var loadingLayoutId = 0
     private var emptyLayoutId = 0
@@ -166,7 +167,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     }
 
     fun showContent(): StateLayout {
-        if(state == State.None) return this;
+        if(state == State.None) return this
         postDelayed({ switchLayout(State.Content) }, createSwitchTimeDiff())
         return this
     }
@@ -315,7 +316,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                 }
             }
 
-            if(isEmptyViewRetryEnable) (findViewById<View?>(retryBtnId)?: this).setOnClickListener { retry(emptyView) }
+            if(isEmptyViewRetryEnable) (findViewById<View?>(R.id.btn_retry)?: this).setOnClickListener { retry(emptyView) }
         }
         return this
     }
@@ -334,8 +335,22 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
             }
             visibility = View.GONE
             alpha = 0f
-            (findViewById<View?>(retryBtnId)?: this).setOnClickListener { retry(errorView) }
             addView(errorView)
+
+            //智能设置文字和图标
+            if(errorView!=null && errorView is ViewGroup){
+                val group = errorView as ViewGroup
+                (0 until group.childCount).forEach {
+                    val child = group.getChildAt(it)
+                    if(child is TextView && !errorText.isEmpty()) {
+                        child.text = errorText
+                    }else if(child is ImageView && errorIcon != 0){
+                        child.setImageResource(errorIcon)
+                    }
+                }
+            }
+
+            (findViewById<View?>(R.id.btn_retry)?: this).setOnClickListener { retry(errorView) }
         }
         return this
     }
@@ -356,6 +371,8 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                   errorLayoutId: Int? = null,
                   emptyText: String? = null,
                   emptyIcon: Int? = null,
+                  errorText: String? = null,
+                  errorIcon: Int? = null,
                   useContentBgWhenLoading: Boolean? = null,
                   animDuration: Long? = null,
                   noEmptyAndError: Boolean? = null,
@@ -365,12 +382,13 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                   showLoadingOnce: Boolean? = null,
                   paddingTop: Int? = null,
                   paddingBottom: Int? = null,
-                  retryBtnId: Int? = null,
                   retryAutoLoading: Boolean = true,
                   isEmptyViewRetryEnable: Boolean = true,
                   retryAction: ((errView: View) -> Unit)? = null): StateLayout {
         if(emptyText!=null) this.emptyText = emptyText
         if(emptyIcon!=null) this.emptyIcon = emptyIcon
+        if(errorText!=null) this.errorText = errorText
+        if(errorIcon!=null) this.errorIcon = errorIcon
         if(noEmptyAndError!=null) this.noEmptyAndError = noEmptyAndError
         if (loadingLayoutId != null) {
             this.loadingLayoutId = loadingLayoutId
@@ -396,9 +414,8 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         if (enableLoadingShadow != null) this.enableLoadingShadow = enableLoadingShadow
         if (enableTouchWhenLoading != null) this.enableTouchWhenLoading = enableTouchWhenLoading
         if (showLoadingOnce != null) this.showLoadingOnce = showLoadingOnce
-        if (retryBtnId != null) this.retryBtnId = retryBtnId
         this.retryAutoLoading = retryAutoLoading
-        this.isEmptyViewRetryEnable = isEmptyViewRetryEnable;
+        this.isEmptyViewRetryEnable = isEmptyViewRetryEnable
         if(retryAction!=null) mRetryAction = retryAction
         return this
     }
@@ -428,14 +445,23 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     /**
      * 配置错误视图
      */
-    fun configErrorLayoutId(errorLayoutId: Int? = null, retryBtnId: Int? = null, retryAutoLoading:Boolean = true, retryAction: ((errView: View) -> Unit)? = null){
-        if (errorLayoutId != null){
-            this.errorLayoutId = errorLayoutId
+    fun configErrorLayoutId(errorLayoutId: Int? = null, errorText: String? = null, errorIcon: Int? = null, retryAutoLoading:Boolean = true){
+        if (errorLayoutId != null) this.errorLayoutId = errorLayoutId
+        if(errorLayoutId!=null || errorText!=null || errorIcon!=null){
+            if(errorText!=null) this.errorText = errorText
+            if(errorIcon!=null) this.errorIcon = errorIcon
             setErrorLayout()
         }
-        if(retryBtnId!=null) this.retryBtnId = retryBtnId
+
         this.retryAutoLoading = retryAutoLoading
-        if(retryAction!=null) mRetryAction = retryAction
+    }
+
+    fun configError(errorText: String? = null, errorIcon: Int? = null){
+        if (errorText != null || errorIcon != null){
+            if (errorText != null) this.errorText = errorText
+            if (errorIcon != null) this.errorIcon = errorIcon
+            setEmptyLayout()
+        }
     }
 
     /**

@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/empty_ic" />
+        android:src="@drawable/baselib_statelayout_empty" />
 
     <TextView
         android:id="@+id/tvNoDataText"
@@ -26,8 +26,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:text="这里好像什么都没有"
-        android:textColor="@color/black_999999"
-        android:textSize="16dp" />
+        android:textColor="#505c73"
+        android:textSize="14dp" />
 
     <Space
         android:layout_width="wrap_content"

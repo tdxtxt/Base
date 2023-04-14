@@ -59,14 +59,14 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     /**
      * 多状态通用页面
      */
-    fun getStateView(resId: Int) : StateLayout?{
+    fun getStateView(resId: Int) : StateLayout{
         var stateLayout: StateLayout? = stateLayouts.get(resId)
 
         if(stateLayout != null) return stateLayout
 
         val view: View = findViewById(resId)?: (findViewById<View>(android.R.id.content).apply { resId == android.R.id.content })
 
-        stateLayout = StateLayout(fragmentActivity!!)
+        stateLayout = StateLayout(fragmentActivity)
 
         initConfigStateView(view, stateLayout)
         stateLayout.showContent()

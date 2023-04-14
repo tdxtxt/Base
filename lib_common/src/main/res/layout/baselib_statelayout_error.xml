@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white_ffffff"
     android:orientation="vertical"
     android:paddingBottom="50dp">
@@ -15,10 +16,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/empty_ic" />
+        android:src="@drawable/baselib_statelayout_fail" />
 
     <TextView
-        android:id="@+id/btn_retry"
+        android:id="@+id/text_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -26,8 +27,23 @@
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
         android:text="数据获取失败，请重试！"
-        android:textColor="#1c1e23"
-        android:textSize="16dp" />
+        android:textColor="#505c73"
+        android:textSize="14dp" />
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击重试"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        app:radius="24dp"
+        android:textColor="@color/white_ffffff"
+        android:textSize="15dp"
+        android:paddingHorizontal="30dp"
+        android:paddingVertical="8dp"
+        app:bgColor="#1b71ea"/>
+
 
     <Space
         android:layout_width="wrap_content"
