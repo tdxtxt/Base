@@ -31,9 +31,7 @@ class MainActivity : BaseActivity() {
 //            }
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
-            CommMenuDialog(fragmentActivity).addMenu(MenuCallBack("男"){
-                ToastHelper.showToast("男")
-            }).addMenu(MenuCallBack("女")).show()
+            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

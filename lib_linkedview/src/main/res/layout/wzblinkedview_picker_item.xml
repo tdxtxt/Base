@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemview_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/wzblinkedview_item_background">
+
+    <CheckedTextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:checked="true"
+        android:drawableEnd="@drawable/wzblinkedview_item_checked"
+        android:padding="10dp"
+        android:textAlignment="center"
+        android:textColor="@drawable/wzblinkedview_item_textcolor"
+        android:textSize="15sp"
+        tools:text="item" />
+
+    <ImageView
+        android:id="@+id/checkbox"
+        android:layout_width="60dp"
+        android:layout_height="15dp"
+        android:background="@android:color/transparent"
+        android:layout_gravity="right|center_vertical"/>
+
+</FrameLayout>
