@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.tdxtxt.linkedview.PickerView
-        android:id="@+id/pickerView"
-        android:layout_width="120dp"
+    <com.tdxtxt.tablayout.vertical.YSlidingTabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="104dp"
+        android:layout_height="match_parent"
+        app:tl_textUnselectBold="false"
+        app:tl_textSelectBold="true"
+        app:tl_textSelectColor="#151D33"
+        app:tl_textUnselectColor="#505C73"
+        android:background="@color/gray_f2f2f2"
+        app:tl_indicator_width="3dp"
+        app:tl_indicator_height="20dp"
+        app:tl_backgroundSelectColor="@color/white_ffffff"
+        app:tl_backgroundUnselectColor="@color/gray_f2f2f2"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+</LinearLayout>

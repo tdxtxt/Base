@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- indicator -->
+    <!-- 设置显示器颜色 -->
+    <attr name="tl_indicator_color" format="color"/>
+    <!-- 设置显示器高度 -->
+    <attr name="tl_indicator_height" format="dimension"/>
+    <!-- 设置显示器固定宽度 -->
+    <attr name="tl_indicator_width" format="dimension"/>
+    <!-- 设置显示器圆角弧度-->
+    <attr name="tl_indicator_corner_radius" format="dimension"/>
+    <!-- 设置显示器margin -->
+    <attr name="tl_indicator_offset_bottom" format="dimension"/>
+
+    <!-- title -->
+    <!-- 设置字体选中大小 -->
+    <attr name="tl_textSelectSize" format="dimension"/>
+    <!-- 设置字体未选中大小 -->
+    <attr name="tl_textUnselectSize" format="dimension"/>
+    <!-- 设置字体选中颜色 -->
+    <attr name="tl_textSelectColor" format="color"/>
+    <!-- 设置字体未选中颜色 -->
+    <attr name="tl_textUnselectColor" format="color"/>
+    <!-- 设置字体选中是否加粗 -->
+    <attr name="tl_textSelectBold" format="boolean"/>
+    <!-- 设置字体未选中是否加粗 -->
+    <attr name="tl_textUnselectBold" format="boolean"/>
+
+    <!-- tab -->
+    <!-- 设置tab大小等分 -->
+    <attr name="tl_tab_space_equal" format="boolean"/>
+    <!-- 设置XSlidingTabLayout.Tab的paddingLeft和paddingRight -->
+    <attr name="tl_tab_horizontal_padding" format="dimension"/>
+    <!-- 设置XSlidingTabLayout.Tab的marginLeft和marginRight -->
+    <attr name="tl_tab_horizontal_margin" format="dimension"/>
+    <!-- 设置YSlidingTabLayout.Tab的paddingLeft和paddingRight -->
+    <attr name="tl_tab_vertical_padding" format="dimension"/>
+    <!-- 设置YSlidingTabLayout.Tab的marginLeft和marginRight -->
+    <attr name="tl_tab_vertical_margin" format="dimension"/>
+
+    <declare-styleable name="XSlidingTabLayout">
+        <attr name="tl_indicator_color"/>
+        <attr name="tl_indicator_height"/>
+        <attr name="tl_indicator_width"/>
+        <attr name="tl_indicator_corner_radius"/>
+        <attr name="tl_indicator_offset_bottom"/>
+
+        <attr name="tl_textSelectSize"/>
+        <attr name="tl_textUnselectSize"/>
+        <attr name="tl_textSelectColor"/>
+        <attr name="tl_textUnselectColor"/>
+        <attr name="tl_textSelectBold"/>
+        <attr name="tl_textUnselectBold"/>
+
+        <attr name="tl_tab_space_equal"/>
+        <attr name="tl_tab_horizontal_margin"/>
+        <attr name="tl_tab_horizontal_padding"/>
+    </declare-styleable>
+
+    <declare-styleable name="YSlidingTabLayout">
+        <attr name="tl_backgroundSelectColor" format="color"/>
+        <attr name="tl_backgroundUnselectColor" format="color"/>
+
+        <attr name="tl_indicator_color"/>
+        <attr name="tl_indicator_height"/>
+        <attr name="tl_indicator_width"/>
+        <attr name="tl_indicator_corner_radius"/>
+
+        <attr name="tl_textSelectSize"/>
+        <attr name="tl_textUnselectSize"/>
+        <attr name="tl_textSelectColor"/>
+        <attr name="tl_textUnselectColor"/>
+        <attr name="tl_textSelectBold"/>
+        <attr name="tl_textUnselectBold"/>
+
+        <attr name="tl_tab_space_equal"/>
+        <attr name="tl_tab_vertical_padding"/>
+    </declare-styleable>
+
+
+</resources>
