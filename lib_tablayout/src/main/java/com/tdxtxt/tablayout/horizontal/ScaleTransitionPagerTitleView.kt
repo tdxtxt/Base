@@ -13,7 +13,7 @@ import com.tdxtxt.tablayout.tools.TabUtils
  *     desc   : 带颜色渐变和缩放的指示器标题
  * </pre>
  */
-class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalCount: Int) : ColorTransitionPagerTitleView(context) {
+class ScaleTransitionPagerTitleView(context: Context) : ColorTransitionPagerTitleView(context) {
     private var selectedBold = false
     private var normalBold = false
     private var mTextSelectSize = 0f

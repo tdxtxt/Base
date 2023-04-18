@@ -133,7 +133,7 @@ class XSlidingTabLayout : MagicIndicator {
             override fun getCount() = mTitles?.size ?: 0
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val titleView = ScaleTransitionPagerTitleView(context, index, count)
+                val titleView = ScaleTransitionPagerTitleView(context)
                 titleView.setTextColor(mTextUnselectColor, mTextSelectColor)
                 titleView.setTextBold(mTextUnselectBold, mTextSelectBold)
                 titleView.setTextSize(mTextUnselectSize, mTextSelectSize, mTextSizeScale)
