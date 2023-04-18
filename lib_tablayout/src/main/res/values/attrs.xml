@@ -25,6 +25,8 @@
     <attr name="tl_textSelectBold" format="boolean"/>
     <!-- 设置字体未选中是否加粗 -->
     <attr name="tl_textUnselectBold" format="boolean"/>
+    <!-- 设置字体大小是否支持缩放 -->
+    <attr name="tl_textSizeScale" format="boolean"/>
 
     <!-- tab -->
     <!-- 设置tab大小等分 -->
@@ -51,6 +53,7 @@
         <attr name="tl_textUnselectColor"/>
         <attr name="tl_textSelectBold"/>
         <attr name="tl_textUnselectBold"/>
+        <attr name="tl_textSizeScale"/>
 
         <attr name="tl_tab_space_equal"/>
         <attr name="tl_tab_horizontal_margin"/>

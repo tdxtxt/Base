@@ -16,7 +16,10 @@ import com.tdxtxt.tablayout.tools.TabUtils
 class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalCount: Int) : ColorTransitionPagerTitleView(context) {
     private var selectedBold = false
     private var normalBold = false
+    private var mTextSelectSize = 0f
+    private var mTextUnselectSize = 0f
 
+    private var mTextSizeScale = true
     private var mSelectedScale = 1f
     private var mNormalScale = 1f
     private var mDiffScale = 0f
@@ -25,14 +28,16 @@ class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalC
         setPadding(0, 0, 0, 0)
     }
 
-    fun setTextSize(normalSize: Float, selectedSize: Float){
-        val normalTextSize = if(normalSize == 0f) TabUtils.dp2px(14f).toFloat() else normalSize
-        val selectedTextSize = if(selectedSize == 0f) normalTextSize else selectedSize
-        mDiffScale = (selectedTextSize - normalTextSize) / selectedTextSize
-        mNormalScale = normalTextSize / selectedTextSize
-        mSelectedScale = 1f
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedTextSize)
+    fun setTextSize(normalSize: Float, selectedSize: Float, textSizeScale: Boolean){
+        mTextUnselectSize = if(normalSize == 0f) TabUtils.dp2px(14f) else normalSize
+        mTextSelectSize = if(selectedSize == 0f) mTextUnselectSize else selectedSize
+        mTextSizeScale = textSizeScale
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSelectSize)
+        if(textSizeScale){
+            mDiffScale = (mTextSelectSize - mTextUnselectSize) / mTextSelectSize
+            mNormalScale = mTextUnselectSize / mTextSelectSize
+            mSelectedScale = 1f
+        }
     }
 
     fun setTextBold(normalBold: Boolean, selectedBold: Boolean){
@@ -53,7 +58,9 @@ class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalC
             setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
         }
 
-//        setTextSize(TypedValue.COMPLEX_UNIT_PX, selectedSize)
+        if(!mTextSizeScale){
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSelectSize)
+        }
     }
 
     override fun onDeselected(index: Int, totalCount: Int) {
@@ -64,11 +71,14 @@ class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalC
             setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
         }
 
-//        setTextSize(TypedValue.COMPLEX_UNIT_PX, normalSize)
+        if(!mTextSizeScale){
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextUnselectSize)
+        }
     }
 
     override fun onLeave(index: Int, totalCount: Int, leavePercent: Float, leftToRight: Boolean) {
         super.onLeave(index, totalCount, leavePercent, leftToRight)
+        if(!mTextSizeScale) return
         if(mDiffScale == 0f) return
         setScaleX(mSelectedScale - mDiffScale * leavePercent)
         setScaleY(mSelectedScale - mDiffScale * leavePercent)
@@ -76,6 +86,7 @@ class ScaleTransitionPagerTitleView(context: Context, val index: Int, val totalC
 
     override fun onEnter(index: Int, totalCount: Int, enterPercent: Float, leftToRight: Boolean) {
         super.onEnter(index, totalCount, enterPercent, leftToRight)
+        if(!mTextSizeScale) return
         if(mDiffScale == 0f) return
         setScaleX(mNormalScale + mDiffScale * enterPercent)
         setScaleY(mNormalScale + mDiffScale * enterPercent)

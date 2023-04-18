@@ -40,6 +40,7 @@ class XSlidingTabLayout : MagicIndicator {
     private var mTextUnselectColor: Int = ContextCompat.getColor(context, R.color.tl_unselect_color)
     private var mTextSelectBold: Boolean = false
     private var mTextUnselectBold: Boolean = false
+    private var mTextSizeScale: Boolean = true
 
     private var mTabEqual: Boolean = false
     private var mTabHorizontalMargin: Float = 0f
@@ -82,6 +83,7 @@ class XSlidingTabLayout : MagicIndicator {
         )
         mTextSelectBold = attributes.getBoolean(R.styleable.XSlidingTabLayout_tl_textSelectBold, false)
         mTextUnselectBold = attributes.getBoolean(R.styleable.XSlidingTabLayout_tl_textUnselectBold, false)
+        mTextSizeScale = attributes.getBoolean(R.styleable.XSlidingTabLayout_tl_textSizeScale, true)
 
         mTabEqual = attributes.getBoolean(R.styleable.XSlidingTabLayout_tl_tab_space_equal, false)
         mTabHorizontalMargin = attributes.getDimension(R.styleable.XSlidingTabLayout_tl_tab_horizontal_margin, 0f)
@@ -134,7 +136,7 @@ class XSlidingTabLayout : MagicIndicator {
                 val titleView = ScaleTransitionPagerTitleView(context, index, count)
                 titleView.setTextColor(mTextUnselectColor, mTextSelectColor)
                 titleView.setTextBold(mTextUnselectBold, mTextSelectBold)
-                titleView.setTextSize(mTextUnselectSize, mTextSelectSize)
+                titleView.setTextSize(mTextUnselectSize, mTextSelectSize, mTextSizeScale)
 
                 titleView.text = mTitles?.get(index)
 
