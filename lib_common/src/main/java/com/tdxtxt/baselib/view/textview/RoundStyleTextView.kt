@@ -122,6 +122,11 @@ class RoundStyleTextView : AppCompatTextView{
         }
     }
 
+    fun setBorder(borderWidth: Int, borderColor: Int){
+        val myGrad = background as GradientDrawable
+        myGrad.setStroke(borderWidth, borderColor)
+    }
+
     fun bindEnableByEditor(func: (() -> Boolean), vararg edits: EditText){
         if(edits.isEmpty()) return
         CustomTextWatcher.createImpl(object : CustomTextWatcher() {
