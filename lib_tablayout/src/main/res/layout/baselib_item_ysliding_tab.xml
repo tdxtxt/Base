@@ -24,5 +24,8 @@
         android:id="@+id/tv_tab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        tools:text="菜单"
+        android:textSize="18dp"
+        android:gravity="center_vertical"
         android:layout_gravity="center" />
 </FrameLayout>

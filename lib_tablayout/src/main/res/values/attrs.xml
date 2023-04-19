@@ -75,9 +75,13 @@
         <attr name="tl_textUnselectColor"/>
         <attr name="tl_textSelectBold"/>
         <attr name="tl_textUnselectBold"/>
+        <attr name="tl_textMaxLine" format="integer"/>
+        <attr name="tl_textLineLength" format="integer"/>
 
         <attr name="tl_tab_space_equal"/>
         <attr name="tl_tab_vertical_padding"/>
+        <attr name="tl_tab_horizontal_padding"/>
+        <attr name="tl_tab_height" format="dimension"/>
     </declare-styleable>
 
 

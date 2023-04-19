@@ -2,6 +2,7 @@ package com.tdxtxt.tablayout.vertical
 
 import android.content.Context
 import android.graphics.Typeface
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
@@ -39,11 +40,15 @@ class YSlidingTabLayout : FrameLayout {
     private var mTextUnselectColor: Int = ContextCompat.getColor(context, R.color.tl_unselect_color)
     private var mTextSelectBold: Boolean = false
     private var mTextUnselectBold: Boolean = false
+    private var mTextMaxLine = -1 //总共显示多少行-1表示自适应
+    private var mTextLineLength = -1 //每一行最多显示字数-1表示自适应
 
     private var mBackgroundSelectColor: Int = ContextCompat.getColor(context, android.R.color.white)
     private var mBackgroundUnselectColor: Int = ContextCompat.getColor(context, android.R.color.white)
 
+    private var mTabHeight: Float = 0f
     private var mTabVerticalPadding: Float = 0f
+    private var mTabHorizontalPadding: Float = 0f
 
     constructor(context: Context): super(context){
         initView(context)
@@ -66,6 +71,8 @@ class YSlidingTabLayout : FrameLayout {
                 TabUtils.dp2px(4f))
 
 
+        mTextMaxLine = attributes.getInteger(R.styleable.YSlidingTabLayout_tl_textMaxLine, -1)
+        mTextLineLength = attributes.getInteger(R.styleable.YSlidingTabLayout_tl_textLineLength, -1)
         mTextSelectSize = attributes.getDimension(
             R.styleable.YSlidingTabLayout_tl_textSelectSize,
             TabUtils.sp2px(14f)
@@ -85,9 +92,11 @@ class YSlidingTabLayout : FrameLayout {
         mTextSelectBold = attributes.getBoolean(R.styleable.YSlidingTabLayout_tl_textSelectBold, false)
         mTextUnselectBold = attributes.getBoolean(R.styleable.YSlidingTabLayout_tl_textUnselectBold, false)
 
+        mTabHeight = attributes.getDimension(R.styleable.YSlidingTabLayout_tl_tab_height, 0f)
         mTabVerticalPadding = attributes.getDimension(R.styleable.YSlidingTabLayout_tl_tab_vertical_padding,
             TabUtils.dp2px(12f)
         )
+        mTabHorizontalPadding = attributes.getDimension(R.styleable.YSlidingTabLayout_tl_tab_horizontal_padding, 0f)
 
         mBackgroundSelectColor = attributes.getColor(R.styleable.YSlidingTabLayout_tl_backgroundSelectColor, ContextCompat.getColor(context, android.R.color.white))
         mBackgroundUnselectColor = attributes.getColor(R.styleable.YSlidingTabLayout_tl_backgroundUnselectColor, ContextCompat.getColor(context, android.R.color.white))
@@ -115,21 +124,26 @@ class YSlidingTabLayout : FrameLayout {
         }
     }
 
+    /**
+     * 参考 https://mp.weixin.qq.com/s/UK7Is0DDcUmzC7CTB8gyvQ
+     */
     private fun scrollToPosition(position: Int){
         val manager = mRecyclerView.layoutManager
         if(manager is LinearLayoutManager){
             //如果选中的条目不在显示范围内，要滑动条目让该条目显示出来
             val startVisible = manager.findFirstVisibleItemPosition()
             val endVisible = manager.findLastVisibleItemPosition()
-            Log.i("tabLayout", String.format("startVisible=%s; endVisible=%s; position=%s", startVisible, endVisible, position))
-            if(position <= startVisible + 1){
+            if(position <= startVisible){
+                TabUtils.rvScrollToPosition(mRecyclerView, startVisible - 1)
                 //这个方法的作用是定位到指定项，就是把你想显示的项显示出来，但是在屏幕的什么位置是不管的，只要那一项现在看得到了，那它就罢工了！
-                manager.scrollToPosition(startVisible - 1)
-            }else if(position >= endVisible - 1){
+//                manager.scrollToPosition(startVisible - 1)
+            }else if(position >= endVisible){
+                TabUtils.rvSmoothScrollToPosition(mRecyclerView, startVisible + 1)
                 //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
-                manager.scrollToPositionWithOffset(startVisible + 1, 0)
+//                manager.scrollToPositionWithOffset(startVisible + 1, 0)
             }
         }
+
     }
 
     fun setViewPager(viewPager: ViewPager) {
@@ -196,11 +210,27 @@ class YSlidingTabLayout : FrameLayout {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
             val holder = TabViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.baselib_item_ysliding_tab, parent, false))
             holder.mTab?.setOnClickListener { clickListener?.itemClick(holder.itemView, holder.adapterPosition) }
+            if (tabLayout.mTabHeight > 0)
+                holder.mTab?.apply {
+                    layoutParams = layoutParams.apply {
+                        height = tabLayout.mTabHeight.toInt()
+                    }
+                }
+            if(tabLayout.mTextMaxLine > 0){
+                holder.mTab?.maxLines = tabLayout.mTextMaxLine
+                holder.mTab?.ellipsize = TextUtils.TruncateAt.END
+            }
+            holder.mTab?.setPadding(tabLayout.mTabHorizontalPadding.toInt(), tabLayout.mTabVerticalPadding.toInt(), tabLayout.mTabHorizontalPadding.toInt(), tabLayout.mTabVerticalPadding.toInt())
+            holder.mIndicator?.setParmas(tabLayout.mIndicatorWidth, tabLayout.mIndicatorHeight, tabLayout.mIndicatorColor, tabLayout.mIndicatorRadius)
             return holder
         }
 
         override fun onBindViewHolder(holder: TabViewHolder, position: Int) {
-            holder.mTab?.setText(titles?.get(position))
+            if(tabLayout.mTextLineLength > 0){
+                holder.mTab?.setText((titles?.get(position) as java.lang.String?)?.replaceAll("(.{${tabLayout.mTextLineLength}})", "$1\n")?.trim())
+            }else{
+                holder.mTab?.setText(titles?.get(position))
+            }
             holder.itemView.setBackgroundColor(if(isCheck(position)) tabLayout.mBackgroundSelectColor else tabLayout.mBackgroundUnselectColor)
             holder.mTab?.setTextSize(TypedValue.COMPLEX_UNIT_PX, if(isCheck(position)) tabLayout.mTextSelectSize else tabLayout.mTextUnselectSize)
             holder.mTab?.setTextColor(if(isCheck(position)) tabLayout.mTextSelectColor else tabLayout.mTextUnselectColor)
@@ -210,10 +240,8 @@ class YSlidingTabLayout : FrameLayout {
             }else{
                 holder.mTab?.setTypeface(if(tabLayout.mTextUnselectBold) Typeface.defaultFromStyle(Typeface.BOLD) else Typeface.defaultFromStyle(Typeface.NORMAL))
             }
-            holder.mTab?.setPadding(0, tabLayout.mTabVerticalPadding.toInt(), 0, tabLayout.mTabVerticalPadding.toInt())
 
             holder.mIndicator?.visibility = if(isCheck(position)) View.VISIBLE else View.INVISIBLE
-            holder.mIndicator?.setParmas(tabLayout.mIndicatorWidth, tabLayout.mIndicatorHeight, tabLayout.mIndicatorColor, tabLayout.mIndicatorRadius)
         }
 
         fun isCheck(position: Int) = position == checkIndex
