@@ -80,7 +80,6 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
                 loadingLayoutId = R.layout.baselib_statelayout_loading, //自定义加载中布局
                 errorLayoutId = R.layout.baselib_statelayout_error, //自定义加载失败布局
                 emptyLayoutId = R.layout.baselib_statelayout_empty, //自定义数据位为空的布局
-                useContentBgWhenLoading = true, //加载过程中是否使用内容的背景
                 retryAutoLoading = true,
 //                enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面
                 retryAction = {

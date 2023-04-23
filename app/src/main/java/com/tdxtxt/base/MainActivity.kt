@@ -21,7 +21,9 @@ class MainActivity : BaseActivity() {
     override fun getLayoutResId() = R.layout.activity_main
 
     override fun initUi() {
-        ImageLoader.loadImageRoundRect(iv_image, "https://img2.baidu.com/it/u=3202947311,1179654885&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", 12f)
+        getStateView(R.id.iv_image).showLoading()
+
+//        ImageLoader.loadImageRoundRect(iv_image, "https://img2.baidu.com/it/u=3202947311,1179654885&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", 12f)
         btn_next_1.setOnClickListener {
 //            PickerUtils.showTime(fragmentActivity, "选择时间",
 //                TimeUtils.string2Millis("2010-10-06", "yyyy-MM-dd"),
@@ -31,7 +33,8 @@ class MainActivity : BaseActivity() {
 //            }
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
-            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
+            getStateView(R.id.iv_image).showError(true)
+//            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

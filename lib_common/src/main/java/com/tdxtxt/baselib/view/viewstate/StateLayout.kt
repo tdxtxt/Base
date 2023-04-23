@@ -22,8 +22,6 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     private var errorView: View? = null
     private var contentView: View? = null
     private var animDuration = 250L
-    private var useContentBgWhenLoading = false //是否在Loading状态使用内容View的背景
-    private var enableLoadingShadow = false //是否启用加载状态时的半透明阴影
     private var emptyText: String = ""
     private var emptyIcon: Int = 0
     private var errorText: String = ""
@@ -54,12 +52,6 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
             StateLayoutConfig.errorLayoutId
         )
         animDuration = ta.getInt(R.styleable.StateLayout_sl_animDuration, StateLayoutConfig.animDuration.toInt()).toLong()
-        useContentBgWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_useContentBgWhenLoading,
-            StateLayoutConfig.useContentBgWhenLoading
-        )
-        enableLoadingShadow = ta.getBoolean(R.styleable.StateLayout_sl_enableLoadingShadow,
-            StateLayoutConfig.enableLoadingShadow
-        )
         enableTouchWhenLoading = ta.getBoolean(R.styleable.StateLayout_sl_enableTouchWhenLoading,
             StateLayoutConfig.enableTouchWhenLoading
         )
@@ -127,26 +119,25 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         }
     }
 
-    private fun switchLayout(s: State) {
+    private fun switchLayout(s: State, useContentBg: Boolean = true) {
         if(state==s)return
         state = s
         when (state) {
             State.Loading -> {
                 switch(loadingView)
-                if (useContentBgWhenLoading && contentView?.background != null) {
-                    background = contentView?.background
-                }
-                if (enableLoadingShadow) {
-                    loadingView?.setBackgroundColor(Color.parseColor("#88000000"))
-                } else {
-                    loadingView?.setBackgroundResource(0)
-                }
+                loadingView?.setBackgroundColor(Color.TRANSPARENT)
             }
             State.Empty -> {
                 switch(emptyView)
+                if (useContentBg) {
+                    emptyView?.setBackgroundColor(Color.TRANSPARENT)
+                }
             }
             State.Error -> {
                 switch(errorView)
+                if (useContentBg) {
+                    errorView?.setBackgroundColor(Color.TRANSPARENT)
+                }
             }
             State.Content -> {
                 if(contentView?.visibility==VISIBLE && loadingView?.visibility!=VISIBLE
@@ -172,23 +163,23 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
         return this
     }
 
-    fun showEmpty(): StateLayout {
+    fun showEmpty(useContentBg: Boolean = true): StateLayout {
         postDelayed( {
             if(noEmptyAndError) {
                 switchLayout(State.Content)
             }else{
-                switchLayout(State.Empty)
+                switchLayout(State.Empty, useContentBg)
             }
         }, createSwitchTimeDiff())
         return this
     }
 
-    fun showError(): StateLayout {
+    fun showError(useContentBg: Boolean = true): StateLayout {
         postDelayed( {
             if(noEmptyAndError) {
                 switchLayout(State.Content)
             }else{
-                switchLayout(State.Error)
+                switchLayout(State.Error, useContentBg)
             }
         }, createSwitchTimeDiff())
         return this
@@ -233,7 +224,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
     inner class SwitchTask(private var target: View?) : Runnable {
         override fun run() {
             for (i in 0..childCount) {
-                if (state == State.Loading && enableLoadingShadow && getChildAt(i) == contentView) continue
+                if (state == State.Loading && getChildAt(i) == contentView) continue
                 hideAnim(getChildAt(i))
             }
             showAnim(target)
@@ -373,11 +364,9 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                   emptyIcon: Int? = null,
                   errorText: String? = null,
                   errorIcon: Int? = null,
-                  useContentBgWhenLoading: Boolean? = null,
                   animDuration: Long? = null,
                   noEmptyAndError: Boolean? = null,
                   defaultShowLoading: Boolean? = null,
-                  enableLoadingShadow: Boolean? = null,
                   enableTouchWhenLoading: Boolean? = null,
                   showLoadingOnce: Boolean? = null,
                   paddingTop: Int? = null,
@@ -402,16 +391,13 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
             this.errorLayoutId = errorLayoutId
             setErrorLayout()
         }
-        if (useContentBgWhenLoading!=null) {
-            this.useContentBgWhenLoading = useContentBgWhenLoading
-        }
+
         if (animDuration != null) {
             this.animDuration = animDuration
         }
         if (paddingBottom != null) paddingBottomDp = SizeUtils.dp2px(paddingBottom.toFloat())
         if (paddingTop != null) paddingTopDp = SizeUtils.dp2px(paddingTop.toFloat())
         if (defaultShowLoading != null) this.defaultShowLoading = defaultShowLoading
-        if (enableLoadingShadow != null) this.enableLoadingShadow = enableLoadingShadow
         if (enableTouchWhenLoading != null) this.enableTouchWhenLoading = enableTouchWhenLoading
         if (showLoadingOnce != null) this.showLoadingOnce = showLoadingOnce
         this.retryAutoLoading = retryAutoLoading

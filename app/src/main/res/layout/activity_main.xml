@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white_ffffff">
+    android:background="@color/white_f5f5f5">
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:layout_margin="50dp"/>
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
