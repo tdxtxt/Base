@@ -99,17 +99,17 @@ class XSlidingTabLayout : MagicIndicator {
     }
 
 
-    fun setViewPager(viewPager: ViewPager) {
+    fun setViewPager(viewPager: ViewPager, smoothScroll: Boolean = false) {
         val adapter = viewPager.adapter ?: return
         val count = adapter.count
         if (count == 0) return
-        setViewPager(viewPager, (0 until count).map { adapter.getPageTitle(it)?.toString() ?: "" })
+        setViewPager(viewPager, (0 until count).map { adapter.getPageTitle(it)?.toString() ?: "" }, smoothScroll)
     }
 
-    fun setViewPager(viewPager: ViewPager, titles: List<String>?) {
+    fun setViewPager(viewPager: ViewPager, titles: List<String>?, smoothScroll: Boolean = false) {
         mTitles = titles
         mViewPager = viewPager
-        val navigator = createNavigator()
+        val navigator = createNavigator(smoothScroll)
         setNavigator(navigator)
 
         // must after setNavigator
@@ -125,7 +125,7 @@ class XSlidingTabLayout : MagicIndicator {
         ViewPagerHelper.bind(this, viewPager)
     }
 
-    private fun createNavigator(): CommonNavigator {
+    private fun createNavigator(smoothScroll: Boolean = false): CommonNavigator {
         val navigator = CommonNavigator(context)
         navigator.setAdjustMode(mTabEqual)
 
@@ -141,7 +141,7 @@ class XSlidingTabLayout : MagicIndicator {
                 titleView.text = mTitles?.get(index)
 
                 titleView.setOnClickListener {
-                    mViewPager?.currentItem = index
+                    mViewPager?.setCurrentItem(index, smoothScroll)
                 }
                 return titleView
             }
