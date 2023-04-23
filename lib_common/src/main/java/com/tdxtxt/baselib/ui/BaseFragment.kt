@@ -45,7 +45,7 @@ abstract class BaseFragment : RxFragment(), IView {
 
     open fun getParams(bundle: Bundle?){}
 
-    open fun reload(view: View?){}
+    open fun reload(){}
 
     open fun customConfigSateView(view: View, stateLayout: StateLayout){}
 
@@ -108,7 +108,7 @@ abstract class BaseFragment : RxFragment(), IView {
 //                enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面
             retryAction = {
                 //点击errorView的回调
-                reload(view)
+                reload()
             })
 
         customConfigSateView(view, stateLayout)

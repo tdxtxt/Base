@@ -146,11 +146,11 @@ class YSlidingTabLayout : FrameLayout {
 
     }
 
-    fun setViewPager(viewPager: ViewPager) {
+    fun setViewPager(viewPager: ViewPager, smoothScroll: Boolean = false) {
         val adapter = viewPager.adapter ?: return
         val count = adapter.count
         if (count == 0) return
-        setViewPager(viewPager, (0 until count).map { adapter.getPageTitle(it)?.toString() ?: "" })
+        setViewPager(viewPager, (0 until count).map { adapter.getPageTitle(it)?.toString() ?: "" }, smoothScroll)
     }
 
     fun getSimpleTabAdapter(): SimpleTabAdapter? {
@@ -161,12 +161,13 @@ class YSlidingTabLayout : FrameLayout {
         return null
     }
 
-    fun setViewPager(viewPager: ViewPager, titles: List<String>?) {
+    fun setViewPager(viewPager: ViewPager, titles: List<String>?, smoothScroll: Boolean = false) {
         getSimpleTabAdapter()?.apply {
             setData(titles)
             setItemClickListener(object : SimpleTabAdapter.OnItemClickListener {
                 override fun itemClick(view: View, position: Int) {
                     viewPager.currentItem = position
+                    viewPager.setCurrentItem(position, smoothScroll)
                 }
             })
         }
