@@ -166,7 +166,6 @@ class YSlidingTabLayout : FrameLayout {
             setData(titles)
             setItemClickListener(object : SimpleTabAdapter.OnItemClickListener {
                 override fun itemClick(view: View, position: Int) {
-                    viewPager.currentItem = position
                     viewPager.setCurrentItem(position, smoothScroll)
                 }
             })
