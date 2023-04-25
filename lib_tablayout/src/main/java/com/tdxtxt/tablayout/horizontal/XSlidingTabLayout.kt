@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.tdxtxt.tablayout.R
+import com.tdxtxt.tablayout.tools.TabUtils
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -14,7 +15,6 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNav
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
-import com.tdxtxt.tablayout.tools.TabUtils
 
 
 /**
@@ -125,6 +125,16 @@ class XSlidingTabLayout : MagicIndicator {
         ViewPagerHelper.bind(this, viewPager)
     }
 
+    fun getTabView(position: Int): TabView?{
+        val nav = navigator
+        if(nav is CommonNavigator){
+            val tabView = nav.getPagerTitleView(position)
+            if(tabView is TabView)
+                return tabView
+        }
+        return null
+    }
+
     private fun createNavigator(smoothScroll: Boolean = false): CommonNavigator {
         val navigator = CommonNavigator(context)
         navigator.setAdjustMode(mTabEqual)
@@ -133,17 +143,15 @@ class XSlidingTabLayout : MagicIndicator {
             override fun getCount() = mTitles?.size ?: 0
 
             override fun getTitleView(context: Context, index: Int): IPagerTitleView {
-                val titleView = ScaleTransitionPagerTitleView(context)
-                titleView.setTextColor(mTextUnselectColor, mTextSelectColor)
-                titleView.setTextBold(mTextUnselectBold, mTextSelectBold)
-                titleView.setTextSize(mTextUnselectSize, mTextSelectSize, mTextSizeScale)
-
-                titleView.text = mTitles?.get(index)
-
-                titleView.setOnClickListener {
+                val tabView = TabView(context)
+                tabView.setTextColor(mTextUnselectColor, mTextSelectColor)
+                tabView.setTextBold(mTextUnselectBold, mTextSelectBold)
+                tabView.setTextSize(mTextUnselectSize, mTextSelectSize, mTextSizeScale)
+                tabView.setTabTextView(mTitles?.get(index))
+                tabView.setOnClickListener {
                     mViewPager?.setCurrentItem(index, smoothScroll)
                 }
-                return titleView
+                return tabView
             }
 
             override fun getIndicator(context: Context?): IPagerIndicator {

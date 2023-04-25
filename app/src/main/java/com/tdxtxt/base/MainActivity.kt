@@ -33,8 +33,8 @@ class MainActivity : BaseActivity() {
 //            }
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
-            getStateView(R.id.iv_image).showError(true)
-//            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
+//            getStateView(R.id.iv_image).showError(true)
+            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

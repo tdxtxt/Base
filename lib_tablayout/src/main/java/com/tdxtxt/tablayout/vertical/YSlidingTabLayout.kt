@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -208,7 +207,7 @@ class YSlidingTabLayout : FrameLayout {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
-            val holder = TabViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.baselib_item_ysliding_tab, parent, false))
+            val holder = TabViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.tablib_item_ysliding_tab, parent, false))
             holder.mTab?.setOnClickListener { clickListener?.itemClick(holder.itemView, holder.adapterPosition) }
             if (tabLayout.mTabHeight > 0)
                 holder.mTab?.apply {

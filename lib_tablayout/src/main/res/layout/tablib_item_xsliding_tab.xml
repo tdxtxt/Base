@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="wrap_content"
+    tools:layout_width="wrap_content"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <TextView
+        android:id="@+id/tabview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        tools:text="Tab"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/badgeview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:includeFontPadding="false"
+        tools:text=""
+        android:textSize="10dp"
+        android:textColor="#828a99"
+        android:gravity="center"
+        android:singleLine="true"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toTopOf="@+id/tabview"
+        app:layout_constraintStart_toEndOf="@+id/tabview"
+        app:layout_constraintTop_toTopOf="@+id/tabview" />
+</merge>
