@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/iv_image"
         android:layout_width="320dp"
-        android:layout_height="320dp"
+        android:layout_height="120dp"
         android:layout_margin="50dp"/>
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
@@ -34,9 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CommTextButtonStyle"
-        android:enabled="false"
         android:text="视频播放"
-        app:useEnableAlpha="true"
         android:layout_marginTop="16dp"/>
 
 </LinearLayout>

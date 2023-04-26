@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -12,8 +11,7 @@ import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.BottomBaseDialog
 import com.tdxtxt.baselib.dialog.IBDialog
-import com.tdxtxt.baselib.view.recycler.divider.BaseItemDecoration
-import com.tdxtxt.baselib.view.recycler.divider.LinerItemDecoration
+import com.tdxtxt.baselib.view.recycler.divider.LinearItemDecoration
 
 /**
  * <pre>
@@ -38,10 +36,7 @@ class CommMenuDialog constructor(activity: FragmentActivity): BottomBaseDialog(a
         }
 
         recyclerView?.addItemDecoration(
-            LinerItemDecoration.Builder(context, OrientationHelper.VERTICAL)
-                .setDividerMarginHorizontal(16f)
-                .setDividerColor(Color.parseColor("#EBECF0"))
-                .build()
+            LinearItemDecoration(16f, Color.parseColor("#EBECF0"))
         )
         mAdapter = object : BaseQuickAdapter<MenuCallBack, BaseViewHolder>(R.layout.baselib_item_menu_dialog_text){
             override fun convert(holder: BaseViewHolder, item: MenuCallBack) {
