@@ -1,60 +1,74 @@
 package com.tdxtxt.baselib.view.recycler.divider;
 
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.content.res.Resources;
+import android.graphics.Rect;
+import android.view.View;
 
-import androidx.annotation.ColorInt;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * @Author donkingliang QQ:1043214265 github:https://github.com/donkingliang
- * @Description 通用的GridItemDecoration类，用于设置GridLayoutManager的RecyclerView间隔装饰
- * @Date 2020/6/19
+ * <pre>
+ *     author : tangdexiang
+ *     time   : 2023/4/26
+ *     desc   :
+ * </pre>
  */
-public class GridItemDecoration extends GridVariedItemDecoration {
-
-    private Drawable mRowDivider;
-    private Drawable mColumnDivider;
-
-    private int mRowDividerSize;
-    private int mColumnDividerSize;
+public class GridItemDecoration extends RecyclerView.ItemDecoration {
+    private int verticalDividerSize;//行间距，垂直间距
+    private int horizontalDividerSize;//列间距，水平间距
+    private int mFirstDividerSize = 0;
 
 
-    public GridItemDecoration(float rowDividerSize, Drawable rowDivider, float columnDividerSize, Drawable columnDivider) {
-        mRowDividerSize = (int) DividerUtils.dp2px(rowDividerSize);
-        mRowDivider = rowDivider;
-        mColumnDividerSize = (int) DividerUtils.dp2px(columnDividerSize);
-        mColumnDivider = columnDivider;
+    public GridItemDecoration(float spacing) {
+        this(spacing, spacing);
     }
 
-    public GridItemDecoration(float rowDividerSize, @ColorInt int rowColor, float columnDividerSize, @ColorInt int columnColor) {
-        this(rowDividerSize, new ColorDrawable(rowColor), columnDividerSize, new ColorDrawable(columnColor));
+    public GridItemDecoration(float verticalDividerSize, float horizontalDividerSize){
+        this.verticalDividerSize = (int) dp2px(verticalDividerSize);
+        this.horizontalDividerSize = (int) dp2px(horizontalDividerSize);
     }
 
-    public GridItemDecoration(float rowDividerSize, float columnDividerSize, @ColorInt int color) {
-        this(rowDividerSize, new ColorDrawable(color), columnDividerSize, new ColorDrawable(color));
-    }
-
-    public GridItemDecoration(float rowDividerSize, float columnDividerSize){
-        this(rowDividerSize, null, columnDividerSize, null);
-    }
 
     @Override
-    public int getRowDividerSize(int position) {
-        return mRowDividerSize;
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+        if(!checkLayoutManager(parent)) return;
+        GridLayoutManager layoutManager = (GridLayoutManager) parent.getLayoutManager();
+        if(layoutManager == null) return;
+        int spanCount = layoutManager.getSpanCount();
+//        int orientation = layoutManager.getOrientation();
+//        GridLayoutManager.SpanSizeLookup spanSizeLookup = layoutManager.getSpanSizeLookup();
+//        int itemCount = layoutManager.getItemCount();
+
+        int position = parent.getChildAdapterPosition(view); // item position
+        int column = position % spanCount; // item column
+
+        outRect.left = column * horizontalDividerSize / spanCount; // column * ((1f / spanCount) * spacing)
+        outRect.right = horizontalDividerSize - (column + 1) * horizontalDividerSize / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+        if (position >= spanCount) {
+            outRect.top = verticalDividerSize; // item top
+        }else{
+            if(isShowFirstDivider()){
+                outRect.top = mFirstDividerSize;
+            }
+        }
     }
 
-    @Override
-    public Drawable getRowDivider(int position) {
-        return mRowDivider;
+    private boolean isShowFirstDivider() {
+        return mFirstDividerSize > 0;
     }
 
-    @Override
-    public int getColumnDividerSize(int position) {
-        return mColumnDividerSize;
+    public GridItemDecoration setFirstDividerSize(float size) {
+        mFirstDividerSize = (int) dp2px(size);
+        return this;
     }
 
-    @Override
-    public Drawable getColumnDivider(int position) {
-        return mColumnDivider;
+    private boolean checkLayoutManager(RecyclerView view) {
+        return view.getLayoutManager() != null && view.getLayoutManager() instanceof GridLayoutManager;
+    }
+
+    private float dp2px(float value){
+        float scale = Resources.getSystem().getDisplayMetrics().density;
+        return (value * scale + 0.5f);
     }
 }

@@ -36,7 +36,7 @@ class CommMenuDialog constructor(activity: FragmentActivity): BottomBaseDialog(a
         }
 
         recyclerView?.addItemDecoration(
-            LinearItemDecoration(16f, Color.parseColor("#EBECF0"))
+            LinearItemDecoration(0.5f, Color.parseColor("#EBECF0")).setMarginHorizontal(16f)
         )
         mAdapter = object : BaseQuickAdapter<MenuCallBack, BaseViewHolder>(R.layout.baselib_item_menu_dialog_text){
             override fun convert(holder: BaseViewHolder, item: MenuCallBack) {
