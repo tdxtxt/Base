@@ -148,6 +148,7 @@ class XSlidingTabLayout : MagicIndicator {
                 tabView.setTextBold(mTextUnselectBold, mTextSelectBold)
                 tabView.setTextSize(mTextUnselectSize, mTextSelectSize, mTextSizeScale)
                 tabView.setTabTextView(mTitles?.get(index))
+                tabView.setEqual(mTabEqual)
                 tabView.setOnClickListener {
                     mViewPager?.setCurrentItem(index, smoothScroll)
                 }

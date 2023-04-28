@@ -87,6 +87,16 @@ class TabView: ConstraintLayout, IMeasurablePagerTitleView {
         this.mNormalColor = normalColor
     }
 
+    fun setEqual(equal: Boolean) {
+        if(equal){
+            textView.layoutParams = textView.layoutParams?.apply {
+                if(this is LayoutParams){
+                    endToEnd = LayoutParams.PARENT_ID
+                }
+            }
+        }
+    }
+
     override fun onSelected(index: Int, totalCount: Int) {
         if(selectedBold){
             textView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))

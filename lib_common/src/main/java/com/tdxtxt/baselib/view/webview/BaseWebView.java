@@ -105,6 +105,18 @@ public class BaseWebView extends WebView {
         setWebChromeClient(new BaseWebChromeClient());
     }
 
+    public void loadHtmlBody(String bodyHTML){
+        loadDataWithBaseURL(null, addHead(bodyHTML), "text/html", "utf-8",null);
+    }
+
+    protected String addHead(String bodyHTML) {
+        String head = "<head>"
+                + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\"> "
+                + "<style>img{max-width: 100%; width:100%; height:auto;}*{margin:0px;}</style>"
+                + "</head>";
+        return "<html>" + head + "<body>" + bodyHTML + "</body></html>";
+    }
+
     @Override
     public void setWebChromeClient(@Nullable WebChromeClient client) {
         this.chromeClient = client;
