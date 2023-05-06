@@ -43,6 +43,11 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         initUi()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        parseParams(intent) //解析参数
+    }
+
     abstract fun getLayoutResId(): Int
     open fun initUi(){}
     open fun reload(){}

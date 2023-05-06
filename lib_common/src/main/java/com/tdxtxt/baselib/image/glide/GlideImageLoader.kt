@@ -14,7 +14,6 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.load.resource.gif.GifOptions
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
-import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.image.ILoader
 import com.tdxtxt.baselib.image.ImageLoader
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
@@ -82,11 +81,11 @@ object GlideImageLoader : ILoader {
         loadImage(view, url, placeholderResId, true, radiusdp)
     }
 
-    override fun loadCircle(view: ImageView?, url: String?) {
-        loadCircle(view, url, ImageLoader.placeholderResId)
+    override fun loadImageCircle(view: ImageView?, url: String?) {
+        loadImageCircle(view, url, ImageLoader.placeholderResId)
     }
 
-    override fun loadCircle(view: ImageView?, url: String?, placeholderResId: Int) {
+    override fun loadImageCircle(view: ImageView?, url: String?, placeholderResId: Int) {
         if (view == null) return
 
         val options = RequestOptions()

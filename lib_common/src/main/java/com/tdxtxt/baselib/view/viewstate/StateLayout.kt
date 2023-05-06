@@ -372,7 +372,7 @@ class StateLayout @JvmOverloads constructor(context: Context, attributeSet: Attr
                   paddingTop: Int? = null,
                   paddingBottom: Int? = null,
                   retryAutoLoading: Boolean = true,
-                  isEmptyViewRetryEnable: Boolean = true,
+                  isEmptyViewRetryEnable: Boolean = false,
                   retryAction: ((errView: View) -> Unit)? = null): StateLayout {
         if(emptyText!=null) this.emptyText = emptyText
         if(emptyIcon!=null) this.emptyIcon = emptyIcon

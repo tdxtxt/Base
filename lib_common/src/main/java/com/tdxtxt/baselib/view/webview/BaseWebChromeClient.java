@@ -43,7 +43,7 @@ public class BaseWebChromeClient extends WebChromeClient {
     protected WeakReference<Activity> mActivity;
     protected WeakReference<Fragment> mFragment;
 
-    private Activity getActivity(){
+    protected Activity getActivity(){
         Activity activity = null;
         if(mActivity != null){
             activity = mActivity.get();
