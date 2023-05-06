@@ -164,19 +164,19 @@ public class BaseWebView extends WebView {
         }
     }
 
-    public void onResume() {
-        if (Build.VERSION.SDK_INT >= 11) {
-            super.onResume();
-        }
-        resumeTimers();
-    }
-
-    public void onPause() {
-        pauseTimers();
-        if (Build.VERSION.SDK_INT >= 11) {
-            super.onPause();
-        }
-    }
+//    public void onResume() {
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            super.onResume();
+//        }
+//        resumeTimers();
+//    }
+//
+//    public void onPause() {
+//        pauseTimers();
+//        if (Build.VERSION.SDK_INT >= 11) {
+//            super.onPause();
+//        }
+//    }
 
     public void onDestroy(){
         try {
@@ -184,7 +184,7 @@ public class BaseWebView extends WebView {
         }
         catch (Exception ignored) { }
 
-        // then try to remove all child views from this view
+//         then try to remove all child views from this view
         try {
             removeAllViews();
         }

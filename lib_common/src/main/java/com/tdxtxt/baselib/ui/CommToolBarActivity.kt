@@ -29,7 +29,7 @@ abstract class CommToolBarActivity : BaseActivity() {
             override fun onLeftClick(v: View) {
                 if(clickTitleBarBack()){
                     interceptCallBack?.invoke()
-                    if (!interceptBackEvent) finish()
+                    if (!interceptBackEvent) onBackPressed()
                 }
             }
             override fun onTitleClick(v: View) {
