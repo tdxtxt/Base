@@ -2,11 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.tdxtxt.video.player.VideoPlayerView
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="240dp" />
+        android:layout_height="wrap_content"
+        app:videoWidthRatio="16"
+        app:videoHeightRatio="9"/>
 
 </LinearLayout>

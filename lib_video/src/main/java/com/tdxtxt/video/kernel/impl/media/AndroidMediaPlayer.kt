@@ -133,8 +133,20 @@ class AndroidMediaPlayer constructor(val context: Context?) : AbstractVideoPlaye
         return (mMediaPlayer?.duration ?: 0).toLong()
     }
 
+    override fun getCurrentPercentage(): Int {
+        val totalTime = getDuration()
+        if(totalTime == 0L) return 0
+        val percent = getCurrentDuration() / totalTime.toFloat()
+        if(percent > 1) return 100
+        return (percent * 100).toInt()
+    }
+
     override fun getBufferedPercentage(): Int {
         return mBufferedPercent
+    }
+
+    override fun getBufferedDuration(): Long {
+        return mBufferedPercent.toLong()
     }
 
     override fun bindSurface(surfaceView: SurfaceView) {

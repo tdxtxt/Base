@@ -1,8 +1,8 @@
 package com.tdxtxt.video.player
 
-import android.view.View
 import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
+import com.tdxtxt.video.player.controller.AbsControllerCustom
 
 /**
  * <pre>
@@ -20,7 +20,7 @@ interface IVideoView : IVideoPlayer {
     /**
      * 显示自定义view
      */
-    fun showCustomView(view: View)
+    fun showCustomView(iView: AbsControllerCustom)
 
     /**
      * 隐藏自定义view
@@ -33,12 +33,8 @@ interface IVideoView : IVideoPlayer {
     fun setCover(resId: Int)
 
     /**
-     * 设置圆角
+     * 是否后台播放
      */
-    fun setRound(round: Float)
+    fun supportBackgroundPlaying(isBackgroundPlaying: Boolean)
 
-    /**
-     * 横竖屏切换
-     */
-//    fun onConfigurationChanged(newConfig: Configuration)
 }

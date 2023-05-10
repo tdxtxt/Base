@@ -1,11 +1,11 @@
 package com.tdxtxt.video.player.view
 
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.SeekBar
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerWrapper
@@ -19,11 +19,10 @@ import kotlinx.android.synthetic.main.libvideo_view_control_wrapper.view.*
  *     desc   : 基础播放视图【封面图、播放/暂停按钮、进度条、返回按钮、标题】
  * </pre>
  */
-class ControlWrapperView : FrameLayout,
+class WrapperControlView : FrameLayout,
     IControllerWrapper {
     private var mContainer: VideoPlayerView? = null
-    private val mDefaultFadeTimeout = 5000L
-    private var mIsTrackingSeekBar = false
+    private val mDefaultFadeTimeout = 7000L
     private val mFadeRunnable = Runnable { wrapper_menu.visibility = View.GONE }
 
     constructor(context: Context) : super(context) { initView() }
@@ -33,20 +32,9 @@ class ControlWrapperView : FrameLayout,
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         LayoutInflater.from(context).inflate(R.layout.libvideo_view_control_wrapper, this, true)
         if(isInEditMode) setBackgroundResource(android.R.color.black)
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-
-            override fun onProgressChanged(skb: SeekBar?, progress: Int, fromUser: Boolean) {
-                if(mIsTrackingSeekBar) scrollValueProgress(progress)
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                removeCallbacks(mFadeRunnable)
-                setTrackingSeekBar(true)
-            }
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                postDelayed(mFadeRunnable, mDefaultFadeTimeout)
-                setTrackingSeekBar(false)
-            }
-        })
+        seekBar.setTrackingTouchListener { isStart ->
+            if(isStart)  removeCallbacks(mFadeRunnable) else  postDelayed(mFadeRunnable, mDefaultFadeTimeout)
+        }
 
         clickView(wrapper_back)
         clickView(wrapper_toggleplay)
@@ -62,21 +50,19 @@ class ControlWrapperView : FrameLayout,
         }
     }
 
-    private fun scrollValueProgress(progress: Int){
-        val percent = progress.toFloat() / seekBar.max.toFloat()
-        val totalTime = mContainer?.getDuration()?: 0
-        val nowTime = (totalTime * percent).toLong()
-        mContainer?.seekTo(nowTime)
-        updateTime(nowTime)
-    }
-
     private fun clickView(view: View?){
         view?.setOnClickListener {
             showMenu()
 
             when(it){
                 wrapper_back -> {
-                    mContainer?.onBackPressed()
+                    if(mContainer?.onBackPressed() == true){
+                        mContainer?.release()
+                        val activity = context
+                        if(activity is Activity){
+                            activity.finish()
+                        }
+                    }
                 }
                 wrapper_toggleplay_small, wrapper_toggleplay ->{
                     mContainer?.togglePlay()
@@ -99,6 +85,10 @@ class ControlWrapperView : FrameLayout,
                 wrapper_forward -> {
                     val totalTime = mContainer?.getDuration()?: 0L
                     var newTime = (mContainer?.getCurrentDuration()?: 0L) + 15000L
+                    val trackMaxDuration = seekBar.getTrackMaxDuration()
+                    if(trackMaxDuration != null && newTime > trackMaxDuration){
+                        newTime = trackMaxDuration
+                    }
                     if(newTime > totalTime) newTime = totalTime
                     if(newTime < 0) newTime = 0L
                     updateTime(newTime, totalTime)
@@ -113,6 +103,10 @@ class ControlWrapperView : FrameLayout,
         }
     }
 
+    fun setTrackMaxPercent(trackMaxPercent: Float){
+        seekBar.setTrackMaxPercent(trackMaxPercent)
+    }
+
     override fun toggleMenu(){
         removeCallbacks(mFadeRunnable)
         if(wrapper_menu.visibility == View.VISIBLE){
@@ -122,17 +116,8 @@ class ControlWrapperView : FrameLayout,
         }
     }
 
-    var isPlayingTrackingSeekBar: Boolean? = null
     override fun setTrackingSeekBar(isTrackingSeekBar: Boolean) {
-        if(isPlayingTrackingSeekBar == isTrackingSeekBar) return
-        this.mIsTrackingSeekBar = isTrackingSeekBar
-        if(isTrackingSeekBar){
-            isPlayingTrackingSeekBar = mContainer?.isPlaying()
-            if(isPlayingTrackingSeekBar == true) mContainer?.pause()
-        }else{
-            if(isPlayingTrackingSeekBar == true) mContainer?.start()
-            isPlayingTrackingSeekBar = null
-        }
+        seekBar.setTrackingSeekBar(isTrackingSeekBar)
     }
 
     override fun showMenu(){
@@ -175,10 +160,12 @@ class ControlWrapperView : FrameLayout,
     override fun attach(container: VideoPlayerView) {
         this.mContainer = container
         container.addView(this, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        seekBar.attach(container)
     }
 
     override fun detach() {
         unBindSurface()
+        seekBar.detach()
     }
 
     override fun updateTogglePlay(isPlaying: Boolean) {
@@ -220,10 +207,9 @@ class ControlWrapperView : FrameLayout,
         if(total != null) wrapper_total_time.text = PlayerUtils.formatTime(total)
     }
 
-    override fun updateSeekBar(progress: Float?) {
-        progress?.apply {
-            seekBar.progress = (seekBar.max * this).toInt()
-        }
+    override fun updateSeekBar(progress: Int?, secondaryProgress: Int?) {
+        if(progress != null) seekBar?.progress = (progress / 100f * seekBar.max).toInt()
+        if(secondaryProgress != null) seekBar?.secondaryProgress = (secondaryProgress / 100f * seekBar.max).toInt()
     }
 
 }

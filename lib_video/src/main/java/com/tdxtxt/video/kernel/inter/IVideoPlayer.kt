@@ -29,11 +29,11 @@ interface IVideoPlayer {
      */
     fun prepare()
     /**
-     * 播放
+     * 播放，进度从当前播放停留的进度开始
      */
     fun start()
     /**
-     * 重新播放
+     * 重新播放，进度从0开始
      */
     fun reStart()
 
@@ -92,21 +92,21 @@ interface IVideoPlayer {
     fun getDuration(): Long
 
     /**
-     * 获取当前播放百分比
+     * 获取当前播放百分比(0, 100)
      */
-    fun getCurrentPercent(): Float {
-        val totalTime = getDuration()
-        if(totalTime == 0L) return 0f
-        val percent = getCurrentDuration() / totalTime.toFloat()
-        if(percent > 1) return 1f
-        return percent
-    }
+    fun getCurrentPercentage(): Int
 
     /**
      * 获取缓冲百分比
      * @return 获取缓冲百分比
      */
     fun getBufferedPercentage(): Int
+
+    /**
+     * 已缓存的时长
+     */
+    fun getBufferedDuration(): Long
+
 
     /**
      * 设置音量

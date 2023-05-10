@@ -39,7 +39,7 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
     /**
      * 播放器事件回调
      */
-    private var mPlayerEventListenerListRef: WeakHashMap<VideoPlayerListener, Int>? = null
+    private var mPlayerEventListenerListRef: HashMap<VideoPlayerListener, Int>? = null
 
     private var mPlayerEventListenerRef: WeakReference<VideoPlayerListener?>? = null
 
@@ -55,7 +55,7 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
      * 绑定VideoView，监听播放异常，完成，开始准备，视频size变化，视频信息等操作
      */
     fun addPlayerEventListener(listener: VideoPlayerListener) {
-        if(mPlayerEventListenerListRef == null) mPlayerEventListenerListRef = WeakHashMap()
+        if(mPlayerEventListenerListRef == null) mPlayerEventListenerListRef = HashMap()
         mPlayerEventListenerListRef?.put(listener, 0)
     }
 
@@ -75,7 +75,7 @@ abstract class AbstractVideoPlayer : IVideoPlayer {
         }
 
         mPlayerEventListenerListRef?.forEach {
-            it.key?.onPlayStateChanged(state, value)
+            it.key.onPlayStateChanged(state, value)
         }
     }
 

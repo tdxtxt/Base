@@ -17,8 +17,6 @@ import kotlin.math.abs
 class GestureController() : IController {
     private var mContext: Context? = null
     private var mContainer: VideoPlayerView? = null
-//    private var mVideoPlayer: AbstractVideoPlayer? = null
-//    private var mWrapperController: ControlWrapperView? = null
     private var isHorizenalDistance = false
     private var isLeftVerticalDistance = false
     private var isRightVerticalDistance = false
@@ -106,11 +104,11 @@ class GestureController() : IController {
         if(targetTime < 0) targetTime = 0
         if(targetTime > totalTime) targetTime = totalTime
 
-        val progress = targetTime.toFloat() / totalTime.toFloat()
+        val progress = (targetTime.toFloat() / totalTime.toFloat() * 100).toInt()
         mContainer?.getControlWrapper()?.apply {
             setTrackingSeekBar(true)
             updateSeekBar(progress)
-            updateTime(targetTime, totalTime)
+//            updateTime(targetTime, totalTime)
             showMenu()
         }
     }

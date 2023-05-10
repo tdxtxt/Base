@@ -2,6 +2,7 @@ package com.tdxtxt.video.utils
 
 import android.app.Activity
 import android.app.Application
+import android.content.res.Resources
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
@@ -123,5 +124,17 @@ object PlayerUtils {
             decorView.systemUiVisibility = uiOptions
             clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
+    }
+
+
+    /**
+     * Value of dp to value of px.
+     *
+     * @param dpValue The value of dp.
+     * @return value of px
+     */
+    fun dp2px(dpValue: Float): Int {
+        val scale = Resources.getSystem().displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
     }
 }

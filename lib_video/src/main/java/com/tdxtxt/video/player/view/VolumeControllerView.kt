@@ -8,17 +8,17 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
-import com.tdxtxt.video.player.controller.IControllerVolume
+import com.tdxtxt.video.player.controller.IControllerGesture
 import kotlinx.android.synthetic.main.libvideo_view_control_volume_bright.view.*
 
 /**
  * <pre>
  *     author : ton
  *     time   : 2023/3/2
- *     desc   :
+ *     desc   : 声音调节
  * </pre>
  */
-class VolumeControllerView: FrameLayout, IControllerVolume {
+class VolumeControllerView: FrameLayout, IControllerGesture {
     private var mContainer: VideoPlayerView? = null
     private var mAudioManager: AudioManager? = null
     private var mStreamVolume: Int = 0

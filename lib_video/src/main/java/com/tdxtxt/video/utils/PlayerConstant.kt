@@ -38,6 +38,7 @@ object PlayerConstant {
      * 4                暂停播放
      * 5                播放完成
      * 6                正在缓冲
+     * 7                释放播放器内核
      *
      * 11               播放内容尺寸
      */
@@ -51,8 +52,8 @@ object PlayerConstant {
             var STATE_PLAYING = 3
             var STATE_PAUSED = 4
             var STATE_COMPLETED = 5
-            var STATE_BUFFERING = 7
-            var STATE_RELEASE = 8
+            var STATE_BUFFERING = 6
+            var STATE_RELEASE = 7
 
             var CHANGE_VIDEO_SIZE = 11
             var CHANGE_MULTIPLE = 12

@@ -9,15 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
+import com.tdxtxt.video.R
 import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 import com.tdxtxt.video.kernel.inter.VideoPlayerListener
 import com.tdxtxt.video.player.controller.GestureController
+import com.tdxtxt.video.player.controller.AbsControllerCustom
 import com.tdxtxt.video.player.controller.OrientationController
 import com.tdxtxt.video.player.view.BrightControllerView
-import com.tdxtxt.video.player.view.ControlWrapperView
 import com.tdxtxt.video.player.view.MultipleControllerView
 import com.tdxtxt.video.player.view.VolumeControllerView
+import com.tdxtxt.video.player.view.WrapperControlView
 import com.tdxtxt.video.utils.PlayerConstant
 import com.tdxtxt.video.utils.PlayerUtils
 
@@ -25,17 +30,18 @@ import com.tdxtxt.video.utils.PlayerUtils
  * <pre>
  *     author : ton
  *     time   : 2023/2/17
- *     desc   :
+ *     desc   : 视频控件
  * </pre>
  */
-class VideoPlayerView constructor(
-    context: Context,
-    attributeSet: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : FrameLayout(context, attributeSet, defStyleAttr), IVideoPlayer,
-    IVideoView, VideoPlayerListener {
-    private var mWrapperView: ControlWrapperView
+class VideoPlayerView : FrameLayout, IVideoPlayer,
+    IVideoView, VideoPlayerListener, androidx.lifecycle.LifecycleObserver {
+    private var mWrapperView: WrapperControlView = WrapperControlView(context).apply { attach(this@VideoPlayerView) }
     private var mVideoPlayer: AbstractVideoPlayer? = null
+    private var videoWidthRatio = -1
+    private var videoHeightRatio = -1
+    private var videoRadius = 0f
+    private var isBackgroundPlaying = false
+    private var mPauseBeforePlaying: Boolean? = null //熄屏之前是否播放
     private lateinit var mOrientationController: OrientationController
     private lateinit var mGestureController: GestureController
     private lateinit var mMultipleControllerView: MultipleControllerView
@@ -46,12 +52,39 @@ class VideoPlayerView constructor(
 
     private var mFullChangelisenter: ((isFullScreen: Boolean) -> Unit)? = null
 
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attributeSet: AttributeSet) : this(context, attributeSet, 0)
+    constructor(context: Context) : super(context){
+        initView(context)
+    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs){
+        val attributes = context.obtainStyledAttributes(attrs, R.styleable.VideoPlayerView)
+        videoWidthRatio = attributes.getInteger(R.styleable.VideoPlayerView_videoWidthRatio, -1)
+        videoHeightRatio = attributes.getInteger(R.styleable.VideoPlayerView_videoHeightRatio, -1)
+        videoRadius = attributes.getDimension(R.styleable.VideoPlayerView_videoRadius, 0f)
+        attributes.recycle()
+        initView(context)
+    }
 
-    init{
-        mWrapperView = ControlWrapperView(context)
-            .apply { attach(this@VideoPlayerView) }
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        if(videoWidthRatio > 0 && videoHeightRatio > 0){
+            val width = MeasureSpec.getSize(widthMeasureSpec)
+            val height = (width.toFloat() / videoWidthRatio.toFloat() * videoHeightRatio.toFloat())
+            super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height.toInt(), View.MeasureSpec.EXACTLY))
+        }else{
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        }
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if(isPlaying() && isBackgroundPlaying){
+            //退出后不进行播放器的销毁
+            destoryView()
+        }else{
+            release()
+        }
+    }
+
+    private fun initView(context: Context){
         if(!isInEditMode){
             mGestureController = GestureController()
                 .apply { attach(this@VideoPlayerView) }
@@ -135,15 +168,13 @@ class VideoPlayerView constructor(
         }
     }
 
-    fun onBackPressed(){
-        if(isFullScreen()){
+    fun onBackPressed(): Boolean{
+        if (isFullScreen()) {
             stopFullScreen()
-        }else{
-            release()
-            val activity = context
-            if(activity is Activity){
-                activity.finish()
-            }
+            return false
+        }
+        else {
+            return true
         }
     }
 
@@ -154,20 +185,24 @@ class VideoPlayerView constructor(
         mWrapperView.updateMultiple(mVideoPlayer?.getSpeed()?: 1f)
     }
 
-    override fun showCustomView(view: View) {
-        TODO("Not yet implemented")
+    override fun showCustomView(iView: AbsControllerCustom) {
+        hideCustomView()
+        val view = iView.init(this)
+        view?.id = R.id.video_customview
+        if(view != null) mWrapperView.addView(view, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     override fun hideCustomView() {
-        TODO("Not yet implemented")
+        val customView: View? = mWrapperView.findViewById(R.id.video_customview)
+        if(customView != null) mWrapperView.removeView(customView)
     }
 
     override fun setCover(resId: Int) {
         mWrapperView.updateCover(resId)
     }
 
-    override fun setRound(round: Float) {
-        TODO("Not yet implemented")
+    override fun supportBackgroundPlaying(isBackgroundPlaying: Boolean) {
+        this.isBackgroundPlaying = isBackgroundPlaying
     }
 
     override fun setDataSource(path: String?) {
@@ -217,23 +252,27 @@ class VideoPlayerView constructor(
     override fun onPlayStateChanged(@PlayerConstant.PlaylerState state: Int, value: Any?) {
         when(state){
             PlayerConstant.PlaylerState.STATE_PREPARED -> {
-                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercent())
+                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercentage(), getVideoPlayer()?.getBufferedPercentage())
                 mWrapperView.updateTime(getVideoPlayer()?.getCurrentDuration(), getVideoPlayer()?.getDuration())
             }
             PlayerConstant.PlaylerState.STATE_START -> {
-                keepScreenOn = true
+                keepScreenOn = true//禁止熄屏
                 mWrapperView.updateTogglePlay(false)
             }
             PlayerConstant.PlaylerState.STATE_PAUSED -> {
-                keepScreenOn = false
+                keepScreenOn = false//允许熄屏
                 mWrapperView.updateTogglePlay(true)
             }
             PlayerConstant.PlaylerState.STATE_BUFFERING -> {
                 mWrapperView.updateBufferProgress(if (value is Float) value else 1f)
             }
             PlayerConstant.PlaylerState.STATE_PLAYING -> {
-                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercent())
+                mWrapperView.updateSeekBar(getVideoPlayer()?.getCurrentPercentage(), getVideoPlayer()?.getBufferedPercentage())
                 mWrapperView.updateTime(getVideoPlayer()?.getCurrentDuration(), getVideoPlayer()?.getDuration())
+            }
+            PlayerConstant.PlaylerState.STATE_COMPLETED -> {
+                keepScreenOn = false//允许熄屏
+                mWrapperView.updateTogglePlay(true)
             }
             PlayerConstant.PlaylerState.CHANGE_VIDEO_SIZE -> {
                 mWrapperView.changeVideoSize(getVideoPlayer()?.getVideoWidth(), getVideoPlayer()?.getVideoHeight())
@@ -242,7 +281,7 @@ class VideoPlayerView constructor(
                 mWrapperView.updateMultiple(if(value is Float) value else 1f)
             }
             PlayerConstant.PlaylerState.STATE_RELEASE ->{
-                destory()
+                destoryView()
             }
         }
     }
@@ -251,12 +290,15 @@ class VideoPlayerView constructor(
         mVideoPlayer?.release()
     }
 
-    fun destory(){
+    fun destoryView(){
         mFullChangelisenter = null
 
         mOrientationController.detach()
         mGestureController.detach()
         mMultipleControllerView.detach()
+        mVolumeControllerView.detach()
+        mBrightControllerView.detach()
+        mWrapperView.detach()
     }
 
     override fun isRelease(): Boolean {
@@ -271,8 +313,16 @@ class VideoPlayerView constructor(
         return mVideoPlayer?.getDuration()?: 0
     }
 
+    override fun getCurrentPercentage(): Int {
+        return mVideoPlayer?.getCurrentPercentage()?: 0
+    }
+
     override fun getBufferedPercentage(): Int {
         return mVideoPlayer?.getBufferedPercentage()?: 0
+    }
+
+    override fun getBufferedDuration(): Long {
+        return mVideoPlayer?.getBufferedDuration()?: 0L
     }
 
     override fun setVolume(volume: Float) {
@@ -297,5 +347,37 @@ class VideoPlayerView constructor(
 
     override fun getTcpSpeed(): Long {
         return mVideoPlayer?.getTcpSpeed()?: 0
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume(){
+        if(!isBackgroundPlaying){
+            if(mPauseBeforePlaying == true) start()
+        }
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    fun onPause(){
+        if(!isBackgroundPlaying){
+            mPauseBeforePlaying = isPlaying()
+            pause()
+        }
+    }
+
+    /**
+     * 可拖动的最大时长百分段，取值0到1
+     */
+    fun setTrackMaxPercent(trackMaxPercent: Float){
+        mWrapperView.setTrackMaxPercent(trackMaxPercent)
+    }
+
+    /**
+     * 绑定生命周期，用以控制熄屏后视频是否任然播放
+     */
+    fun bindLifecycle(owner: LifecycleOwner?) {
+        owner?.lifecycle?.apply {
+            removeObserver(this@VideoPlayerView)
+            addObserver(this@VideoPlayerView)
+        }
     }
 }

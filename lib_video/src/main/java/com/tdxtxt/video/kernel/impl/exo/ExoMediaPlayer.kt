@@ -19,7 +19,7 @@ import com.tdxtxt.video.utils.PlayerUtils
  * <pre>
  *     author : ton
  *     time   : 2023/2/23
- *     desc   :
+ *     desc   : exo播放器内核
  * </pre>
  */
 class ExoMediaPlayer(val context: Context?) : AbstractVideoPlayer(), Player.Listener {
@@ -136,6 +136,7 @@ class ExoMediaPlayer(val context: Context?) : AbstractVideoPlayer(), Player.List
     }
 
     override fun reStart() {
+        seekTo(0)
         sendStartEvent()
         mMediaPlayer?.play()
         stopProgress()
@@ -209,12 +210,20 @@ class ExoMediaPlayer(val context: Context?) : AbstractVideoPlayer(), Player.List
         return mMediaPlayer?.duration?: 0
     }
 
+    override fun getCurrentPercentage(): Int {
+        val totalTime = getDuration()
+        if(totalTime == 0L) return 0
+        val percent = getCurrentDuration() / totalTime.toFloat()
+        if(percent > 1) return 100
+        return (percent * 100).toInt()
+    }
+
     override fun getBufferedPercentage(): Int {
-        val totalLength = getDuration()
-        if(totalLength == 0L) return 0
-        val buffer = mMediaPlayer?.bufferedPosition?: 0
-        val rate = (buffer / totalLength) * 100
-        return rate.toInt()
+        return mMediaPlayer?.bufferedPercentage?: 0
+    }
+
+    override fun getBufferedDuration(): Long {
+        return mMediaPlayer?.bufferedPosition?: 0L
     }
 
     override fun setVolume(volume: Float) {

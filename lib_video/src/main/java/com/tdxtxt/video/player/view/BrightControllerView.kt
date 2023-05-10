@@ -9,17 +9,17 @@ import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import android.widget.FrameLayout
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
-import com.tdxtxt.video.player.controller.IControllerVolume
+import com.tdxtxt.video.player.controller.IControllerGesture
 import kotlinx.android.synthetic.main.libvideo_view_control_volume_bright.view.*
 
 /**
  * <pre>
  *     author : ton
  *     time   : 2023/3/2
- *     desc   :
+ *     desc   : 亮度调节
  * </pre>
  */
-class BrightControllerView: FrameLayout, IControllerVolume {
+class BrightControllerView: FrameLayout, IControllerGesture {
     private var mContainer: VideoPlayerView? = null
     private var mBrightness: Float = 0f
 
