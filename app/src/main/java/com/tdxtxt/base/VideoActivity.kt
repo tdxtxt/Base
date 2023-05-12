@@ -4,6 +4,7 @@ import android.view.View
 import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.ui.CommToolBarActivity
 import com.tdxtxt.video.VideoPlayerManager
+import com.tdxtxt.video.kernel.impl.exo.ExoMediaPlayer
 import com.tdxtxt.video.kernel.inter.VideoPlayerListener
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.AbsControllerCustom
@@ -25,7 +26,7 @@ class VideoActivity : CommToolBarActivity(){
     }
 
     override fun initUi() {
-        val manager = VideoPlayerManager.newInstance().getVideoPlayer()
+        val manager = VideoPlayerManager.newInstance(ExoMediaPlayer(fragmentActivity)).getVideoPlayer()
         manager.addPlayerEventListener(object : VideoPlayerListener{
             override fun onPlayStateChanged(state: Int, value: Any?) {
                 when(state){
@@ -39,7 +40,8 @@ class VideoActivity : CommToolBarActivity(){
         })
         videoPlayer.bindLifecycle(this)
         videoPlayer.setVideoPlayer(manager)
-        videoPlayer.setDataSource("https://mediaapi.juexiaotime.com/1111112023年法考资料/肖沛权/内部课/40diwuzhang.mp4")
+        videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7ad7e450387702302383294626/v.f100230.m3u8?t=645c5155&sign=b84d52e23d927bb3c16496a5c2311459")
+//        videoPlayer.setDataSource("https://mediaapi.juexiaotime.com/1111112023年法考资料/肖沛权/内部课/40diwuzhang.mp4")
 //        videoPlayer.setTrackMaxPercent(0.5f)
         videoPlayer.start()
     }

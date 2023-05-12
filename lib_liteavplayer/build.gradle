@@ -6,7 +6,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "video_beta"
+def modelName = "liteavplayer"
 def debugNum = 1
 
 android {
@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.3"
+        versionName "0.0.1"
     }
 
     lintOptions {
@@ -35,22 +35,26 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    packagingOptions {
+        pickFirst '**/libc++_shared.so'
+        doNotStrip "*/armeabi/libYTCommon.so"
+        doNotStrip "*/armeabi-v7a/libYTCommon.so"
+        doNotStrip "*/x86/libYTCommon.so"
+        doNotStrip "*/arm64-v8a/libYTCommon.so"
+
+        exclude "lib/armeabi/libijkhlscache-master.so"
+        exclude "lib/armeabi-v7a/libijkhlscache-master.so"
+        exclude "lib/arm64-v8a/libijkhlscache-master.so"
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-//    //视频UI层，必须要有
-//    implementation 'cn.yc:VideoPlayer:3.1.0'
-//    //视频内核层，必须有
-//    implementation 'cn.yc:VideoKernel:3.0.6'
-
+    //google官方lib
     implementation rootProject.ext.supprotLibs
-    api ('com.google.android.exoplayer:exoplayer:2.16.1') {
-        exclude group : "androidx.core" , module: "core"
-        exclude group : "androidx.annotation" , module: "annotation"
-    }
+    api 'com.tencent.liteav:LiteAVSDK_Player:11.1.0.13141'
 }
 
 //上传到Maven仓库的task

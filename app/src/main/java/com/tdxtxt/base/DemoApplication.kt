@@ -12,6 +12,7 @@ import com.tdxtxt.base.net.AppNetProvider
 import com.tdxtxt.baselib.app.ApplicationDelegate
 import com.tdxtxt.baselib.tools.CacheHelper
 import com.tdxtxt.baselib.tools.LogA
+import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.net.NetMgr
 
 
@@ -35,7 +36,7 @@ class DemoApplication : Application() {
     }
 }
 
-class ApplicationDelegateImpl constructor(val context: Application) : ApplicationDelegate(context) {
+class ApplicationDelegateImpl constructor(val application: Application) : ApplicationDelegate(application) {
     override fun onPrivacyAfter(context: Context) {
     }
 
@@ -56,6 +57,8 @@ class ApplicationDelegateImpl constructor(val context: Application) : Applicatio
 //            .registerWbPlatform(WbPlatform.Creator())
             .registerQQPlatform(QQPlatform.Creator())
             .registerAliPlatform(AliPlatform.Creator())
+
+        LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1253499804_1/v_cube.license", "341ea3d21fe51789da3ad8c3ad47bd0f")
     }
 
 }

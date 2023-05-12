@@ -12,6 +12,10 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode 1
         versionName "0.0.1"
+
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+        }
     }
 
     signingConfigs {
@@ -52,6 +56,7 @@ dependencies {
     implementation project(':lib_common')
     implementation project(':lib_net')
     implementation project(':lib_video')
+    implementation project(":lib_liteavplayer")
     implementation project(':lib_pickerview')
     implementation project(':lib_linkedview')
     implementation project(':lib_tablayout')

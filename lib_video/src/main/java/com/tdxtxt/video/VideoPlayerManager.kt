@@ -1,14 +1,9 @@
 package com.tdxtxt.video
 
-import android.content.Context
 import android.os.SystemClock
-import android.util.ArrayMap
-import com.tdxtxt.video.kernel.impl.exo.ExoMediaPlayer
-import com.tdxtxt.video.kernel.impl.media.AndroidMediaPlayer
 import com.tdxtxt.video.kernel.inter.AbstractVideoPlayer
 import com.tdxtxt.video.kernel.inter.IVideoPlayer
 import com.tdxtxt.video.kernel.inter.VideoPlayerListener
-import com.tdxtxt.video.utils.PlayerUtils
 
 /**
  * <pre>
@@ -38,9 +33,9 @@ class VideoPlayerManager(val id: Long, val player: AbstractVideoPlayer) : IVideo
     companion object{
         private var mInstance: VideoPlayerManager? = null
 
-        fun newInstance(context: Context? = PlayerUtils.getApplicationByReflect()): VideoPlayerManager{
+        fun newInstance(player: AbstractVideoPlayer): VideoPlayerManager{
             if(mInstance == null || mInstance?.isRelease() == true){
-                mInstance = VideoPlayerManager(SystemClock.uptimeMillis(), ExoMediaPlayer(context))
+                mInstance = VideoPlayerManager(SystemClock.uptimeMillis(), player)
             }
             return mInstance!!
         }

@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
                 })
         }
         btn_next_3.setOnClickListener {
-            startActivity(Intent(this, VideoActivity::class.java))
+            startActivity(Intent(this, TXVideoActivity::class.java))
         }
     }
 
