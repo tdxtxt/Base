@@ -5,12 +5,10 @@
     android:layout_width="46dp"
     android:layout_height="24dp"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="12dp"
+    android:layout_marginVertical="1dp"
     android:textColor="@android:color/white"
     android:gravity="center"
     android:textSize="14dp"
     tools:text="1.0X"
     android:includeFontPadding="false"
-    android:lineSpacingExtra="0dp"
-
-    android:background="@drawable/liteavlib_item_multiple_normal"/>
+    android:lineSpacingExtra="0dp"/>

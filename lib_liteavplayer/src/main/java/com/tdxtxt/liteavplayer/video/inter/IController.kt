@@ -1,12 +1,9 @@
-package com.tdxtxt.liteavplayer.weight.inter
+package com.tdxtxt.liteavplayer.video.inter
 
-import android.content.res.AssetFileDescriptor
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.IdRes
-import com.tdxtxt.liteavplayer.inter.IVideoPlayer
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tencent.rtmp.TXVodPlayer
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 
 /**
  * <pre>
@@ -16,7 +13,21 @@ import com.tencent.rtmp.TXVodPlayer
  * </pre>
  */
 interface IController {
+    /**
+     * 捆绑父容器
+     */
     fun attach(playerView: TXVideoPlayerView)
+    /**
+     * 跟随activity/fragment生命周期，前提是必须调用{@link TXVideoPlayerView.bindLifecycle}方法
+     */
+    fun onResume(){}
+    /**
+     * 跟随activity/fragment生命周期，前提是必须调用{@link TXVideoPlayerView.bindLifecycle}方法
+     */
+    fun onPause(){}
+    /**
+     * 触发销毁相关方法回调
+     */
     fun detach()
 }
 
@@ -51,12 +62,12 @@ interface IVideoView {
     fun startFullScreen(isReverse: Boolean? = null)
 }
 
-interface IBaiscController : IController {
+interface IBasicController : IController {
     fun setCoverIds(resId: Int)
     fun getViewWidth(): Int
     fun getViewHeight(): Int
-    fun showBaicMenuLayout()
-    fun hideBaicMenuLayout()
+    fun showBasicMenuLayout()
+    fun hideBasicMenuLayout()
     fun showLoading()
     fun hideLoading()
     fun toggleBaicMenuLayout()
@@ -67,25 +78,36 @@ interface IBaiscController : IController {
     fun updateTextTime(current: Int?, total: Int?)
     fun updateFullScreen(isFullScreen: Boolean?)
     fun updateSeekBar(progress: Int?, secondaryProgress: Int? = null)
+    fun updateMultiple(value: Float)
 }
 interface ISeekBarController : IController
-interface IGestureController : IController{
+interface IGestureController : IController {
     fun show(changePercent: Float)
     fun hide()
 }
-interface IMultipleController : IController{
+interface IMultipleController : IController {
     fun show()
     fun hide()
+    fun toggle()
 }
-abstract class AbsControllerCustom: IController{
+abstract class AbsControllerCustom: IController {
     private var mView: View? = null
+    private var mPlayerView: TXVideoPlayerView? = null
+    fun getPlayerView() = mPlayerView
     abstract fun getLayoutResId(): Int
+    abstract fun onCreate()
+
+    override fun attach(playerView: TXVideoPlayerView) {
+        mPlayerView = playerView
+        onCreate()
+    }
 
     override fun detach() {
+        mPlayerView = null
         mView = null
     }
 
-    fun init(playerView: TXVideoPlayerView): View? {
+    fun inflater(playerView: TXVideoPlayerView): View? {
         mView = LayoutInflater.from(playerView.context).inflate(getLayoutResId(), null, false)
         //禁止手势传递
         mView?.setOnTouchListener { v, event ->  true}

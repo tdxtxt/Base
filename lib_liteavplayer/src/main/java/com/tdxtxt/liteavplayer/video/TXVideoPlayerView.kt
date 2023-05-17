@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.weight
+package com.tdxtxt.liteavplayer.video
 
 import android.app.Activity
 import android.content.Context
@@ -12,20 +12,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
-import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.liteavplayer.R
-import com.tdxtxt.liteavplayer.inter.IVideoPlayer
-import com.tdxtxt.liteavplayer.inter.TXPlayerListener
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
-import com.tdxtxt.liteavplayer.weight.controller.GestureController
-import com.tdxtxt.liteavplayer.weight.controller.OrientationController
-import com.tdxtxt.liteavplayer.weight.controller.view.BaiscControllerView
-import com.tdxtxt.liteavplayer.weight.controller.view.BrightControllerView
-import com.tdxtxt.liteavplayer.weight.controller.view.MultipleControllerView
-import com.tdxtxt.liteavplayer.weight.controller.view.VolumeControllerView
-import com.tdxtxt.liteavplayer.weight.inter.AbsControllerCustom
-import com.tdxtxt.liteavplayer.weight.inter.IVideoView
+import com.tdxtxt.liteavplayer.video.controller.GestureController
+import com.tdxtxt.liteavplayer.video.controller.NetworkController
+import com.tdxtxt.liteavplayer.video.controller.OrientationController
+import com.tdxtxt.liteavplayer.video.controller.view.BasicControllerView
+import com.tdxtxt.liteavplayer.video.controller.view.BrightControllerView
+import com.tdxtxt.liteavplayer.video.controller.view.MultipleControllerView
+import com.tdxtxt.liteavplayer.video.controller.view.VolumeControllerView
+import com.tdxtxt.liteavplayer.video.inter.*
 import com.tencent.rtmp.TXVodPlayer
+import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
 
 
 /**
@@ -37,24 +35,30 @@ import com.tencent.rtmp.TXVodPlayer
  */
 class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListener,
     LifecycleObserver {
-    private var mLiteMgr: LiteAVManager? = null
-    private var videoWidthRatio = -1
-    private var videoHeightRatio = -1
-    private lateinit var mBaicView: BaiscControllerView
+    private var mVideoMgr: VideoMananger? = null
+    private var mWidthRatio = -1
+    private var mHeightRatio = -1
+    private lateinit var mBaicView: BasicControllerView
     private lateinit var mGestureController: GestureController
     private lateinit var mOrientationController: OrientationController
+    private lateinit var mNetworkController: NetworkController
     private lateinit var mVolumeControllerView: VolumeControllerView
     private lateinit var mBrightControllerView: BrightControllerView
     private lateinit var mMultipleControllerView: MultipleControllerView
+    private val mControllerList: MutableList<IController> = ArrayList()
+    private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
+    private var mMultipleList: List<Float>? = null
+
     private var mFullChangelisenter: ((isFullScreen: Boolean) -> Unit)? = null
     private var mOrientationType = OrientationController.VERITCAL
 
-    fun setPlayerManager(manager: LiteAVManager){
-        mLiteMgr = manager
-        mLiteMgr?.removeEventListener(this)
-        mLiteMgr?.addPlayerEventListener(this)
+    fun setVideoManager(manager: VideoMananger){
+        mVideoMgr = manager
+        mVideoMgr?.removeEventListener(this)
+        mVideoMgr?.addPlayerEventListener(this)
         getBaicView().bindSurface()
     }
+    fun getVideoManager() = mVideoMgr
 
     constructor(context: Context): super(context){
         initView(context)
@@ -63,37 +67,48 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     constructor(context: Context, attrs: AttributeSet?): super(context, attrs){
         if(attrs != null){
             val attributes = context.obtainStyledAttributes(attrs, R.styleable.TXVideoPlayerView)
-            videoHeightRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txVideoHeightRatio, -1)
-            videoWidthRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txVideoWidthRatio, -1)
+            mHeightRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txHeightRatio, -1)
+            mWidthRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txWidthRatio, -1)
             attributes.recycle()
         }
         initView(context)
     }
 
     private fun initView(context: Context) {
-        mBaicView = BaiscControllerView(context)
+        mControllerList.clear()
+        mBaicView = BasicControllerView(context)
         mBaicView.attach(this)
+        mControllerList.add(mBaicView)
 
         mOrientationController = OrientationController()
         mOrientationController.attach(this)
+        mControllerList.add(mOrientationController)
 
         mGestureController = GestureController()
         mGestureController.attach(this)
+        mControllerList.add(mGestureController)
+
+        mNetworkController = NetworkController()
+        mNetworkController.attach(this)
+        mControllerList.add(mNetworkController)
 
         mVolumeControllerView = VolumeControllerView(context)
         mVolumeControllerView.attach(this)
+        mControllerList.add(mVolumeControllerView)
 
         mBrightControllerView = BrightControllerView(context)
         mBrightControllerView.attach(this)
+        mControllerList.add(mBrightControllerView)
 
         mMultipleControllerView = MultipleControllerView(context)
         mMultipleControllerView.attach(this)
+        mControllerList.add(mMultipleControllerView)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        if(videoWidthRatio > 0 && videoHeightRatio > 0){
+        if(mWidthRatio > 0 && mHeightRatio > 0){
             val width = MeasureSpec.getSize(widthMeasureSpec)
-            val height = (width.toFloat() / videoWidthRatio.toFloat() * videoHeightRatio.toFloat())
+            val height = (width.toFloat() / mWidthRatio.toFloat() * mHeightRatio.toFloat())
             super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(height.toInt(), View.MeasureSpec.EXACTLY))
         }else{
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -116,15 +131,41 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     fun getMultipleControllerView() = mMultipleControllerView
 
     /**
+     * 设置标题
+     */
+    fun setTitle(title: CharSequence?){
+        getBaicView().setTitle(title)
+    }
+
+    /**
+     * 设置动态水印
+     */
+    fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int){
+        getBaicView().setWaterMark(dynamicWatermarkTip, tipTextSize, tipTextColor)
+    }
+
+    /**
      * 可拖动的最大时长百分段，取值0到1
      */
     fun setTrackMaxPercent(trackMaxPercent: Float){
         getBaicView().getSeekBarControllerView().setTrackMaxPercent(trackMaxPercent)
     }
 
+    /**
+     * 设置倍速可选项列表
+     */
+    fun setMultipleList(multipleList: List<Float>?){
+        mMultipleList = multipleList
+    }
+
+    /**
+     * 获取倍速可选项列表
+     */
+    fun getMultipleList() = mMultipleList
+
     override fun showCustomView(iView: AbsControllerCustom) {
         hideCustomView()
-        val view = iView.init(this)
+        val view = iView.inflater(this)
         view?.id = R.id.txvideo_customview
         if(view != null) getBaicView().addView(view, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
@@ -152,56 +193,59 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     override fun stopFullScreen(){
         if(!isFullScreen()) return
-        val activity = context
-        if(activity is Activity){
-            if(activity.isFinishing || activity.isDestroyed) return
+        val activity = getActivity() ?: return
 
-            if (activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            }
-            mOrientationType = OrientationController.VERITCAL
+        if(activity.isFinishing || activity.isDestroyed) return
 
-            LiteavPlayerUtils.showSysBar(activity)
-            mFullChangelisenter?.invoke(isFullScreen())
-
-            getBaicView().updateFullScreen(isFullScreen())
-            val parentView = getBaicView().parent
-            if(parentView is ViewGroup){
-                parentView.removeView(getBaicView())
-            }
-            addView(getBaicView(), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+        if (activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
+        mOrientationType = OrientationController.VERITCAL
+
+        LiteavPlayerUtils.showSysBar(activity)
+        mFullChangelisenter?.invoke(isFullScreen())
+
+        getBaicView().updateFullScreen(isFullScreen())
+        val parentView = getBaicView().parent
+        if(parentView is ViewGroup){
+            parentView.removeView(getBaicView())
+        }
+        addView(getBaicView(), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
     }
 
     override fun startFullScreen(isReverse: Boolean?){
         if(isReverseFullScreen() == isReverse) return
+        val activity = getActivity() ?: return
 
-        val activity = context
-        if(activity is Activity){
-            if(activity.isFinishing || activity.isDestroyed) return
-            if(isReverse == true || mOrientationController.isReverseHorizontal()){
-                mOrientationType = OrientationController.HORIZONTA_REVERSE
-                if(activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                }
-            }else{
-                mOrientationType = OrientationController.HORIZONTA_FORWARD
-                if(activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                }
+        if(activity.isFinishing || activity.isDestroyed) return
+        if(isReverse == true || mOrientationController.isReverseHorizontal()){
+            mOrientationType = OrientationController.HORIZONTA_REVERSE
+            if(activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE){
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
             }
-
-            LiteavPlayerUtils.hideSysBar(activity)
-            mFullChangelisenter?.invoke(isFullScreen())
-
-            getBaicView().updateFullScreen(isFullScreen())
-            val parentView = getBaicView().parent
-            if(parentView is ViewGroup){
-                parentView.removeView(getBaicView())
+        }else{
+            mOrientationType = OrientationController.HORIZONTA_FORWARD
+            if(activity.requestedOrientation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             }
-            val dectorView = activity.findViewById<ViewGroup>(Window.ID_ANDROID_CONTENT)
-            dectorView.addView(getBaicView(), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         }
+
+        LiteavPlayerUtils.hideSysBar(activity)
+        mFullChangelisenter?.invoke(isFullScreen())
+
+        getBaicView().updateFullScreen(isFullScreen())
+        val parentView = getBaicView().parent
+        if(parentView is ViewGroup){
+            parentView.removeView(getBaicView())
+        }
+        val dectorView = activity.findViewById<ViewGroup>(Window.ID_ANDROID_CONTENT)
+        dectorView.addView(getBaicView(), LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+    }
+
+    fun getActivity(): Activity? {
+        val activity = context
+        if(activity is Activity) return activity
+        return null
     }
 
     fun setFullChangeLisenter(lisenter: (isFullScreen: Boolean) -> Unit){
@@ -230,7 +274,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
                     if(value)  getBaicView().showLoading() else  getBaicView().hideLoading()
                 }
             }
-            TXPlayerListener.PlayerState.STATE_NETSPEED -> {
+            TXPlayerListener.PlayerState.CHANGE_NETSPEED -> {
                 if(value is Int){
                     getBaicView().updateNetspeed(value)
                 }
@@ -241,93 +285,121 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             TXPlayerListener.PlayerState.STATE_RELEASE -> {
                 destoryView()
             }
+            TXPlayerListener.PlayerState.CHANGE_MULTIPLE -> {
+                getBaicView().updateMultiple(getMultiple())
+            }
         }
+
+        mPlayerEventListenerListRef?.forEach { it.onPlayStateChanged(state, value) }
     }
 
     private fun destoryView(){
-        getBaicView().detach()
-        mOrientationController.detach()
-        mGestureController.detach()
-        mVolumeControllerView.detach()
-        mBrightControllerView.detach()
+        mControllerList.forEach {
+            it.detach()
+        }
+        mPlayerEventListenerListRef?.clear()
+        mControllerList.clear()
         mFullChangelisenter = null
     }
 
     /************************************* 播放相关方法重写开始 *************************************/
     override fun getPlayer(): TXVodPlayer? {
-        return mLiteMgr?.getPlayer()
+        return mVideoMgr?.getPlayer()
+    }
+
+    override fun setToken(token: String?) {
+        mVideoMgr?.setToken(token)
+    }
+
+    override fun addPlayerEventListener(listener: TXPlayerListener?) {
+        if(listener == null) return
+        if(mPlayerEventListenerListRef == null) mPlayerEventListenerListRef = ArrayList()
+        mPlayerEventListenerListRef?.add(listener)
+    }
+
+    override fun removeEventListener(listener: TXPlayerListener?) {
+        if(listener == null) return
+        mPlayerEventListenerListRef?.remove(listener)
     }
 
     override fun setDataSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
-        mLiteMgr?.setDataSource(appId, fileId, psign, startTime, autoPlay)
+        mVideoMgr?.setDataSource(appId, fileId, psign, startTime, autoPlay)
+        getBaicView().showBasicMenuLayout()
     }
 
     override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {
-        mLiteMgr?.setDataSource(path, startTime, autoPlay)
+        mVideoMgr?.setDataSource(path, startTime, autoPlay)
+        getBaicView().showBasicMenuLayout()
     }
 
     override fun reStart() {
-        mLiteMgr?.reStart()
+        mVideoMgr?.reStart()
     }
 
     override fun resume() {
-        mLiteMgr?.resume()
+        mVideoMgr?.resume()
+        waterMark?.show()
     }
 
     override fun pause() {
-        mLiteMgr?.pause()
+        mVideoMgr?.pause()
+        waterMark?.hide()
+    }
+
+    override fun stop(clearFrame: Boolean) {
+        mVideoMgr?.stop(clearFrame)
     }
 
     override fun togglePlay() {
-        mLiteMgr?.togglePlay()
+        mVideoMgr?.togglePlay()
     }
 
     override fun isPlaying(): Boolean {
-        return mLiteMgr?.isPlaying()?: false
+        return mVideoMgr?.isPlaying()?: false
     }
 
     override fun seekTo(time: Int) {
-        mLiteMgr?.seekTo(time)
+        mVideoMgr?.seekTo(time)
     }
 
     override fun release() {
-        mLiteMgr?.release()
+        mVideoMgr?.release()
     }
 
     override fun isRelease(): Boolean {
-        return mLiteMgr?.isRelease()?: false
+        return mVideoMgr?.isRelease()?: false
     }
 
     override fun getCurrentDuration(): Int {
-        return mLiteMgr?.getCurrentDuration()?: 0
+        return mVideoMgr?.getCurrentDuration()?: 0
     }
 
     override fun getDuration(): Int {
-        return mLiteMgr?.getDuration()?: 0
+        return mVideoMgr?.getDuration()?: 0
     }
 
     override fun getCurrentPercentage(): Int {
-        return mLiteMgr?.getCurrentPercentage()?: 0
+        return mVideoMgr?.getCurrentPercentage()?: 0
     }
 
     override fun getBufferedPercentage(): Int {
-        return mLiteMgr?.getBufferedPercentage()?: 0
+        return mVideoMgr?.getBufferedPercentage()?: 0
     }
 
     override fun getBufferedDuration(): Int {
-        return mLiteMgr?.getBufferedDuration()?: 0
+        return mVideoMgr?.getBufferedDuration()?: 0
     }
 
     override fun setLooping(isLooping: Boolean) {
-        mLiteMgr?.setLooping(isLooping)
+        mVideoMgr?.setLooping(isLooping)
     }
 
     override fun setMultiple(speed: Float) {
-        mLiteMgr?.setMultiple(speed)
+        mVideoMgr?.setMultiple(speed)
     }
 
     override fun getMultiple(): Float {
-        return mLiteMgr?.getMultiple()?: 1f
+        return mVideoMgr?.getMultiple()?: 1f
     }
 
     /************************************* 生命周期方法 *************************************/
@@ -347,12 +419,16 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume(){
+        mControllerList.forEach { it.onResume() }
+
         if(!isBackgroundPlaying){
             if(mPauseBeforePlaying == true) resume()
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause(){
+        mControllerList.forEach { it.onPause() }
+
         if(!isBackgroundPlaying){
             mPauseBeforePlaying = isPlaying()
             pause()

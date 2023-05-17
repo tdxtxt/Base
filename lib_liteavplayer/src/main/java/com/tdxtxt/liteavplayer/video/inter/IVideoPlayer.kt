@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.inter
+package com.tdxtxt.liteavplayer.video.inter
 
 import com.tencent.rtmp.TXVodPlayer
 
@@ -11,6 +11,11 @@ import com.tencent.rtmp.TXVodPlayer
  */
 interface IVideoPlayer {
     fun getPlayer(): TXVodPlayer?
+
+    /*----------------------------第一部分：视频播放器----------------------------------*/
+    fun setToken(token: String?)
+    fun addPlayerEventListener(listener: TXPlayerListener?)
+    fun removeEventListener(listener: TXPlayerListener?)
 
     /*----------------------------第二部分：视频播放器状态方法----------------------------------*/
     /**
@@ -35,6 +40,12 @@ interface IVideoPlayer {
      * 暂停
      */
     fun pause()
+
+    /**
+     * @clearFrame 清除画面残留的帧
+     * 停止播放
+     */
+    fun stop(clearFrame: Boolean = true)
 
     /**
      * 暂停/播放

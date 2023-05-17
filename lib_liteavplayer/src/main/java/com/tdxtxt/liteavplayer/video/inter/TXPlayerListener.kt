@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.inter
+package com.tdxtxt.liteavplayer.video.inter
 
 
 /**
@@ -12,15 +12,18 @@ interface TXPlayerListener {
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class PlayerState {
         companion object {
-            var STATE_ERROR = -1 //播放错误
-            var STATE_PREPARED = 1 //准备成功
-            var STATE_START = 2 //播放开始
-            var STATE_PLAYING = 3
-            var STATE_PAUSED = 4
-            var STATE_COMPLETED = 5
-            var STATE_RELEASE = 7
-            var STATE_LOADING = 8
-            var STATE_NETSPEED = 9
+            var STATE_ERROR = -1    //播放错误
+            var STATE_PREPARED = 1  //准备成功
+            var STATE_START = 2     //播放开始
+            var STATE_PLAYING = 3   //播放中
+            var STATE_PAUSED = 4    //播放暂停
+            var STATE_COMPLETED = 5 //播放完成
+            var STATE_RELEASE = 7   //释放
+            var STATE_LOADING = 8   //缓冲中...
+
+            var CHANGE_NETSPEED = 20  //网速变化
+            var CHANGE_NETWORK = 21  //网络变化
+            var CHANGE_MULTIPLE = 22 //播放速度变化
         }
     }
     /**

@@ -5,11 +5,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
+    <com.tdxtxt.liteavplayer.video.TXVideoPlayerView
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:txVideoWidthRatio="16"
-        app:txVideoHeightRatio="9"/>
+        app:txWidthRatio="16"
+        app:txHeightRatio="9"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_1"
+        style="@style/CommTextButtonStyle"
+        android:text="播放地址1"
+        android:layout_marginTop="12dp"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_2"
+        style="@style/CommTextButtonStyle"
+        android:text="播放地址2"
+        android:layout_marginTop="5dp"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_3"
+        style="@style/CommTextButtonStyle"
+        android:text="播放地址3"
+        android:layout_marginTop="5dp"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_4"
+        style="@style/CommTextButtonStyle"
+        android:text="播放地址4"
+        android:layout_marginTop="5dp"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_5"
+        style="@style/CommTextButtonStyle"
+        android:text="播放地址5"
+        android:layout_marginTop="5dp"/>
+
 
 </LinearLayout>

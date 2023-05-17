@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.weight.controller.view
+package com.tdxtxt.liteavplayer.video.controller.view
 
 import android.content.Context
 import android.media.AudioManager
@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.tdxtxt.liteavplayer.R
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IGestureController
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IGestureController
 import kotlinx.android.synthetic.main.liteavlib_view_control_volume_bright.view.*
 
 /**

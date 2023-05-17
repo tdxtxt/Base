@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="txWidthRatio" format="integer"/>
+    <attr name="txHeightRatio" format="integer"/>
+
     <declare-styleable name="TXVideoPlayerView">
-        <attr name="txVideoWidthRatio" format="integer"/>
-        <attr name="txVideoHeightRatio" format="integer"/>
+        <attr name="txWidthRatio"/>
+        <attr name="txHeightRatio"/>
+    </declare-styleable>
+
+    <declare-styleable name="TXLivePlayerView">
+        <attr name="txWidthRatio"/>
+        <attr name="txHeightRatio"/>
     </declare-styleable>
 </resources>

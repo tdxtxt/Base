@@ -1,10 +1,10 @@
-package com.tdxtxt.liteavplayer.weight.controller.view
+package com.tdxtxt.liteavplayer.video.controller.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.SeekBar
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.ISeekBarController
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.ISeekBarController
 import kotlin.math.max
 
 /**

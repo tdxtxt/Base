@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.weight.controller.view
+package com.tdxtxt.liteavplayer.video.controller.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.tdxtxt.liteavplayer.R
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IMultipleController
-import com.tdxtxt.video.player.adapter.MultipleAdapter
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IMultipleController
+import com.tdxtxt.liteavplayer.video.adapter.MultipleAdapter
 import kotlinx.android.synthetic.main.liteavlib_view_control_multiple.view.*
 
 /**
@@ -28,8 +28,8 @@ class MultipleControllerView : FrameLayout, IMultipleController {
     private fun initView(){
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         LayoutInflater.from(context).inflate(R.layout.liteavlib_view_control_multiple, this, true)
-        setBackgroundResource(android.R.color.black)
-        alpha = 0.7f
+        setBackgroundResource(R.drawable.liteavlib_background_multiple)
+
         mMultipleAdapter = MultipleAdapter().apply {
             setItemClickListenter {
                 hide()
@@ -47,15 +47,23 @@ class MultipleControllerView : FrameLayout, IMultipleController {
     override fun show() {
         val parentView = parent
         if(!(parentView is ViewGroup)){
-            this.mPlayerView?.getBaicView()?.addView(this, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
+            this.mPlayerView?.getBaicView()?.getMultiplePlaceHolder()?.addView(this, LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT))
         }
-        mMultipleAdapter?.setMultiple(mPlayerView?.getMultiple()?: 1f)
+        mMultipleAdapter?.setData(mPlayerView?.getMultipleList())
     }
 
     override fun hide() {
         val parentView = parent
         if(parentView is ViewGroup){
             parentView.removeView(this)
+        }
+    }
+
+    override fun toggle() {
+        if(parent == null){
+            show()
+        }else{
+            hide()
         }
     }
 

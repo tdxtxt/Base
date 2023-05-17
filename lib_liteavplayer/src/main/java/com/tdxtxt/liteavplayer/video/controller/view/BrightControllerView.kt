@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.weight.controller.view
+package com.tdxtxt.liteavplayer.video.controller.view
 
 import android.app.Activity
 import android.content.Context
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import android.widget.FrameLayout
 import com.tdxtxt.liteavplayer.R
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IGestureController
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IGestureController
 import kotlinx.android.synthetic.main.liteavlib_view_control_volume_bright.view.*
 
 /**

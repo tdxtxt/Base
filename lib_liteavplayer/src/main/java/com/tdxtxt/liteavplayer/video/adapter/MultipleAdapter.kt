@@ -1,10 +1,9 @@
-package com.tdxtxt.video.player.adapter
+package com.tdxtxt.liteavplayer.video.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
@@ -19,7 +18,7 @@ import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
  */
 class MultipleAdapter : RecyclerView.Adapter<MultipleHolder>() {
     private var mSelectedPosition = -1
-    private var mData = mutableListOf(0.5f, 0.75f, 1f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.75f, 2f)
+    private var mData: List<Float> = mutableListOf(1f)
     private var mListener: ((value: Float) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultipleHolder {
         return MultipleHolder(LayoutInflater.from(parent.context).inflate(R.layout.liteavlib_item_multiple, parent, false))
@@ -31,19 +30,19 @@ class MultipleAdapter : RecyclerView.Adapter<MultipleHolder>() {
     override fun onBindViewHolder(holder: MultipleHolder, position: Int) {
         val item = LiteavPlayerUtils.formatMultiple(mData.get(position))
         holder.tvMultiple.setText(item)
-        if(mSelectedPosition == position){
-            holder.itemView.setBackgroundResource(R.drawable.liteavlib_item_multiple_selected)
-            holder.tvMultiple.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.liteavlib_theme))
-        }else{
-            holder.itemView.setBackgroundResource(R.drawable.liteavlib_item_multiple_normal)
-            holder.tvMultiple.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.white))
-        }
+//        if(mSelectedPosition == position){
+//            holder.itemView.setBackgroundResource(R.drawable.liteavlib_item_multiple_selected)
+//            holder.tvMultiple.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.liteavlib_theme))
+//        }else{
+//            holder.itemView.setBackgroundResource(R.drawable.liteavlib_item_multiple_normal)
+//            holder.tvMultiple.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.white))
+//        }
         holder.itemView.setOnClickListener {
-            val lastSelectedPosition = mSelectedPosition
-            mSelectedPosition = position
-            if(lastSelectedPosition == mSelectedPosition) return@setOnClickListener
-            notifyItemChanged(mSelectedPosition)
-            notifyItemChanged(lastSelectedPosition)
+//            val lastSelectedPosition = mSelectedPosition
+//            mSelectedPosition = position
+//            if(lastSelectedPosition == mSelectedPosition) return@setOnClickListener
+//            notifyItemChanged(mSelectedPosition)
+//            notifyItemChanged(lastSelectedPosition)
             mListener?.invoke(mData[position])
         }
     }
@@ -56,6 +55,11 @@ class MultipleAdapter : RecyclerView.Adapter<MultipleHolder>() {
         val selectedPosition = mData.indexOf(value)
         if(selectedPosition == mSelectedPosition) return
         mSelectedPosition = selectedPosition
+        notifyDataSetChanged()
+    }
+
+    fun setData(data: List<Float>?){
+        this.mData = data?: mutableListOf(1f)
         notifyDataSetChanged()
     }
 }

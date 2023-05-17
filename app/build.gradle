@@ -7,7 +7,7 @@ android {
     buildToolsVersion versions.buildTools
 
     defaultConfig {
-        applicationId "com.juexiao.english"
+        applicationId "cn.com.changan.learning.android"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1

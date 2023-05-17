@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/liteavlib_shape_round_660c0c0c_4dp"
+        android:background="@drawable/liteavlib_shape_round4_660c0c0c"
         android:orientation="horizontal">
 
         <ImageView

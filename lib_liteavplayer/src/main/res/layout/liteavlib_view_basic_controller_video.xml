@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="match_parent"
+    tools:layout_width="match_parent"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <ImageView
+        android:id="@+id/basic_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:visibility="visible"
+        android:background="@android:color/black" />
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/basic_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <FrameLayout
+        android:id="@+id/basic_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/basic_netspeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="12kb/s"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="3dp"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="8"
+            android:textColor="@android:color/white" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/basic_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/liteavlib_navigationbar">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/basic_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:drawableStart="@mipmap/liteavlib_ic_back"
+                android:drawablePadding="8dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                tools:text="视频标题" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/basic_backward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/liteavlib_ic_backward" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/basic_toggleplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/liteavlib_ic_playing" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <ImageView
+                android:id="@+id/basic_forward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/liteavlib_ic_forward" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
+
+            <com.tdxtxt.liteavplayer.video.controller.view.SeekBarControllerView
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:background="@android:color/transparent"
+                android:max="1000"
+                android:maxHeight="2dp"
+                android:progressDrawable="@drawable/liteavlib_seekbar"
+                tools:secondaryProgress="800"
+                android:thumb="@mipmap/liteavlib_ic_seekbar_thumb"
+                tools:progress="100" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="6dp">
+
+                <ImageView
+                    android:id="@+id/basic_toggleplay_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:src="@mipmap/liteavlib_ic_playing_small" />
+
+                <TextView
+                    android:id="@+id/basic_current_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@android:color/white"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="/"
+                    android:textColor="@android:color/white"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:id="@+id/basic_total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="00:00"
+                    android:textColor="@android:color/white"
+                    android:textSize="12dp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/basic_multiple"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:gravity="center"
+                        android:text="1.0X"
+                        android:layout_marginEnd="32dp"
+                        android:paddingVertical="4dp"
+                        android:paddingStart="8dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp" />
+
+                    <ImageView
+                        android:id="@+id/basic_toggle_orient"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingVertical="2dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:src="@mipmap/liteavlib_ic_orient_large" />
+                </FrameLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/basic_multiple_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="40dp"/>
+    </FrameLayout>
+
+    <com.tdxtxt.liteavplayer.weight.DynamicWatermarkView
+        android:id="@+id/waterMark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>

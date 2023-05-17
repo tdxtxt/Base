@@ -22,13 +22,12 @@ import com.blankj.utilcode.util.BarUtils
  */
 object StatusBarHelper {
     fun setPaddingStatusBarHeight(view: View?){
-        if(view is ViewGroup){
-            view.setPadding(
-                view.getPaddingLeft(),
-                view.getPaddingTop() + BarUtils.getStatusBarHeight(), view.getPaddingRight(),
-                view.getPaddingBottom()
-            )
-        }
+        if(view == null) return
+        view.setPadding(
+            view.getPaddingLeft(),
+            view.getPaddingTop() + BarUtils.getStatusBarHeight(), view.getPaddingRight(),
+            view.getPaddingBottom()
+        )
     }
 
     fun setMarginStatusBarHeight(view: View?){

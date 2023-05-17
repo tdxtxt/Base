@@ -1,4 +1,4 @@
-package com.tdxtxt.liteavplayer.weight.controller.view
+package com.tdxtxt.liteavplayer.video.controller.view
 
 import android.app.Activity
 import android.content.Context
@@ -8,10 +8,11 @@ import android.view.View
 import android.widget.FrameLayout
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IBaiscController
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IBasicController
 import com.tencent.rtmp.ui.TXCloudVideoView
-import kotlinx.android.synthetic.main.liteavlib_view_baisc_controller.view.*
+import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
+import kotlin.math.abs
 
 /**
  * <pre>
@@ -20,10 +21,14 @@ import kotlinx.android.synthetic.main.liteavlib_view_baisc_controller.view.*
  *     desc   :
  * </pre>
  */
-class BaiscControllerView : FrameLayout, IBaiscController {
+class BasicControllerView : FrameLayout, IBasicController {
     private var mPlayerView: TXVideoPlayerView? = null
     private val mDefaultFadeTimeout = 7000L
-    private val mFadeRunnable = Runnable { baisc_menu.visibility = View.GONE }
+    private var mLastBasicMenuLayoutShowTime = 0L
+    private val mFadeBasicMenuLayoutRunnable = Runnable {
+        basic_menu.visibility = View.GONE
+        mPlayerView?.getMultipleControllerView()?.hide()
+    }
 
     constructor(context: Context): super(context){
         initView(context)
@@ -34,30 +39,36 @@ class BaiscControllerView : FrameLayout, IBaiscController {
 
     private fun initView(context: Context){
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-        LayoutInflater.from(context).inflate(R.layout.liteavlib_view_baisc_controller, this, true)
+        LayoutInflater.from(context).inflate(R.layout.liteavlib_view_basic_controller_video, this, true)
 
         seekBar.setTrackingTouchListener { isStart ->
-            if(isStart)  removeCallbacks(mFadeRunnable) else  postDelayed(mFadeRunnable, mDefaultFadeTimeout)
+            if(isStart)  removeCallbacks(mFadeBasicMenuLayoutRunnable) else  postDelayed(mFadeBasicMenuLayoutRunnable, mDefaultFadeTimeout)
         }
-        clickView(baisc_back)
-        clickView(baisc_toggleplay)
-        clickView(baisc_toggleplay_small)
-        clickView(baisc_toggle_orient)
-        clickView(baisc_backward)
-        clickView(baisc_forward)
-        clickView(baisc_multiple)
+        clickView(basic_back)
+        clickView(basic_toggleplay)
+        clickView(basic_toggleplay_small)
+        clickView(basic_toggle_orient)
+        clickView(basic_backward)
+        clickView(basic_forward)
+        clickView(basic_multiple)
 
         updatePlayButton(!(mPlayerView?.isPlaying()?: false))
-        showBaicMenuLayout()
+        showBasicMenuLayout()
     }
 
     fun getSeekBarControllerView(): SeekBarControllerView = seekBar
 
+    fun getMultiplePlaceHolder() = basic_multiple_placeholder
+
+    fun setTitle(title: CharSequence?){
+        basic_back.text = title
+    }
+
     private fun clickView(view: View?){
         view?.setOnClickListener {
-            showBaicMenuLayout()
+            showBasicMenuLayout()
             when(it){
-                baisc_back -> {
+                basic_back -> {
                     if(mPlayerView?.onBackPressed() == true){
                         mPlayerView?.release()
                         val activity = context
@@ -66,17 +77,17 @@ class BaiscControllerView : FrameLayout, IBaiscController {
                         }
                     }
                 }
-                baisc_toggleplay, baisc_toggleplay_small -> {
+                basic_toggleplay, basic_toggleplay_small -> {
                     mPlayerView?.togglePlay()
                 }
-                baisc_toggle_orient -> {
+                basic_toggle_orient -> {
                     if(mPlayerView?.isFullScreen() == true){
                         mPlayerView?.stopFullScreen()
                     }else{
                         mPlayerView?.startFullScreen()
                     }
                 }
-                baisc_backward -> {
+                basic_backward -> {
                     val totalTime = mPlayerView?.getDuration()?: 0
                     var newTime = (mPlayerView?.getCurrentDuration()?: 0) - 15
                     if(newTime > totalTime) newTime = totalTime
@@ -84,7 +95,7 @@ class BaiscControllerView : FrameLayout, IBaiscController {
                     updateTextTime(newTime, totalTime)
                     mPlayerView?.seekTo(newTime)
                 }
-                baisc_forward -> {
+                basic_forward -> {
                     val totalTime = mPlayerView?.getDuration()?: 0
                     var newTime = (mPlayerView?.getCurrentDuration()?: 0) + 15
                     val trackMaxDuration = seekBar.getTrackMaxDuration()
@@ -96,9 +107,8 @@ class BaiscControllerView : FrameLayout, IBaiscController {
                     updateTextTime(newTime, totalTime)
                     mPlayerView?.seekTo(newTime)
                 }
-                baisc_multiple -> {
-                    hideBaicMenuLayout()
-                    mPlayerView?.getMultipleControllerView()?.show()
+                basic_multiple -> {
+                    mPlayerView?.getMultipleControllerView()?.toggle()
                 }
             }
         }
@@ -108,8 +118,13 @@ class BaiscControllerView : FrameLayout, IBaiscController {
         seekBar.setTrackingSeekBar(isTrackingSeekBar)
     }
 
+    fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int){
+        waterMark.setData(dynamicWatermarkTip, tipTextSize, tipTextColor)
+        waterMark.show()
+    }
+
     override fun setCoverIds(resId: Int) {
-        baisc_cover.setImageResource(resId)
+        basic_cover.setImageResource(resId)
     }
 
     override fun getViewWidth(): Int {
@@ -120,36 +135,39 @@ class BaiscControllerView : FrameLayout, IBaiscController {
         return height
     }
 
-    override fun showBaicMenuLayout() {
-        removeCallbacks(mFadeRunnable)
-        baisc_menu.visibility = View.VISIBLE
-        postDelayed(mFadeRunnable, mDefaultFadeTimeout)
+    override fun showBasicMenuLayout() {
+        if(abs(System.currentTimeMillis() - mLastBasicMenuLayoutShowTime) > 800){
+            mLastBasicMenuLayoutShowTime = System.currentTimeMillis()
+            removeCallbacks(mFadeBasicMenuLayoutRunnable)
+            basic_menu.visibility = View.VISIBLE
+            postDelayed(mFadeBasicMenuLayoutRunnable, mDefaultFadeTimeout)
+        }
     }
 
-    override fun hideBaicMenuLayout() {
-        removeCallbacks(mFadeRunnable)
-        mFadeRunnable.run()
+    override fun hideBasicMenuLayout() {
+        removeCallbacks(mFadeBasicMenuLayoutRunnable)
+        mFadeBasicMenuLayoutRunnable.run()
     }
 
     override fun showLoading() {
-        baisc_loading.visibility = View.VISIBLE
+        basic_loading.visibility = View.VISIBLE
     }
 
     override fun hideLoading() {
-        baisc_loading.visibility = View.GONE
+        basic_loading.visibility = View.GONE
     }
 
     override fun toggleBaicMenuLayout() {
-        removeCallbacks(mFadeRunnable)
-        if(baisc_menu.visibility == View.VISIBLE){
-            hideBaicMenuLayout()
+        removeCallbacks(mFadeBasicMenuLayoutRunnable)
+        if(basic_menu.visibility == View.VISIBLE){
+            hideBasicMenuLayout()
         }else{
-            showBaicMenuLayout()
+            showBasicMenuLayout()
         }
     }
 
     override fun bindSurface() {
-        mPlayerView?.getPlayer()?.setPlayerView(baisc_surface)
+        mPlayerView?.getPlayer()?.setPlayerView(basic_surface)
     }
 
     override fun unBindSurface() {
@@ -157,35 +175,39 @@ class BaiscControllerView : FrameLayout, IBaiscController {
     }
 
     override fun updateNetspeed(speed: Int?) {
-        baisc_netspeed.setText("${speed}kb/s")
+        basic_netspeed.setText(LiteavPlayerUtils.formatSpeed(speed))
     }
 
     override fun updatePlayButton(isPlaying: Boolean) {
         if(isPlaying){
-            baisc_toggleplay_small.setImageResource(R.mipmap.liteavlib_ic_playing_small)
-            baisc_toggleplay.setImageResource(R.mipmap.liteavlib_ic_playing)
+            basic_toggleplay_small.setImageResource(R.mipmap.liteavlib_ic_playing_small)
+            basic_toggleplay.setImageResource(R.mipmap.liteavlib_ic_playing)
         }else{
-            baisc_toggleplay_small.setImageResource(R.mipmap.liteavlib_ic_pause_small)
-            baisc_toggleplay.setImageResource(R.mipmap.liteavlib_ic_pause)
+            basic_toggleplay_small.setImageResource(R.mipmap.liteavlib_ic_pause_small)
+            basic_toggleplay.setImageResource(R.mipmap.liteavlib_ic_pause)
         }
     }
 
     override fun updateTextTime(current: Int?, total: Int?) {
-        baisc_current_time.text = LiteavPlayerUtils.formatTime(current?: 0)
-        if(total != null) baisc_total_time.text = LiteavPlayerUtils.formatTime(total)
+        basic_current_time.text = LiteavPlayerUtils.formatTime(current?: 0)
+        if(total != null) basic_total_time.text = LiteavPlayerUtils.formatTime(total)
     }
 
     override fun updateFullScreen(isFullScreen: Boolean?) {
         if(isFullScreen == true){
-            baisc_toggle_orient.setImageResource(R.mipmap.liteavlib_ic_orient_small)
+            basic_toggle_orient.setImageResource(R.mipmap.liteavlib_ic_orient_small)
         }else{
-            baisc_toggle_orient.setImageResource(R.mipmap.liteavlib_ic_orient_large)
+            basic_toggle_orient.setImageResource(R.mipmap.liteavlib_ic_orient_large)
         }
     }
 
     override fun updateSeekBar(progress: Int?, secondaryProgress: Int?) {
         if(progress != null) seekBar?.progress = (progress / 100f * seekBar.max).toInt()
         if(secondaryProgress != null) seekBar?.secondaryProgress = (secondaryProgress / 100f * seekBar.max).toInt()
+    }
+
+    override fun updateMultiple(value: Float) {
+        basic_multiple.text =  LiteavPlayerUtils.formatMultiple(value)
     }
 
     override fun attach(playerView: TXVideoPlayerView) {
@@ -195,8 +217,17 @@ class BaiscControllerView : FrameLayout, IBaiscController {
     }
 
     override fun detach() {
-        baisc_surface?.onDestroy()
+        basic_surface?.onDestroy()
         seekBar.detach()
+        waterMark.release()
+    }
+
+    override fun onPause() {
+        waterMark.hide()
+    }
+
+    override fun onResume() {
+        waterMark.show()
     }
 
 }

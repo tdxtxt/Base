@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="match_parent"
+    tools:layout_width="match_parent"
+    tools:parentTag="android.widget.FrameLayout">
+
+    <ImageView
+        android:id="@+id/basic_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:scaleType="fitXY"
+        android:visibility="visible" />
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/basic_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
+
+    <FrameLayout
+        android:id="@+id/basic_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            style="@android:style/Widget.Holo.ProgressBar.Large"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/basic_netspeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="3dp"
+            android:shadowColor="@android:color/black"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="8"
+            android:textColor="@android:color/white"
+            tools:text="12kb/s" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/basic_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@drawable/liteavlib_navigationbar_top"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/basic_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:drawableStart="@mipmap/liteavlib_ic_back"
+                android:drawablePadding="8dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                tools:text="直播标题" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/liteavlib_navigationbar_bottom"
+            android:gravity="center"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/basic_toggleplay_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:src="@mipmap/liteavlib_ic_playing_small" />
+
+            <ImageView
+                android:id="@+id/basic_toggle_orient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:src="@mipmap/liteavlib_ic_orient_large" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <com.tdxtxt.liteavplayer.weight.DynamicWatermarkView
+        android:id="@+id/waterMark"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</merge>

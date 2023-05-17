@@ -1,11 +1,13 @@
-package com.tdxtxt.liteavplayer.weight.controller
+package com.tdxtxt.liteavplayer.video.controller
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IController
+import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IController
 import kotlin.math.abs
 
 /**
@@ -24,6 +26,7 @@ class GestureController : IController {
 
     private val mGestureDetector = GestureDetector(mContext, object : GestureDetector.SimpleOnGestureListener(){
         var xDown: Float = 0f
+        var yDown: Float = 0f
         var currentDuration = 0
 
         override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
@@ -46,6 +49,11 @@ class GestureController : IController {
 
         override fun onScroll(e1: MotionEvent?, e2: MotionEvent?,
             distanceX: Float, distanceY: Float): Boolean {
+
+            if(isStatusBar(yDown)){
+                return true
+            }
+
             if(abs(distanceX) >= abs(distanceY)){//水平滑动
                 if(isLeftVerticalDistance || isRightVerticalDistance){
 
@@ -72,6 +80,7 @@ class GestureController : IController {
 
         override fun onDown(e: MotionEvent?): Boolean {
             xDown = e?.x ?: 0f
+            yDown = e?.y ?: 0f
             currentDuration = mPlayerView?.getCurrentDuration()?: 0
             return true
         }
@@ -109,14 +118,14 @@ class GestureController : IController {
         mPlayerView?.getBaicView()?.apply {
             setTrackingSeekBar(true)
             updateSeekBar(progress)
-            showBaicMenuLayout()
+            showBasicMenuLayout()
         }
     }
 
     fun onLeftVerticalDistance(donwY: Float, nowY: Float){
         isLeftVerticalDistance = true
 
-        mPlayerView?.getBaicView()?.hideBaicMenuLayout()
+        mPlayerView?.getBaicView()?.hideBasicMenuLayout()
 
         val deltaX = donwY - nowY
         val height = mPlayerView?.getBaicView()?.getViewWidth()?: 1
@@ -127,7 +136,7 @@ class GestureController : IController {
     fun onRightVerticalDistance(donwY: Float, nowY: Float){
         isRightVerticalDistance = true
 
-        mPlayerView?.getBaicView()?.hideBaicMenuLayout()
+        mPlayerView?.getBaicView()?.hideBasicMenuLayout()
 
         val deltaX = donwY - nowY
         val height = mPlayerView?.getBaicView()?.getViewWidth()?: 1
@@ -153,6 +162,10 @@ class GestureController : IController {
 
     private fun isRight(x: Number): Boolean{
         return x.toFloat() > (mPlayerView?.getBaicView()?.getViewWidth()?: 1) / 2f
+    }
+
+    private fun isStatusBar(y: Number): Boolean {
+        return y.toInt() < LiteavPlayerUtils.getStatusBarHeight(mPlayerView?.context)
     }
 
     @SuppressLint("ClickableViewAccessibility")

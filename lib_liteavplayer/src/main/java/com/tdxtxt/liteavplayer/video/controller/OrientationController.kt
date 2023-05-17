@@ -1,9 +1,9 @@
-package com.tdxtxt.liteavplayer.weight.controller
+package com.tdxtxt.liteavplayer.video.controller
 
 import android.content.Context
 import android.view.OrientationEventListener
-import com.tdxtxt.liteavplayer.weight.TXVideoPlayerView
-import com.tdxtxt.liteavplayer.weight.inter.IController
+import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.inter.IController
 
 /**
  * <pre>

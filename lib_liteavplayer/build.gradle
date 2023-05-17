@@ -6,7 +6,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "liteavplayer"
+def modelName = "liteavplayer_beta"
 def debugNum = 1
 
 android {
@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.0.3"
     }
 
     lintOptions {
@@ -54,7 +54,8 @@ dependencies {
 
     //google官方lib
     implementation rootProject.ext.supprotLibs
-    api 'com.tencent.liteav:LiteAVSDK_Player:11.1.0.13141'
+    api 'com.tencent.liteav:LiteAVSDK_Player:11.0.0.13129' //稳定版
+
 }
 
 //上传到Maven仓库的task
