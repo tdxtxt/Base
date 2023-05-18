@@ -35,7 +35,7 @@ interface IVideoView {
     /**
      * 显示自定义view
      */
-    fun showCustomView(iView: AbsControllerCustom)
+    fun showCustomView(iView: AbsCustomController)
 
     /**
      * 隐藏自定义view
@@ -90,7 +90,7 @@ interface IMultipleController : IController {
     fun hide()
     fun toggle()
 }
-abstract class AbsControllerCustom: IController {
+abstract class AbsCustomController: IController {
     private var mView: View? = null
     private var mPlayerView: TXVideoPlayerView? = null
     fun getPlayerView() = mPlayerView
@@ -108,10 +108,17 @@ abstract class AbsControllerCustom: IController {
     }
 
     fun inflater(playerView: TXVideoPlayerView): View? {
+        attach(playerView)
         mView = LayoutInflater.from(playerView.context).inflate(getLayoutResId(), null, false)
         //禁止手势传递
         mView?.setOnTouchListener { v, event ->  true}
-        attach(playerView)
+        mView?.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener{
+            override fun onViewAttachedToWindow(v: View?) {}
+            override fun onViewDetachedFromWindow(v: View?) {
+                mView?.removeOnAttachStateChangeListener(this)
+                detach()
+            }
+        })
         return mView
     }
 

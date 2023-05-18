@@ -30,6 +30,9 @@ object LiteAVManager {
     private var mApp: Application? = null
     private var mReferer: String? = null
 
+    /**
+     * referer 防止 URL 被到处拷贝的 Referer 字段（腾讯云可以提供更加安全的签名防盗链方案），如没有特殊需求，可以不传
+     */
     fun init(app: Application, licenceURL: String?, licenceKey: String?, referer: String? = null){
         mApp = app
         mReferer = referer

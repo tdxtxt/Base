@@ -59,7 +59,8 @@ class ApplicationDelegateImpl constructor(val application: Application) : Applic
             .registerQQPlatform(QQPlatform.Creator())
             .registerAliPlatform(AliPlatform.Creator())
 
-        LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1307664769_1/v_cube.license", "a784ace47a32b8bf0ba85bdac884e767", "https://1307664769.vod2.myqcloud.com")
+        LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1253499804_1/v_cube.license", "341ea3d21fe51789da3ad8c3ad47bd0f", "https://1307664769.vod2.myqcloud.com")
+//        LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1307664769_1/v_cube.license", "a784ace47a32b8bf0ba85bdac884e767", "https://1307664769.vod2.myqcloud.com")
     }
 
 }

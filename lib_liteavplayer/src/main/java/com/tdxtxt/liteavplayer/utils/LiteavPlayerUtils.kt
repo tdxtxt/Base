@@ -183,7 +183,8 @@ object LiteavPlayerUtils {
      */
     fun getNetworkState(context: Context?): NetworkState {
         try {
-            val connectivityManager = context?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
+            if(context == null)  return NetworkState.NONE
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 val activeNetwork = connectivityManager?.activeNetwork ?: return NetworkState.NONE
@@ -210,9 +211,9 @@ object LiteavPlayerUtils {
     }
 
     fun formatSpeed(byteSize: Int?): String {
-        if(byteSize == null) return "0 kb/s"
-        return if (byteSize < 0) {
-            return "0 kb/s"
+        if(byteSize == null) return ""
+        return if (byteSize <= 0) {
+            return ""
         } else if (byteSize < 1024) {
             return "$byteSize kb/s"
         } else {

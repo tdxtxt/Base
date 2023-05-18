@@ -1,7 +1,9 @@
 package com.tdxtxt.base
 
+import android.util.Log
 import android.view.View
 import com.tdxtxt.baselib.tools.StatusBarHelper
+import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.liteavplayer.LiteAVManager
 import kotlinx.android.synthetic.main.activity_txvideo_test.*
@@ -51,5 +53,11 @@ class TXVideoActivity : BaseActivity() {
         if(videoPlayer.onBackPressed()){
             super.onBackPressed()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("tdxtxt", "被回收了")
+        ToastHelper.showToast("被回收了")
     }
 }

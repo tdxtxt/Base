@@ -17,7 +17,7 @@ import kotlin.math.abs
  *     desc   :
  * </pre>
  */
-class VideoMananger constructor(context: Context?, id: Long) : IVideoPlayer {
+class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPlayer {
     private var isDestory = false
     private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
     private var mPlayer: TXVodPlayer? = null
@@ -61,6 +61,8 @@ class VideoMananger constructor(context: Context?, id: Long) : IVideoPlayer {
                     sendLoadingEvent(false)
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_END){
                     sendCompleteEvent()
+                }else{
+                    sendUnkownEvent(Pair(event, param))
                 }
             }
             override fun onNetStatus(player: TXVodPlayer?, param: Bundle?) {
@@ -142,8 +144,8 @@ class VideoMananger constructor(context: Context?, id: Long) : IVideoPlayer {
     }
 
     override fun pause() {
-        sendPauseEvent()//因为SDK没有暂停这一事件，所以就自己实现
         getPlayer()?.pause()
+        sendPauseEvent()//因为SDK没有暂停这一事件，所以就自己实现
     }
 
     override fun stop(clearFrame: Boolean) {
@@ -227,31 +229,35 @@ class VideoMananger constructor(context: Context?, id: Long) : IVideoPlayer {
     }
 
     private fun sendCompleteEvent(){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_COMPLETED)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_COMPLETED)
     }
 
     private fun sendStartEvent(){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_START)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_START)
     }
 
     private fun sendPlayingEvent(timePair: Pair<Int, Int>){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_PLAYING, timePair)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_PLAYING, timePair)
     }
 
     private fun sendLoadingEvent(isLoading: Boolean){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_LOADING, isLoading)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_LOADING, isLoading)
     }
 
     private fun sendPauseEvent(){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_PAUSED)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_PAUSED)
     }
 
     private fun sendPreparedEvent(){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_PREPARED)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_PREPARED)
     }
 
+//    private fun sendStopEvent(){
+//        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_STOP)
+//    }
+
     private fun sendReleaseEvent(){
-        sendPlayerEvent(TXPlayerListener.PlayerState.STATE_RELEASE)
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_RELEASE)
     }
 
     private fun sendNetspeedEvent(speed: Int?){
@@ -261,10 +267,10 @@ class VideoMananger constructor(context: Context?, id: Long) : IVideoPlayer {
     fun sendNetworkEvent(state: NetworkState){
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_NETWORK, state)
     }
-//    private fun sendVideoSizeChangedEvent(width: Int, height: Int){
-//        sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_VIDEO_SIZE)
-//    }
-//
+    private fun sendUnkownEvent(eventPair: Pair<Int, Bundle?>){
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_UNKOWN, eventPair)
+    }
+
     private fun sendMultipleChangeEvent(value: Float){
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_MULTIPLE, value)
     }

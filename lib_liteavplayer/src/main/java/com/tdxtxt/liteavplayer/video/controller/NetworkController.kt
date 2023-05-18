@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
-import com.tdxtxt.liteavplayer.utils.NetworkState
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.inter.IController
 

@@ -163,7 +163,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
      */
     fun getMultipleList() = mMultipleList
 
-    override fun showCustomView(iView: AbsControllerCustom) {
+    override fun showCustomView(iView: AbsCustomController) {
         hideCustomView()
         val view = iView.inflater(this)
         view?.id = R.id.txvideo_customview
@@ -254,22 +254,22 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     override fun onPlayStateChanged(state: Int, value: Any?) {
         when(state){
-            TXPlayerListener.PlayerState.STATE_PREPARED -> {
+            TXPlayerListener.PlayerState.EVENT_PREPARED -> {
                 getBaicView().hideLoading()
             }
-            TXPlayerListener.PlayerState.STATE_START -> {
+            TXPlayerListener.PlayerState.EVENT_START -> {
                 keepScreenOn = true//禁止熄屏
                 getBaicView().updatePlayButton(false)
             }
-            TXPlayerListener.PlayerState.STATE_PLAYING -> {
+            TXPlayerListener.PlayerState.EVENT_PLAYING -> {
                 getBaicView().updateTextTime(getCurrentDuration(), getDuration())
                 getBaicView().updateSeekBar(getCurrentPercentage(), getBufferedPercentage())
             }
-            TXPlayerListener.PlayerState.STATE_PAUSED -> {
+            TXPlayerListener.PlayerState.EVENT_PAUSED -> {
                 keepScreenOn = false//允许熄屏
                 getBaicView().updatePlayButton(true)
             }
-            TXPlayerListener.PlayerState.STATE_LOADING -> {
+            TXPlayerListener.PlayerState.EVENT_LOADING -> {
                 if(value is Boolean){
                     if(value)  getBaicView().showLoading() else  getBaicView().hideLoading()
                 }
@@ -279,10 +279,10 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
                     getBaicView().updateNetspeed(value)
                 }
             }
-            TXPlayerListener.PlayerState.STATE_COMPLETED -> {
+            TXPlayerListener.PlayerState.EVENT_COMPLETED -> {
 
             }
-            TXPlayerListener.PlayerState.STATE_RELEASE -> {
+            TXPlayerListener.PlayerState.EVENT_RELEASE -> {
                 destoryView()
             }
             TXPlayerListener.PlayerState.CHANGE_MULTIPLE -> {
@@ -325,11 +325,13 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     override fun setDataSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
         mVideoMgr?.setDataSource(appId, fileId, psign, startTime, autoPlay)
         getBaicView().showBasicMenuLayout()
+        getBaicView().showLoading()
     }
 
     override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {
         mVideoMgr?.setDataSource(path, startTime, autoPlay)
         getBaicView().showBasicMenuLayout()
+        getBaicView().showLoading()
     }
 
     override fun reStart() {

@@ -15,6 +15,7 @@ import com.tdxtxt.pickerview.util.OnClickItemListener
 import com.tdxtxt.pickerview.util.PickerUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
 
@@ -38,6 +39,7 @@ class MainActivity : BaseActivity() {
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)
+                .delay(3000, TimeUnit.MILLISECONDS)
                 .compose(bindUIThread())
                 .compose(bindProgress())
                 .subscribe(object : BaseObserverNetapi<Any>() {
