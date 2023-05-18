@@ -113,7 +113,6 @@ abstract class AbsCustomController: IController {
     }
 
     fun inflater(playerView: TXVideoPlayerView): View? {
-        attach(playerView)
         mView = LayoutInflater.from(playerView.context).inflate(getLayoutResId(), null, false)
         //禁止手势传递
         mView?.setOnTouchListener { v, event ->  true}
@@ -124,6 +123,7 @@ abstract class AbsCustomController: IController {
                 detach()
             }
         })
+        attach(playerView)//必须放到最后
         return mView
     }
 
