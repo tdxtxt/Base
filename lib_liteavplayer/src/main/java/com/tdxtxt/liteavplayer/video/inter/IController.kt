@@ -47,6 +47,11 @@ interface IVideoView {
     fun onBackPressed(): Boolean
 
     /**
+     * 返回操作处理
+     */
+    fun back()
+
+    /**
      * 是否全屏播放
      */
     fun isFullScreen(): Boolean

@@ -69,13 +69,7 @@ class BasicControllerView : FrameLayout, IBasicController {
             showBasicMenuLayout()
             when(it){
                 basic_back -> {
-                    if(mPlayerView?.onBackPressed() == true){
-                        mPlayerView?.release()
-                        val activity = context
-                        if(activity is Activity){
-                            activity.finish()
-                        }
-                    }
+                    mPlayerView?.back()
                 }
                 basic_toggleplay, basic_toggleplay_small -> {
                     mPlayerView?.togglePlay()

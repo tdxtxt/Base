@@ -184,6 +184,13 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         }
     }
 
+    override fun back() {
+        if(onBackPressed()){
+            release()
+            getActivity()?.finish()
+        }
+    }
+
     override fun isFullScreen(): Boolean {
         return isReverseFullScreen() || isForwardFullScreen()
     }
