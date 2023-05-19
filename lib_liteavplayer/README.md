@@ -19,7 +19,7 @@ implementation 'io.github.tdxtxt:liteavplayer_beta:0.0.5-release' //引入依赖
 * 第一步:初始化
 
 ```kotlin
-LiteAVManager.init(application,"licenceURL","a784ace47a32b8bf0ba85bdac884e767", "防盗链接域名，可不传")
+LiteAVManager.init(application,"licenceURL","licenceKey", "防盗链接域名，可不传")
 ```
 
 * 第二步:布局中添加播放器控件
@@ -41,10 +41,10 @@ videoPlayer.setVideoManager(LiteAVManager.getVideoManage())
 videoPlayer.setDataSource("url", 开始播放时间int, 是否马上播放boolean)
 //重写返回事件
  override fun onBackPressed() {
-        if(videoPlayer.onBackPressed()){
-            super.onBackPressed()
-        }
-	}
+     if(videoPlayer.onBackPressed()){
+         super.onBackPressed()
+     }
+}
 ```
 * 其他配置说明
 ```kotlin
