@@ -1,10 +1,10 @@
 package com.tdxtxt.liteavplayer.video.controller.view
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
@@ -28,6 +28,7 @@ class BasicControllerView : FrameLayout, IBasicController {
     private val mFadeBasicMenuLayoutRunnable = Runnable {
         basic_menu.visibility = View.GONE
         mPlayerView?.getMultipleControllerView()?.hide()
+        moveBasicTopMenuLayout()
     }
 
     constructor(context: Context): super(context){
@@ -134,7 +135,29 @@ class BasicControllerView : FrameLayout, IBasicController {
             mLastBasicMenuLayoutShowTime = System.currentTimeMillis()
             removeCallbacks(mFadeBasicMenuLayoutRunnable)
             basic_menu.visibility = View.VISIBLE
+            resumeBasicTopMenuLayout()
             postDelayed(mFadeBasicMenuLayoutRunnable, mDefaultFadeTimeout)
+        }
+    }
+
+    fun resumeBasicTopMenuLayout(){
+        val topview = basic_topmenu
+        val topviewParent = topview.parent
+        if(topviewParent is ViewGroup && topviewParent != basic_menu){
+            topviewParent.removeView(topview)
+            basic_menu.addView(topview)
+        }
+    }
+
+    fun moveBasicTopMenuLayout(){
+        //竖屏+暂停播放，要显示返回按钮
+        if(mPlayerView?.isFullScreen() == false && mPlayerView?.isPlaying() == false){
+            val topview = basic_topmenu
+            val topviewParent = topview.parent
+            if(topviewParent is ViewGroup){
+                topviewParent.removeView(topview)
+                addView(topview)
+            }
         }
     }
 

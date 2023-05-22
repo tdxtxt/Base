@@ -213,6 +213,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mFullChangelisenter?.invoke(isFullScreen())
 
         getBaicView().updateFullScreen(isFullScreen())
+        getBaicView().moveBasicTopMenuLayout()
         val parentView = getBaicView().parent
         if(parentView is ViewGroup){
             parentView.removeView(getBaicView())
@@ -267,6 +268,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             TXPlayerListener.PlayerState.EVENT_START -> {
                 keepScreenOn = true//禁止熄屏
                 getBaicView().updatePlayButton(false)
+                getBaicView().resumeBasicTopMenuLayout()
             }
             TXPlayerListener.PlayerState.EVENT_PLAYING -> {
                 getBaicView().updateTextTime(getCurrentDuration(), getDuration())
@@ -275,6 +277,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             TXPlayerListener.PlayerState.EVENT_PAUSED -> {
                 keepScreenOn = false//允许熄屏
                 getBaicView().updatePlayButton(true)
+                getBaicView().moveBasicTopMenuLayout()
             }
             TXPlayerListener.PlayerState.EVENT_LOADING -> {
                 if(value is Boolean){

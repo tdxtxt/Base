@@ -55,6 +55,7 @@
         android:background="@drawable/liteavlib_navigationbar">
 
         <FrameLayout
+            android:id="@+id/basic_topmenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
@@ -76,6 +77,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/basic_centermenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -123,6 +125,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/basic_bottommenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -211,7 +214,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
         <FrameLayout
             android:id="@+id/basic_multiple_placeholder"
