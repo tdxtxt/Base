@@ -5,7 +5,9 @@ import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.size
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.tdxtxt.tablayout.R
 import com.tdxtxt.tablayout.tools.TabUtils
 import net.lucode.hackware.magicindicator.MagicIndicator
@@ -27,6 +29,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 class XSlidingTabLayout : MagicIndicator {
     private var mTitles: List<String>? = null
     private var mViewPager: ViewPager? = null
+    private var mViewPager2: ViewPager2? = null
 
     private var mIndicatorColor: Int = ContextCompat.getColor(context, R.color.tl_indicator_color)
     private var mIndicatorHeight: Float = TabUtils.dp2px(3f)
@@ -98,6 +101,23 @@ class XSlidingTabLayout : MagicIndicator {
         }
     }
 
+    fun setViewPager2(viewPager: ViewPager2, titles: List<String>?, smoothScroll: Boolean = false){
+        mTitles = titles
+        mViewPager2 = viewPager
+        val navigator = createNavigator(smoothScroll)
+        setNavigator(navigator)
+
+        // must after setNavigator
+        val titleContainer = navigator.titleContainer
+        titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+        titleContainer.dividerDrawable = object : ColorDrawable(){
+            override fun getIntrinsicWidth(): Int {
+                return mTabHorizontalPadding.toInt()
+            }
+        }
+        titleContainer.setPadding(mTabHorizontalMargin.toInt(), 0, mTabHorizontalMargin.toInt(), 0)
+        TabUtils.bindViewPage2(this, viewPager)
+    }
 
     fun setViewPager(viewPager: ViewPager, smoothScroll: Boolean = false) {
         val adapter = viewPager.adapter ?: return
@@ -151,6 +171,7 @@ class XSlidingTabLayout : MagicIndicator {
                 tabView.setEqual(mTabEqual)
                 tabView.setOnClickListener {
                     mViewPager?.setCurrentItem(index, smoothScroll)
+                    mViewPager2?.setCurrentItem(index, smoothScroll)
                 }
                 return tabView
             }

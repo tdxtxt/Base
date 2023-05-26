@@ -4,6 +4,9 @@ import android.content.res.Resources
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import androidx.viewpager2.widget.ViewPager2
+import net.lucode.hackware.magicindicator.MagicIndicator
 
 /**
  * <pre>
@@ -29,6 +32,26 @@ object TabUtils {
     fun px2dp(pxValue: Float): Float {
         val scale = Resources.getSystem().displayMetrics.density
         return (pxValue / scale + 0.5f)
+    }
+
+    fun bindViewPage2(magicIndicator: MagicIndicator?, viewPager: ViewPager2?){
+        viewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                magicIndicator?.onPageScrolled(position, positionOffset, positionOffsetPixels)
+            }
+
+            override fun onPageSelected(position: Int) {
+                magicIndicator?.onPageSelected(position)
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                magicIndicator?.onPageScrollStateChanged(state)
+            }
+        })
     }
 
     /**
