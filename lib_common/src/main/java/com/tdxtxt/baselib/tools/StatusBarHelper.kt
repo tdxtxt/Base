@@ -4,9 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Build
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.WindowInsetsController
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
@@ -104,13 +102,15 @@ object StatusBarHelper {
 
     fun hideSysBar(activity: Activity?) {
         activity?.window?.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                attributes = attributes.apply {
+                    layoutInDisplayCutoutMode =
+                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                }
+            }
             var uiOptions = decorView.systemUiVisibility
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            }
+            uiOptions = uiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            uiOptions = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 
             decorView.systemUiVisibility = uiOptions
             setFlags(

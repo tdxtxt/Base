@@ -6,8 +6,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.KeyboardUtils
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.tdxtxt.baselib.R
@@ -30,6 +33,7 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 abstract class BaseActivity : RxAppCompatActivity(), IView {
     protected lateinit var fragmentActivity: FragmentActivity
     private var mProgressDialog: ProgressDialog? = null
+    protected var autoHideSoftInput = false
     protected var interceptBackEvent = false
     protected var interceptCallBack: (() -> Unit)? = null
     private val stateLayouts = SparseArray<StateLayout>()
@@ -157,6 +161,37 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         } else super.onKeyDown(keyCode, event)
     }
 
+    fun setAutoHideKeyboard(value: Boolean){
+        this.autoHideSoftInput = value
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if(autoHideSoftInput){
+            if(ev?.action == MotionEvent.ACTION_DOWN){
+                val focusView = currentFocus
+                if(focusView is EditText){
+                    if(isViewOutside(focusView, ev)){
+                        //当前触摸位置不处于焦点控件中，需要隐藏软键盘
+                        KeyboardUtils.hideSoftInput(focusView)
+                    }
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun isViewOutside(view: View, event: MotionEvent): Boolean{
+        val location = IntArray(2)
+        view.getLocationInWindow(location)
+        val left = location[0]
+        val top = location[1]
+        val bottom = top + view.height
+        val right = left + view.width
+        return !(event.x > left
+                && event.x < right
+                && event.y > top
+                && event.y < bottom)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

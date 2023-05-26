@@ -136,4 +136,19 @@
         <attr name="endBgColor" format="reference|color" />
         <attr name="useEnableAlpha" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="XViewPager">
+        <attr name="xvp_height_wrap" format="boolean" />
+        <attr name="xvp_horizontal_scroll" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="DashLineView">
+        <attr name="dlineWidth" format="dimension"/>
+        <attr name="dlineColor" format="color"/>
+        <attr name="dlineSpace" format="dimension"/>
+        <attr name="dlineOrientation" format="enum">
+            <enum name="VERTICAL" value="1"/>
+            <enum name="HORIZONTAL" value="0"/>
+        </attr>>
+    </declare-styleable>
 </resources>
