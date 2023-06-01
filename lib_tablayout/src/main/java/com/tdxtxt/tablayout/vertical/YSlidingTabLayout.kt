@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
@@ -123,23 +125,32 @@ class YSlidingTabLayout : FrameLayout {
         }
     }
 
-    /**
-     * 参考 https://mp.weixin.qq.com/s/UK7Is0DDcUmzC7CTB8gyvQ
-     */
     private fun scrollToPosition(position: Int){
         val manager = mRecyclerView.layoutManager
         if(manager is LinearLayoutManager){
+            val smoothScroller = object : LinearSmoothScroller(context){
+                //控制滑动时间
+                override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
+                    return 300f / (displayMetrics?.densityDpi?: 1)
+                }
+            }
             //如果选中的条目不在显示范围内，要滑动条目让该条目显示出来
             val startVisible = manager.findFirstVisibleItemPosition()
             val endVisible = manager.findLastVisibleItemPosition()
-            if(position <= startVisible){
-                TabUtils.rvScrollToPosition(mRecyclerView, startVisible - 1)
-                //这个方法的作用是定位到指定项，就是把你想显示的项显示出来，但是在屏幕的什么位置是不管的，只要那一项现在看得到了，那它就罢工了！
-//                manager.scrollToPosition(startVisible - 1)
+            if(startVisible == RecyclerView.NO_POSITION || endVisible == RecyclerView.NO_POSITION){
+                smoothScroller.targetPosition = position + 1
+                if(smoothScroller.targetPosition >= 0) manager.startSmoothScroll(smoothScroller)
+//                TabUtils.rvScrollToPosition(mRecyclerView, position)
+            }else if(position <= startVisible){
+                smoothScroller.targetPosition = startVisible - 1
+                if(smoothScroller.targetPosition >= 0) manager.startSmoothScroll(smoothScroller)
+//                TabUtils.rvScrollToPosition(mRecyclerView, startVisible - 1)
+////                manager.scrollToPosition(startVisible - 1) //这个方法的作用是定位到指定项，就是把你想显示的项显示出来，但是在屏幕的什么位置是不管的，只要那一项现在看得到了，那它就罢工了！
             }else if(position >= endVisible){
-                TabUtils.rvSmoothScrollToPosition(mRecyclerView, startVisible + 1)
-                //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
-//                manager.scrollToPositionWithOffset(startVisible + 1, 0)
+                smoothScroller.targetPosition = endVisible + 1
+                if(smoothScroller.targetPosition >= 0) manager.startSmoothScroll(smoothScroller)
+//                TabUtils.rvSmoothScrollToPosition(mRecyclerView, startVisible + 1)
+////                manager.scrollToPositionWithOffset(startVisible + 1, 0) //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
             }
         }
 
@@ -226,7 +237,7 @@ class YSlidingTabLayout : FrameLayout {
 
         override fun onBindViewHolder(holder: TabViewHolder, position: Int) {
             if(tabLayout.mTextLineLength > 0){
-                holder.mTab?.setText((titles?.get(position) as java.lang.String?)?.replaceAll("(.{${tabLayout.mTextLineLength}})", "$1\n")?.trim())
+                holder.mTab?.setText((titles?.get(position))?.replace("(.{${tabLayout.mTextLineLength}})".toRegex(), "$1\n")?.trim())
             }else{
                 holder.mTab?.setText(titles?.get(position))
             }
