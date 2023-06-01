@@ -50,6 +50,7 @@ dependencies {
     api ('com.google.android.exoplayer:exoplayer:2.16.1') {
         exclude group : "androidx.core" , module: "core"
         exclude group : "androidx.annotation" , module: "annotation"
+//        exclude group : "androidx.media" , module: "media"
     }
 }
 

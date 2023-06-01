@@ -23,6 +23,13 @@ public abstract class BaseProviderMultiItemLoadMoreAdapter<T extends MultiItemEn
 
     public BaseProviderMultiItemLoadMoreAdapter(List<T> data){
         super(data);
+        init();
+    }
+
+    /**
+     * 该方法主要解决：如果在构造方法中调用抽象方法，可能会导致子类还未实现该方法而出现错误
+     */
+    private void init(){
         addItemTypeLayout();
     }
 

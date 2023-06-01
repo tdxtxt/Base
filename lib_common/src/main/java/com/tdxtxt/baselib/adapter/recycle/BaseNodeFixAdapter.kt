@@ -13,6 +13,17 @@ import com.chad.library.adapter.base.entity.node.NodeFooterImp
  * </pre>
  */
 abstract class BaseNodeFixAdapter(nodeList: MutableList<BaseNode>? = null) : BaseNodeAdapter(nodeList) {
+    init {
+        init()
+    }
+    /**
+     * 该方法主要解决：如果在构造方法中调用抽象方法，可能会导致子类还未实现该方法而出现错误
+     */
+    private fun init(){
+        addItemTypeLayout()
+    }
+
+    abstract fun addItemTypeLayout()
 
     // 此方法有误，需要修复
     override fun removeAt(position: Int) {
