@@ -12,7 +12,7 @@ import com.tencent.live2.impl.V2TXLivePlayerImpl
  *     desc   :
  * </pre>
  */
-class LiveMananger constructor(context: Context?, id: Long): ILivePlayer {
+class LiveMananger constructor(val context: Context?, val id: Long): ILivePlayer {
     private var mPlayer: V2TXLivePlayer? = null
     init {
         mPlayer = V2TXLivePlayerImpl(context)

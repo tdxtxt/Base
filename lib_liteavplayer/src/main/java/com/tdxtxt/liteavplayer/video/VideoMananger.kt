@@ -5,6 +5,9 @@ import android.os.Bundle
 import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.utils.NetworkState
+import com.tdxtxt.liteavplayer.video.controller.PlayerAudioFocusController
+import com.tdxtxt.liteavplayer.video.controller.PlayerHeadsetController
+import com.tdxtxt.liteavplayer.video.inter.IPlayerController
 import com.tdxtxt.liteavplayer.video.inter.IVideoPlayer
 import com.tdxtxt.liteavplayer.video.inter.TXPlayerListener
 import com.tencent.rtmp.*
@@ -23,10 +26,17 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     private var mPlayer: TXVodPlayer? = null
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
-
+    private val mControllerList: MutableList<IPlayerController> = ArrayList()
     init {
         mPlayer = TXVodPlayer(context)
         configPlayer(mPlayer)
+
+        val audioFocusController = PlayerAudioFocusController()
+        audioFocusController.attach(context, this)
+        mControllerList.add(audioFocusController)
+        val headsetController = PlayerHeadsetController()
+        headsetController.attach(context, this)
+        mControllerList.add(headsetController)
     }
 
     private fun configPlayer(player: TXVodPlayer?){
@@ -170,6 +180,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
 
     override fun release() {
         stop(true)
+        mControllerList.forEach { it.detach() }
         mPlayer = null
         isDestory = true
         sendReleaseEvent()
@@ -224,6 +235,10 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     /******************************************************发送播放事件开始*************************************************************************/
     private fun sendPlayerEvent(@TXPlayerListener.PlayerState state: Int, value: Any? = null){
         mPlayerEventListenerListRef?.forEach {
+            it.onPlayStateChanged(state, value)
+        }
+
+        mControllerList.forEach {
             it.onPlayStateChanged(state, value)
         }
     }

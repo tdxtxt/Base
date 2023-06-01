@@ -1,9 +1,12 @@
 package com.tdxtxt.liteavplayer.video.inter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.IdRes
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.VideoMananger
+import com.tencent.rtmp.TXVodPlayer
 
 /**
  * <pre>
@@ -29,6 +32,12 @@ interface IController {
      * 触发销毁相关方法回调
      */
     fun detach()
+}
+
+interface IPlayerController : TXPlayerListener {
+    fun attach(context: Context?, videoMgr: VideoMananger?)
+    fun detach()
+
 }
 
 interface IVideoView {
