@@ -1,27 +1,22 @@
-package com.tdxtxt.base
+package com.tdxtxt.base.fragment
 
 import android.util.Pair
 import androidx.fragment.app.Fragment
-import com.tdxtxt.base.fragment.TestFragment
+import com.tdxtxt.base.R
 import com.tdxtxt.baselib.adapter.viewpager.ViewPagerAdapter
-import com.tdxtxt.baselib.tools.StatusBarHelper
-import com.tdxtxt.baselib.ui.BaseActivity
-import kotlinx.android.synthetic.main.activity_linked.*
+import com.tdxtxt.baselib.ui.BaseFragment
+import kotlinx.android.synthetic.main.fragment_tablayout_y.*
 import java.util.*
 
 /**
  * <pre>
  *     author : tangdexiang
- *     time   : 2023/4/14
+ *     time   : 2023/5/31
  *     desc   :
  * </pre>
  */
-class LinkedViewActivity : BaseActivity() {
-    override fun getLayoutResId() = R.layout.activity_linked
-
-    override fun initStatusBar() {
-        StatusBarHelper.setLightMode(this)
-    }
+class YTabLayoutFragment : BaseFragment() {
+    override fun getLayoutId() = R.layout.fragment_tablayout_y
 
     override fun initUi() {
         val fragments: MutableList<Pair<String, Fragment>> = ArrayList()
@@ -47,9 +42,8 @@ class LinkedViewActivity : BaseActivity() {
         fragments.add(Pair("其他", TestFragment()))
         fragments.add(Pair("222222222222222222", TestFragment()))
 
-        viewPager.adapter = ViewPagerAdapter(supportFragmentManager, fragments)
+        viewPager.adapter = ViewPagerAdapter(childFragmentManager, fragments)
         tabLayout.setViewPager(viewPager)
+        viewPager.setCurrentItem(22)
     }
-
-
 }

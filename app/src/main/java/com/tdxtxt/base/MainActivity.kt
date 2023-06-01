@@ -1,20 +1,13 @@
 package com.tdxtxt.base
 
 import android.content.Intent
-import com.blankj.utilcode.util.TimeUtils
 import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
-import com.tdxtxt.baselib.callback.MenuCallBack
-import com.tdxtxt.baselib.dialog.impl.CommMenuDialog
-import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.pickerview.dataset.OptionDataSet
-import com.tdxtxt.pickerview.util.OnClickItemListener
-import com.tdxtxt.pickerview.util.PickerUtils
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
@@ -35,7 +28,7 @@ class MainActivity : BaseActivity() {
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
 //            getStateView(R.id.iv_image).showError(true)
-            startActivity(Intent(fragmentActivity, LinkedViewActivity::class.java))
+            startActivity(Intent(fragmentActivity, XTabLayoutActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)
@@ -54,6 +47,9 @@ class MainActivity : BaseActivity() {
         }
         btn_next_3.setOnClickListener {
             startActivity(Intent(this, TXVideoActivity::class.java))
+        }
+        btn_next_4.setOnClickListener {
+            startActivity(Intent(this, WebViewActivity::class.java))
         }
     }
 

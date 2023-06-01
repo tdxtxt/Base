@@ -37,4 +37,12 @@
         android:text="视频播放"
         android:layout_marginTop="16dp"/>
 
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_next_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CommTextButtonStyle"
+        android:text="WebView"
+        android:layout_marginTop="16dp"/>
+
 </LinearLayout>
