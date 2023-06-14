@@ -33,8 +33,7 @@ import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view
  *     desc   : 腾讯点播
  * </pre>
  */
-class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListener,
-    LifecycleObserver {
+class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListener, LifecycleObserver {
     private var mVideoMgr: VideoMananger? = null
     private var mWidthRatio = -1
     private var mHeightRatio = -1
@@ -133,35 +132,35 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     /**
      * 设置标题
      */
-    fun setTitle(title: CharSequence?){
+    override fun setTitle(title: CharSequence?){
         getBaicView().setTitle(title)
     }
 
     /**
      * 设置动态水印
      */
-    fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int){
+    override fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int){
         getBaicView().setWaterMark(dynamicWatermarkTip, tipTextSize, tipTextColor)
     }
 
     /**
-     * 可拖动的最大时长百分段，取值0到1
+     * 可拖动的最大时长百分段，取值0到1 Control
      */
-    fun setTrackMaxPercent(trackMaxPercent: Float){
-        getBaicView().getSeekBarControllerView().setTrackMaxPercent(trackMaxPercent)
+    override fun setDragMaxPercent(dragMaxPercent: Float?){
+        getBaicView().getSeekBarControllerView().setDragMaxPercent(dragMaxPercent)
     }
 
     /**
      * 设置倍速可选项列表
      */
-    fun setMultipleList(multipleList: List<Float>?){
+    override fun setMultipleList(multipleList: List<Float>?){
         mMultipleList = multipleList
     }
 
     /**
      * 获取倍速可选项列表
      */
-    fun getMultipleList() = mMultipleList
+    override fun getMultipleList() = mMultipleList?: mutableListOf(1f)
 
     override fun showCustomView(iView: AbsCustomController) {
         hideCustomView()

@@ -18,7 +18,7 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
     private var mPlayerView: TXVideoPlayerView? = null
     private var mIsTrackingSeekBar = false//是否手指进行拖动
     private var isPlayOnTouchBefore: Boolean? = null //手指拖动前的播放状态
-    private var mTrackMaxProgress: Int? = null //允许手指拖动的最大进度值
+    private var mDragMaxProgress: Int? = null //允许手指拖动的最大进度值
     private var mTrackingTouchListener: ((isStart: Boolean) -> Unit)? = null
 
 
@@ -33,16 +33,16 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
         setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(skb: SeekBar?, progress: Int, fromUser: Boolean) {
                 if(mIsTrackingSeekBar){
-                    val tempTrackMaxProgress = mTrackMaxProgress
+                    val tempTrackMaxProgress = mDragMaxProgress
                     if(tempTrackMaxProgress != null && progress > tempTrackMaxProgress){
                         setProgress(tempTrackMaxProgress)
                     }else{
                         scrollValueProgress(progress)
                     }
                 }else{
-                    val tempTrackMaxProgress = mTrackMaxProgress
+                    val tempTrackMaxProgress = mDragMaxProgress
                     if(tempTrackMaxProgress != null) {
-                        mTrackMaxProgress = max(tempTrackMaxProgress, progress)
+                        mDragMaxProgress = max(tempTrackMaxProgress, progress)
                     }
                 }
             }
@@ -73,16 +73,20 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
         mTrackingTouchListener = trackingTouchListener
     }
 
-    fun setTrackMaxPercent(percent: Float){
+    fun setDragMaxPercent(percent: Float?){
+        if(percent == null){
+            mDragMaxProgress = null
+            return
+        }
         val tempPercent = if(percent < 0) 0f else if(percent > 1) 1f else percent
-        mTrackMaxProgress = (max.toFloat() * tempPercent).toInt()
+        mDragMaxProgress = (max.toFloat() * tempPercent).toInt()
     }
 
-    fun getTrackMaxDuration(): Int? {
-        val tempTrackMaxProgress = mTrackMaxProgress ?: return null
+    fun getDragMaxDuration(): Int? {
+        val tempDragMaxProgress = mDragMaxProgress ?: return null
         val totalDuration = mPlayerView?.getDuration() ?: return null
 
-        return (totalDuration * (tempTrackMaxProgress.toFloat() / max.toFloat())).toInt()
+        return (totalDuration * (tempDragMaxProgress.toFloat() / max.toFloat())).toInt()
     }
 
     /**

@@ -93,7 +93,7 @@ class BasicControllerView : FrameLayout, IBasicController {
                 basic_forward -> {
                     val totalTime = mPlayerView?.getDuration()?: 0
                     var newTime = (mPlayerView?.getCurrentDuration()?: 0) + 15
-                    val trackMaxDuration = seekBar.getTrackMaxDuration()
+                    val trackMaxDuration = seekBar.getDragMaxDuration()
                     if(trackMaxDuration != null && newTime > trackMaxDuration){
                         newTime = trackMaxDuration
                     }

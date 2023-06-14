@@ -51,7 +51,7 @@ videoPlayer.setDataSource("url", 开始播放时间int, 是否马上播放boolea
  videoPlayer.bindLifecycle(owner) //绑定生命周期
  videoPlayer.setMultipleList(mutableListOf(0.75f, 1f, 1.5f, 2f)) //设置倍速
  videoPlayer.setWaterMark("水印", 14, Color.argb(100, 255, 0, 0)) //设置水印
- videoPlayer.setTrackMaxPercent(0.5f) //可拖动的最大时长百分段，取值0到1
+ videoPlayer.setDragMaxPercent(0.5f) //可拖动的最大时长百分段，取值0到1；传null表示可以任意拖动
  videoPlayer.addPlayerEventListener(this) //设置播放状态监听，具体状态可查看源码
  videoPlayer.showCustomView() //设置自定义View，通常用来做广告、播放完成后的封面等，注意：这里只会设置一个，再次设置的时候会覆盖前面设置的额
  videoPlayer.hideCustomView() //移除自定义view

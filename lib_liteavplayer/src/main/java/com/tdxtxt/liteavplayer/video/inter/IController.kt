@@ -74,6 +74,31 @@ interface IVideoView {
      * 开始全屏播放
      */
     fun startFullScreen(isReverse: Boolean? = null)
+
+    /**
+     * 设置显示水印
+     */
+    fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int)
+
+    /**
+     * 设置title
+     */
+    fun setTitle(title: CharSequence?)
+
+    /**
+     * 设置可拖着百分比进度
+     */
+    fun setDragMaxPercent(dragMaxPercent: Float?)
+
+    /**
+     * 设置倍速选择列表
+     */
+    fun setMultipleList(multipleList: List<Float>?)
+
+    /**
+     * 获取倍速选择列表
+     */
+    fun getMultipleList(): List<Float>
 }
 
 interface IBasicController : IController {
@@ -82,9 +107,9 @@ interface IBasicController : IController {
     fun getViewHeight(): Int
     fun showBasicMenuLayout()
     fun hideBasicMenuLayout()
+    fun toggleBaicMenuLayout()
     fun showLoading()
     fun hideLoading()
-    fun toggleBaicMenuLayout()
     fun bindSurface()
     fun unBindSurface()
     fun updateNetspeed(speed: Int?)
