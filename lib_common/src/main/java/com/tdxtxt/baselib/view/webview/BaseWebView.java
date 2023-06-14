@@ -223,15 +223,16 @@ public class BaseWebView extends WebView {
 
     private void initLifecycle(){
         if(lifecycleObserver == null) lifecycleObserver = new LifecycleObserver(new LifecycleMethod() {
-            @Override
-            public void onResume() {
-                BaseWebView.this.onResume();
-            }
-
-            @Override
-            public void onPause() {
-                BaseWebView.this.onPause();
-            }
+            //这两个方法调用可能会导致一些莫名奇怪的问题，一次注释掉
+//            @Override
+//            public void onResume() {
+//                BaseWebView.this.onResume();
+//            }
+//
+//            @Override
+//            public void onPause() {
+//                BaseWebView.this.onPause();
+//            }
 
             @Override
             public void onDestroy() {

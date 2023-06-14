@@ -3,7 +3,6 @@ package com.tdxtxt.baselib.image.glide
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.text.TextUtils
 import android.widget.ImageView
 import com.blankj.utilcode.util.SizeUtils
 import com.bumptech.glide.Glide
@@ -16,6 +15,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.tdxtxt.baselib.image.ILoader
 import com.tdxtxt.baselib.image.ImageLoader
+import jp.wasabeef.glide.transformations.CropCircleWithBorderTransformation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.io.File
 
@@ -30,23 +30,25 @@ object GlideImageLoader : ILoader {
 
     }
 
-    override fun toggleGif(view: ImageView?, resId: Int, resume: Boolean) {
+    override fun loadGif(view: ImageView?, resId: Int, isPlay: Boolean) {
         if (view == null) return
         if(isDestory(view.context)) return
+
         if (view.drawable is GifDrawable) {
             val drawable = view.drawable as GifDrawable
-            if (resume) {
+            if (isPlay) {
                 if (!drawable.isRunning) drawable.start()
             } else {
                 if (drawable.isRunning) drawable.stop()
             }
         } else {
-            Glide.with(view.context).load(resId).set(GifOptions.DECODE_FORMAT, DecodeFormat.DEFAULT)
+            Glide.with(view.context).load(resId)
+                .set(GifOptions.DECODE_FORMAT, DecodeFormat.DEFAULT)
                 .into(view)
 
             if (view.drawable is GifDrawable) {
                 val drawable = view.drawable as GifDrawable
-                if (resume) {
+                if (isPlay) {
                     if (!drawable.isRunning) drawable.start()
                 } else {
                     if (drawable.isRunning) drawable.stop()
@@ -87,67 +89,71 @@ object GlideImageLoader : ILoader {
 
     override fun loadImageCircle(view: ImageView?, url: String?, placeholderResId: Int) {
         if (view == null) return
+        if(isDestory(view.context)) return
 
         val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .placeholder(placeholderResId)
+            .error(placeholderResId)
             .circleCrop()
-        val request =
-            if (TextUtils.isEmpty(url)) {
-                Glide.with(view.context).load(placeholderResId).apply(options)
-            } else {
-                Glide.with(view.context).load(url).apply(options)
-            }
-        if (placeholderResId > 0) {
-            val new = request.placeholder(placeholderResId)
+
+        if(url?.startsWith("http") == true){
+            Glide.with(view.context).load(url).apply(options).into(view)
+        }else{
+            Glide.with(view.context).load(placeholderResId).apply(options).into(view)
         }
-        request.into(view)
+    }
+
+    override fun loadImageCircle(view: ImageView?, url: String?, borderWidthDp: Float, borderColor: Int) {
+        loadImageCircle(view, url, borderWidthDp, borderColor, ImageLoader.placeholderResId)
+    }
+
+    override fun loadImageCircle(view: ImageView?, url: String?, borderWidthDp: Float, borderColor: Int, placeholderResId: Int) {
+        if (view == null) return
+        if(isDestory(view.context)) return
+
+        val options = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .placeholder(placeholderResId)
+            .error(placeholderResId)
+            .transform(CropCircleWithBorderTransformation(SizeUtils.dp2px(borderWidthDp), borderColor))
+
+        if(url?.startsWith("http") == true){
+            Glide.with(view.context).load(url).apply(options).into(view)
+        }else{
+            Glide.with(view.context).load(placeholderResId).apply(options).into(view)
+        }
     }
 
     @SuppressLint("ResourceType")
     override fun loadImage(view: ImageView?, url: String?, placeholderResId: Int, isCache: Boolean,radiusdp: Float) {
         if (view == null) return
         if(isDestory(view.context)) return
-        if (TextUtils.isEmpty(url)) {
-            if (placeholderResId > 0) view.setImageResource(placeholderResId)
-            return
+
+        val options = RequestOptions()
+        if(!isCache){
+            options.skipMemoryCache(!isCache)
+            options.diskCacheStrategy(DiskCacheStrategy.NONE)
         }
-        val requests = Glide.with(view.context)
-        val request = requests.load(url)
+        options.placeholder(placeholderResId)
+        options.error(placeholderResId)
         if(radiusdp > 0){
-            val options = RequestOptions()
             options.transform(RoundedCornersTransformation(SizeUtils.dp2px(radiusdp), 0))
-            request.apply(options)
         }
-        //如果占位图(placeHolder)比请求加载的url图要大，或者实际加载图是有透明部分未把占位图遮挡，就会看到占位图，占位图被当作加载成功后的图的背景展示
-//        request.transition(DrawableTransitionOptions().crossFade())
-        request.transition(DrawableTransitionOptions.with(DrawableCrossFadeFactory.Builder(300).setCrossFadeEnabled(true).build()))
-        when {
-            placeholderResId > 0 -> {
-                request.placeholder(placeholderResId)
-                request.error(placeholderResId)
-            }
-            !isCache -> {
-                // 跳过内存缓存
-                request.skipMemoryCache(true)
-                // 跳过磁盘缓存
-                request.diskCacheStrategy(DiskCacheStrategy.NONE)
-            }
+
+        if(url?.startsWith("http") == true){
+            Glide.with(view.context).load(url).apply(options)
+//              .transition(DrawableTransitionOptions().crossFade()) 如果占位图(placeHolder)比请求加载的url图要大，或者实际加载图是有透明部分未把占位图遮挡，就会看到占位图，占位图被当作加载成功后的图的背景展示
+                .transition(DrawableTransitionOptions.with(DrawableCrossFadeFactory.Builder(300).setCrossFadeEnabled(true).build()))
+                .into(view)
+        }else{
+            Glide.with(view.context).load(placeholderResId).apply(options).into(view)
         }
-        request.into(view)
     }
 
 
     override fun saveImage(url: String?, destFile: File, callback: (isSuccess: Boolean, msg: String) -> Unit) {
     }
-
-
-//    override fun loadRoundRect(view: ImageView?, url: String?, radiusdp: Float) {
-//        val options = RequestOptions()
-//            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-//            .transform(RoundedCornersTransformation(SizeUtils.dp2px(radiusdp), 0))
-//
-//        Glide.with(context).load(url).apply(options).into(imgView);
-//    }
 
 
     override fun clearMemoryCache() {

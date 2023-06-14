@@ -6,7 +6,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "baselib"
+def modelName = "baselib_beta"
 def debugNum = 1
 
 android {
@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.3"
+        versionName "0.0.28"
     }
 
     lintOptions {
