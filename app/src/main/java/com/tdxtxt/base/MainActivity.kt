@@ -1,9 +1,11 @@
 package com.tdxtxt.base
 
 import android.content.Intent
+import android.graphics.Color
 import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
+import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.pickerview.dataset.OptionDataSet
@@ -15,9 +17,9 @@ class MainActivity : BaseActivity() {
     override fun getLayoutResId() = R.layout.activity_main
 
     override fun initUi() {
-        getStateView(R.id.iv_image).showLoading()
+//        getStateView(R.id.iv_image).showLoading()
 
-//        ImageLoader.loadImageRoundRect(iv_image, "https://img2.baidu.com/it/u=3202947311,1179654885&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500", 12f)
+        ImageLoader.loadImageRoundRect(iv_image, "https://img95.699pic.com/photo/50136/1351.jpg_wh300.jpg", 12f)
         btn_next_1.setOnClickListener {
 //            PickerUtils.showTime(fragmentActivity, "选择时间",
 //                TimeUtils.string2Millis("2010-10-06", "yyyy-MM-dd"),
@@ -49,6 +51,9 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this, TXVideoActivity::class.java))
         }
         btn_next_4.setOnClickListener {
+            startActivity(Intent(this, TXLiveActivity::class.java))
+        }
+        btn_next_5.setOnClickListener {
             startActivity(Intent(this, WebViewActivity::class.java))
         }
     }

@@ -9,9 +9,10 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="320dp"
+        android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_margin="50dp"/>
+        android:layout_margin="50dp"
+        android:layout_gravity="center_horizontal"/>
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
         android:id="@+id/btn_next_1"
@@ -39,6 +40,14 @@
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
         android:id="@+id/btn_next_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CommTextButtonStyle"
+        android:text="直播"
+        android:layout_marginTop="16dp"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_next_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/CommTextButtonStyle"
