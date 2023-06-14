@@ -3,9 +3,10 @@ package com.tdxtxt.tablayout.horizontal
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
+import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.size
+import androidx.core.widget.NestedScrollView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.tdxtxt.tablayout.R
@@ -30,6 +31,7 @@ class XSlidingTabLayout : MagicIndicator {
     private var mTitles: List<String>? = null
     private var mViewPager: ViewPager? = null
     private var mViewPager2: ViewPager2? = null
+    private var mScrollView: NestedScrollView? = null
 
     private var mIndicatorColor: Int = ContextCompat.getColor(context, R.color.tl_indicator_color)
     private var mIndicatorHeight: Float = TabUtils.dp2px(3f)
@@ -101,6 +103,28 @@ class XSlidingTabLayout : MagicIndicator {
         }
     }
 
+    fun setScrollView(scrollView: NestedScrollView, anchorTitleViews: List<Pair<String?, View?>>?, smoothScroll: Boolean = false){
+        mTitles = anchorTitleViews?.map { it.first?: "" }
+        mScrollView = scrollView
+        val anchorViews = anchorTitleViews?.map { it.second }
+
+        val navigator = createNavigator(smoothScroll, anchorViews)
+        setNavigator(navigator)
+
+        // must after setNavigator
+        val titleContainer = navigator.titleContainer
+        titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+        titleContainer.dividerDrawable = object : ColorDrawable(){
+            override fun getIntrinsicWidth(): Int {
+                return mTabHorizontalPadding.toInt()
+            }
+        }
+        titleContainer.setPadding(mTabHorizontalMargin.toInt(), 0, mTabHorizontalMargin.toInt(), 0)
+        scrollView.post { //必须要在绘制完成只会才能进行绑定
+            TabUtils.bindScrollView(this, scrollView, anchorViews)
+        }
+    }
+
     fun setViewPager2(viewPager: ViewPager2, titles: List<String>?, smoothScroll: Boolean = false){
         mTitles = titles
         mViewPager2 = viewPager
@@ -155,7 +179,7 @@ class XSlidingTabLayout : MagicIndicator {
         return null
     }
 
-    private fun createNavigator(smoothScroll: Boolean = false): CommonNavigator {
+    private fun createNavigator(smoothScroll: Boolean = false, anchorViews: List<View?>? = null): CommonNavigator {
         val navigator = CommonNavigator(context)
         navigator.setAdjustMode(mTabEqual)
 
@@ -172,6 +196,15 @@ class XSlidingTabLayout : MagicIndicator {
                 tabView.setOnClickListener {
                     mViewPager?.setCurrentItem(index, smoothScroll)
                     mViewPager2?.setCurrentItem(index, smoothScroll)
+
+                    if(anchorViews?.isNotEmpty() == true && index < anchorViews.size){
+                        navigator.onPageSelected(index)
+                        val top = anchorViews.get(index)?.top
+                        if(top != null){
+                            mScrollView?.tag = false //scrollview被动引起的滑动，这里表示点击tablayout引起的滑动
+                            mScrollView?.smoothScrollTo(0, top)
+                        }
+                    }
                 }
                 return tabView
             }

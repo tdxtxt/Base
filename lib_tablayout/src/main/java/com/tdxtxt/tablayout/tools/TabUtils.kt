@@ -1,12 +1,15 @@
 package com.tdxtxt.tablayout.tools
 
+import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.view.MotionEvent
 import android.view.View
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.viewpager2.widget.ViewPager2
 import net.lucode.hackware.magicindicator.MagicIndicator
+
 
 /**
  * <pre>
@@ -50,6 +53,34 @@ object TabUtils {
 
             override fun onPageScrollStateChanged(state: Int) {
                 magicIndicator?.onPageScrollStateChanged(state)
+            }
+        })
+    }
+
+    //https://mp.weixin.qq.com/s?__biz=MzAxNjg3MTIyMw==&mid=2650482117&idx=1&sn=4c4a16020d5db83f2e24c1654a44fe82&scene=21#wechat_redirect
+    @SuppressLint("ClickableViewAccessibility")
+    fun bindScrollView(magicIndicator: MagicIndicator?, scollview: NestedScrollView?, anchorViews: List<View?>?){
+        val tops = anchorViews?.map { it?.top?: -1 } ?: return
+        scollview?.setOnTouchListener(object : View.OnTouchListener{
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                //当由scrollview触发时，isScroll 置true
+                if (event?.getAction() == MotionEvent.ACTION_DOWN) {
+                    scollview.tag = true //scrollview主动引起的滑动，这里表示手势操作引起的滑动
+                }
+                return false
+            }
+        })
+        scollview?.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scollview.tag == false) { //scrollview被动引起的滑动，这里表示点击tablayout引起的滑动
+                return@OnScrollChangeListener
+            }
+
+            for (index in tops.size - 1 downTo 0) {
+                //根据滑动距离，对比各模块距离父布局顶部的高度判断
+                if (scrollY > tops[index] - 10) {
+                    magicIndicator?.onPageSelected(index)
+                    break
+                }
             }
         })
     }
