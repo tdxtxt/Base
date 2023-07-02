@@ -21,7 +21,7 @@
 
 #### 基础库CommonLib
 
-      implementation 'io.github.tdxtxt:baselib_beta:0.0.6-release'
+      implementation 'io.github.tdxtxt:baselib_beta:0.0.34-release'
 
 #### 网络库NetLib
 
