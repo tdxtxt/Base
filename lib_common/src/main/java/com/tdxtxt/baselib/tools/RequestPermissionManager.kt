@@ -7,6 +7,7 @@ import com.permissionx.guolindev.PermissionX
 import com.permissionx.guolindev.callback.ForwardToSettingsCallback
 import com.permissionx.guolindev.callback.RequestCallback
 import com.tdxtxt.baselib.callback.MenuCallBack
+import com.tdxtxt.baselib.dialog.impl.CommDialog
 
 /**
  * 功能描述:权限申请工具类
@@ -55,7 +56,7 @@ object RequestPermissionManager{
         if(isGranted){
             callback?.onGranted?.invoke(permissions)
         }else{
-            DialogMethodExt.showCommDialog(activity, requestReason, MenuCallBack("取消"){
+            CommDialog.showCommDialog(activity, requestReason, MenuCallBack("取消"){
                 callback?.onDenied?.invoke(permissions)
             }, MenuCallBack("确认"){
                 directreQuestPermission(activity, permissions, isToSettings, listener)

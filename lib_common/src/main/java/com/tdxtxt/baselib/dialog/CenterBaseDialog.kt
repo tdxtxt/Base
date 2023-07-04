@@ -44,6 +44,10 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity) : IBD
     })
     var popupView: BasePopupView? = null
 
+    override fun isShow(): Boolean {
+        return dialog.isShow
+    }
+
     override fun show(): CenterBaseDialog {
         popupView?.dismiss()
         return builder.asCustom(dialog).apply { popupView = this }.show().lifecycleOwner(context).run { this@CenterBaseDialog }

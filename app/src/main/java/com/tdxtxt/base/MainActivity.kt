@@ -17,7 +17,7 @@ class MainActivity : BaseActivity() {
     override fun getLayoutResId() = R.layout.activity_main
 
     override fun initUi() {
-//        getStateView(R.id.iv_image).showLoading()
+        getStateView(R.id.iv_image)
 
         ImageLoader.loadImageRoundRect(iv_image, "https://img95.699pic.com/photo/50136/1351.jpg_wh300.jpg", 12f)
         btn_next_1.setOnClickListener {
@@ -29,8 +29,8 @@ class MainActivity : BaseActivity() {
 //            }
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
-//            getStateView(R.id.iv_image).showError(true)
-            startActivity(Intent(fragmentActivity, XTabLayoutActivity::class.java))
+            getStateView(R.id.iv_image).showEmpty(text = "哈哈哈哈")
+//            startActivity(Intent(fragmentActivity, XTabLayoutActivity::class.java))
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

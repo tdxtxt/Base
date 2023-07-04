@@ -9,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
-import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
-import com.tdxtxt.baselib.tools.DialogMethodExt
 import com.tdxtxt.baselib.view.titlebar.OnTitleBarListener
 import com.tdxtxt.baselib.view.titlebar.TitleBar
+import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.FragmentEvent
 import com.trello.rxlifecycle3.components.support.RxFragment
@@ -99,11 +98,6 @@ abstract class BaseFragment : RxFragment(), IView {
 
     private fun initConfigStateView(view: View, stateLayout: StateLayout){
         stateLayout.configAll(
-            emptyText = "别看了，这里什么都没有",
-            loadingLayoutId = R.layout.baselib_statelayout_loading, //自定义加载中布局
-            errorLayoutId = R.layout.baselib_statelayout_error, //自定义加载失败布局
-            emptyLayoutId = R.layout.baselib_statelayout_empty, //自定义数据位为空的布局
-            retryAutoLoading = true,
             retryAction = {
                 //点击errorView的回调
                 reload()
@@ -124,7 +118,7 @@ abstract class BaseFragment : RxFragment(), IView {
                     if(fragmentActivity == null || fragmentActivity?.isFinishing() != false || fragmentActivity?.isDestroyed != false){
                         return null
                     }
-                    mProgressDialog = DialogMethodExt.createProgressDialog(fragmentActivity!!, "正在加载...", true)
+                    mProgressDialog = ProgressDialog.createProgressDialog(fragmentActivity!!, "正在加载...", true)
                 }
             }
         }

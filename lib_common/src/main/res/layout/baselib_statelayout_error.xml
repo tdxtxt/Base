@@ -13,13 +13,14 @@
         android:layout_weight="1" />
 
     <ImageView
+        android:id="@+id/ivErrorIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/baselib_statelayout_fail" />
 
     <TextView
-        android:id="@+id/text_desc"
+        android:id="@+id/tvErrorText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

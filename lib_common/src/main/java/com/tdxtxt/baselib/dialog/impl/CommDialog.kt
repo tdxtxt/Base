@@ -35,8 +35,8 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var title: String? = null
-    fun setTitle(title: String?): CommDialog {
+    var title: CharSequence? = null
+    fun setTitle(title: CharSequence?): CommDialog {
         this.title = title
         if(TextUtils.isEmpty(title)){
             tvTitle?.visibility = View.GONE
@@ -47,8 +47,8 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         return this
     }
 
-    var content: String? = null
-    fun setContent(content: String?): CommDialog {
+    var content: CharSequence? = null
+    fun setContent(content: CharSequence?): CommDialog {
         this.content = content
         if(TextUtils.isEmpty(content)){
             tvContent?.visibility = View.GONE
@@ -146,10 +146,44 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
 
     companion object{
         private var layoutResId = R.layout.baselib_dialog_commtips_view
+        @JvmStatic
         fun setLayoutId(resId: Int){
             if(resId > 0){
                 layoutResId = resId
             }
+        }
+        @JvmStatic
+        fun showTips(context: FragmentActivity, content: CharSequence?){
+            showCommDialog(context, "温馨提示", content)
+        }
+        @JvmStatic
+        fun showCommDialog(activity: FragmentActivity?, content: CharSequence?,
+                           leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
+            if (activity == null) return null
+            return createCommDialog(activity, "温馨提示", content, leftMenu = leftMenu, rightMenu = rightMenu)?.apply { show() }
+        }
+        @JvmStatic
+        fun showCommDialog(activity: FragmentActivity?, title: CharSequence?, content: CharSequence?,
+                           leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
+            if (activity == null) return null
+            return createCommDialog(activity, title, content, leftMenu = leftMenu, rightMenu = rightMenu)?.apply { show() }
+        }
+        @JvmStatic
+        fun showCommDialog(activity: FragmentActivity?, title: CharSequence?, content: CharSequence?, centerMenu: MenuCallBack? = null): CommDialog? {
+            if (activity == null) return null
+            return createCommDialog(activity, title, content, centerMenu = centerMenu)?.apply { show() }
+        }
+        @JvmStatic
+        fun createCommDialog(activity: FragmentActivity?, title: CharSequence? = "温馨提示", content: CharSequence?,
+                             leftMenu: MenuCallBack? = null,
+                             centerMenu: MenuCallBack? = null,
+                             rightMenu: MenuCallBack? = null): CommDialog? {
+            if (activity == null) return null
+            return CommDialog(activity).setTitle(title)
+                .setContent(content)
+                .setLeftMenu(leftMenu)
+                .setCenterMenu(centerMenu)
+                .setRightMenu(rightMenu)
         }
     }
 }

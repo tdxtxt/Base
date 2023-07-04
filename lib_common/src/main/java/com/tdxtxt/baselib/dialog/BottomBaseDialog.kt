@@ -58,6 +58,10 @@ abstract class BottomBaseDialog(val context: FragmentActivity) : IBDialog {
 
     var popupView: BasePopupView? = null
 
+    override fun isShow(): Boolean {
+        return dialog.isShow
+    }
+
     override fun show(): BottomBaseDialog {
         popupView?.dismiss()
         return builder.asCustom(dialog).apply { popupView = this }.show().lifecycleOwner(context).run { this@BottomBaseDialog }

@@ -35,6 +35,7 @@ class CountDownTimer {
                             if (value.countDownTimeSecond == 0) {
                                 value.onTick(0)
                                 value.onFinish()
+                                value.detach()
                                 iterator.remove()
                                 listeners.remove(key)
                             } else {
@@ -58,13 +59,15 @@ class CountDownTimer {
         fun getInstance() = mCountDownTime
     }
 
-    private val listeners by lazy { ConcurrentHashMap<Int, TimerListener?>(2) }
+    private val listeners by lazy { ConcurrentHashMap<Int, TimerListener?>(4) }
 
-    @Synchronized
+    /**
+     * 这里会根据key去重
+     */
     fun addTimerListener(listener: TimerListener?) {
         if (listener == null) return
         listeners[listener.key] = listener
-
+        listener.attach()
         if (!mHandler.hasMessages(MSG)) {
             mHandler.sendMessage(mHandler.obtainMessage(MSG))
         }
@@ -72,12 +75,10 @@ class CountDownTimer {
 
     fun removeTimeListener(listener: TimerListener?) {
         if (listener == null) return
-        synchronized(CountDownTimer::class.java) {
-            listeners.remove(listener.key)
-
-            if (listeners.isEmpty()) {
-                mHandler.removeMessages(MSG)
-            }
+        listeners.remove(listener.key)
+        listener.detach()
+        if (listeners.isEmpty()) {
+            mHandler.removeMessages(MSG)
         }
     }
 

@@ -12,6 +12,7 @@ import androidx.annotation.IdRes
 interface IBDialog {
     fun getLayoutId(): Int
     fun onCreate(dialog: IBDialog)
+    fun isShow(): Boolean
     fun show(): IBDialog
     fun dismiss()
     fun hide()

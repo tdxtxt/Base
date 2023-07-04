@@ -1,12 +1,9 @@
 package com.tdxtxt.baselib.app
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import androidx.multidex.MultiDex
 import com.tdxtxt.baselib.tools.CacheHelper
-import java.lang.ref.WeakReference
 
 /**
  * <pre>
@@ -35,7 +32,7 @@ abstract class ApplicationDelegate constructor(val app: Application) {
     }
 
     private fun initActivityLifecycleCallbacks(){
-        app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks{
+        /*app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks{
             override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
                 mAct.add(WeakReference(activity))
             }
@@ -68,7 +65,7 @@ abstract class ApplicationDelegate constructor(val app: Application) {
                     }
                 }
             }
-        })
+        })*/
     }
 
     companion object{
@@ -77,9 +74,9 @@ abstract class ApplicationDelegate constructor(val app: Application) {
         @JvmStatic
         var delegateApp: ApplicationDelegate? = null
 
-        var mAct = mutableListOf<WeakReference<Activity?>>()
+//        var mAct = mutableListOf<WeakReference<Activity?>>()
 
-        fun getTopActivity(): Activity?{
+        /*fun getTopActivity(): Activity?{
             mAct.forEach {
                 val act = it.get()
                 if(act != null && !act.isFinishing && !act.isDestroyed){
@@ -133,6 +130,6 @@ abstract class ApplicationDelegate constructor(val app: Application) {
                     }
                 }
             }
-        }
+        }*/
     }
 }

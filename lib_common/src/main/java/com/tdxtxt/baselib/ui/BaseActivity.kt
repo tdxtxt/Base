@@ -2,7 +2,6 @@ package com.tdxtxt.baselib.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.KeyEvent
@@ -12,12 +11,10 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import com.blankj.utilcode.util.KeyboardUtils
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
-import com.tdxtxt.baselib.view.viewstate.StateLayout
-import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
-import com.tdxtxt.baselib.tools.DialogMethodExt
 import com.tdxtxt.baselib.tools.StatusBarHelper
+import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.ActivityEvent
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
@@ -73,7 +70,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
 
         if(stateLayout != null) return stateLayout
 
-        val view: View = findViewById(resId)?: (findViewById<View>(android.R.id.content).apply { resId == android.R.id.content })
+        val view: View = findViewById(resId)?: (findViewById<View>(android.R.id.content))
 
         stateLayout = StateLayout(fragmentActivity)
 
@@ -85,12 +82,6 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
 
     private fun initConfigStateView(view: View, stateLayout: StateLayout){
         stateLayout.configAll(
-                emptyText = "别看了，这里什么都没有",
-                loadingLayoutId = R.layout.baselib_statelayout_loading, //自定义加载中布局
-                errorLayoutId = R.layout.baselib_statelayout_error, //自定义加载失败布局
-                emptyLayoutId = R.layout.baselib_statelayout_empty, //自定义数据位为空的布局
-                retryAutoLoading = true,
-//                enableLoadingShadow = true, //加载过程中是否启用半透明阴影盖在内容上面
                 retryAction = {
                     //点击errorView的回调
                     reload()
@@ -108,7 +99,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     override fun getProgressBar(): ProgressDialog? {
-        if (mProgressDialog == null) mProgressDialog = DialogMethodExt.createProgressDialog(this, "正在加载...", true)
+        if (mProgressDialog == null) mProgressDialog = ProgressDialog.createProgressDialog(this, "正在加载...", true)
         return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(true) }
     }
 

@@ -9,7 +9,7 @@ package com.tdxtxt.baselib.tools.timer
  */
 abstract class TimerListener constructor(var countDownTimeSecond: Int, val key: Int) {
     /**
-     * countDownTimeSecond 倒计时时间,小于0表示可以一直倒计
+     * countDownTimeSecond 倒计时时间,小于0表示可以一直倒计时
      */
     constructor(key: Int): this(-1, key)
 
@@ -21,6 +21,14 @@ abstract class TimerListener constructor(var countDownTimeSecond: Int, val key: 
      * 倒计时结束
      */
     fun onFinish(){}
+    /**
+     * 被移除
+     */
+    fun detach(){}
+    /**
+     * 被添加
+     */
+    fun attach(){}
 
     /**
      * 设置倒计时时长，单位秒

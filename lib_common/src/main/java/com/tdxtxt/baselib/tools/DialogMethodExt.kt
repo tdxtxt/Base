@@ -19,37 +19,6 @@ import com.lxj.xpopup.impl.FullScreenPopupView
  * dialog工具类
  */
 object DialogMethodExt {
-    fun showCommDialog(activity: FragmentActivity?, content: String?,
-                       leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
-        if (activity == null) return null
-        return createCommDialog(activity, "温馨提示", content, leftMenu, rightMenu)?.apply { show() }
-    }
-
-    fun showCommDialog(activity: FragmentActivity?, title: String? = "温馨提示", content: String?,
-                       leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
-        if (activity == null) return null
-        return createCommDialog(activity, title, content, leftMenu, rightMenu)?.apply { show() }
-    }
-
-    fun createCommDialog(activity: FragmentActivity?, title: String? = "温馨提示", content: String?,
-                         leftMenu: MenuCallBack? = null,
-                         rightMenu: MenuCallBack? = null): CommDialog? {
-        if (activity == null) return null
-        return CommDialog(activity).setTitle(title)
-                .setContent(content)
-                .setLeftMenu(leftMenu)
-                .setCenterMenu(null)
-                .setRightMenu(rightMenu)
-    }
-
-    fun createProgressDialog(activity: FragmentActivity, desc: String = "正在加载...", cancelable: Boolean): ProgressDialog {
-        return ProgressDialog(activity).apply { setDesc(desc)?.setCancelable(cancelable) }
-    }
-
-    fun showTips(context: FragmentActivity, content: String?){
-        showCommDialog(context, "温馨提示", content)
-    }
-
     /**
      * atView 依附的view
      * popupPosition 相对atView的哪个位置
