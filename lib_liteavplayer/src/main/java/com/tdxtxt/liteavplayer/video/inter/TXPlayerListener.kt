@@ -26,6 +26,8 @@ interface TXPlayerListener {
             var CHANGE_NETWORK = 21  //网络变化
             var CHANGE_MULTIPLE = 22 //播放速度变化
 
+            var EVENT_NONDRAG = 30 // 不可拖拽
+
             var EVENT_UNKOWN = 100 //未知事件
         }
     }

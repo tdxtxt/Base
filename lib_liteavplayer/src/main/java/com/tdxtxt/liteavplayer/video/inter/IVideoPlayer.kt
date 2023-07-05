@@ -22,11 +22,15 @@ interface IVideoPlayer {
     /**
      * 播放加密视频
      */
-    fun setDataSource(appId: Int, fileId: String?, psign: String?, startTime: Int? = null, autoPlay: Boolean = true)
+    fun setFileIdSource(appId: Int, fileId: String?, psign: String?, startTime: Int? = null, autoPlay: Boolean = true)
     /**
      * 播放，进度从当前播放停留的进度开始
      */
     fun setDataSource(path: String?, startTime: Int? = null, autoPlay: Boolean = true)
+    /**
+     * 获取播放url
+     */
+    fun getDataSource(): String?
     /**
      * 重新播放，进度从0开始
      */
@@ -74,13 +78,13 @@ interface IVideoPlayer {
     fun isRelease(): Boolean
 
     /**
-     * 获取当前播放的位置
+     * 获取当前播放的位置，单位秒
      * @return  获取当前播放的位置
      */
     fun getCurrentDuration(): Int
 
     /**
-     * 获取视频总时长
+     * 获取视频总时长，单位秒
      * @return  获取视频总时长
      */
     fun getDuration(): Int
@@ -97,7 +101,7 @@ interface IVideoPlayer {
     fun getBufferedPercentage(): Int
 
     /**
-     * 已缓存的时长
+     * 已缓存的时长，单位秒
      */
     fun getBufferedDuration(): Int
 

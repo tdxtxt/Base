@@ -24,6 +24,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     private var isDestory = false
     private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
     private var mPlayer: TXVodPlayer? = null
+    private var mDataSource: String? = null
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
     private val mControllerList: MutableList<IPlayerController> = ArrayList()
@@ -105,7 +106,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         return mPlayer
     }
 
-    override fun setDataSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
+    override fun setFileIdSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
         stop(true)//这里将之前的播放内容清除掉，不然频繁调用将会导致播放器卡死
         val playRunnable = Runnable {
             if(startTime != null) getPlayer()?.setStartTime(startTime.toFloat())
@@ -131,6 +132,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
             if (startTime != null) getPlayer()?.setStartTime(startTime.toFloat())
             getPlayer()?.setAutoPlay(autoPlay)
             getPlayer()?.startVodPlay(path)
+            mDataSource = path
         }
 
         if(abs(System.currentTimeMillis() - mLastStartPlayTime) > 200){//间隔200毫秒，直接播放
@@ -144,6 +146,8 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         }
     }
 
+    override fun getDataSource() = mDataSource
+
     override fun reStart() {
         getPlayer()?.setStartTime(0f)
         resume()
@@ -155,10 +159,13 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
 
     override fun pause() {
         getPlayer()?.pause()
-        sendPauseEvent()//因为SDK没有暂停这一事件，所以就自己实现
+        if(isPlaying()){
+            sendPauseEvent()//因为SDK没有暂停这一事件，所以就自己实现
+        }
     }
 
     override fun stop(clearFrame: Boolean) {
+        mDataSource = null
         getPlayer()?.stopPlay(clearFrame)
     }
 
@@ -182,6 +189,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         stop(true)
         mControllerList.forEach { it.detach() }
         mPlayer = null
+        mDataSource = null
         isDestory = true
         sendReleaseEvent()
         mPlayerEventListenerListRef?.clear()
@@ -279,14 +287,19 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_NETSPEED, speed)
     }
 
-    fun sendNetworkEvent(state: NetworkState){
-        sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_NETWORK, state)
-    }
     private fun sendUnkownEvent(eventPair: Pair<Int, Bundle?>){
         sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_UNKOWN, eventPair)
     }
 
     private fun sendMultipleChangeEvent(value: Float){
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_MULTIPLE, value)
+    }
+
+    fun sendNetworkEvent(state: NetworkState){
+        sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_NETWORK, state)
+    }
+
+    fun sendNondragEvent(){
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_NONDRAG)
     }
 }

@@ -154,7 +154,15 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
      * 设置倍速可选项列表
      */
     override fun setMultipleList(multipleList: List<Float>?){
-        mMultipleList = multipleList
+        if(multipleList?.contains(1f) != true){
+            val tempMultipleList = mutableListOf<Float>()
+            tempMultipleList.add(1f)
+            if(multipleList != null) tempMultipleList.addAll(multipleList)
+            tempMultipleList.sort()
+            mMultipleList = tempMultipleList
+        }else{
+            mMultipleList = multipleList
+        }
     }
 
     /**
@@ -331,10 +339,14 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mPlayerEventListenerListRef?.remove(listener)
     }
 
-    override fun setDataSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
-        mVideoMgr?.setDataSource(appId, fileId, psign, startTime, autoPlay)
+    override fun setFileIdSource(appId: Int, fileId: String?, psign: String?, startTime: Int?, autoPlay: Boolean) {
+        mVideoMgr?.setFileIdSource(appId, fileId, psign, startTime, autoPlay)
         getBaicView().showBasicMenuLayout()
         getBaicView().showLoading()
+    }
+
+    override fun getDataSource(): String? {
+        return mVideoMgr?.getDataSource()
     }
 
     override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {

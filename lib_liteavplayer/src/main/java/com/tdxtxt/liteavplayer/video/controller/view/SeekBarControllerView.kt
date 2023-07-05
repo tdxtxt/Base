@@ -17,6 +17,7 @@ import kotlin.math.max
 class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeekBarController {
     private var mPlayerView: TXVideoPlayerView? = null
     private var mIsTrackingSeekBar = false//是否手指进行拖动
+    private var mDragEventOnce = false //发送拖拽事件执行了一次
     private var isPlayOnTouchBefore: Boolean? = null //手指拖动前的播放状态
     private var mDragMaxProgress: Int? = null //允许手指拖动的最大进度值
     private var mTrackingTouchListener: ((isStart: Boolean) -> Unit)? = null
@@ -36,6 +37,10 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
                     val tempTrackMaxProgress = mDragMaxProgress
                     if(tempTrackMaxProgress != null && progress > tempTrackMaxProgress){
                         setProgress(tempTrackMaxProgress)
+                        if(!mDragEventOnce){
+                            mPlayerView?.getVideoManager()?.sendNondragEvent()
+                            mDragEventOnce = true
+                        }
                     }else{
                         scrollValueProgress(progress)
                     }
@@ -97,6 +102,7 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
     fun setTrackingSeekBar(isTrackingSeekBar: Boolean) {
         this.mIsTrackingSeekBar = isTrackingSeekBar
         if(isTrackingSeekBar){//开始拖动
+            mDragEventOnce = false
             if(isPlayOnTouchBefore != null) return
             isPlayOnTouchBefore = mPlayerView?.isPlaying()
             if(isPlayOnTouchBefore == true) mPlayerView?.pause()
