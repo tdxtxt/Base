@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.callback.MenuCallBack
@@ -238,19 +240,55 @@ abstract class BaseFragment : RxFragment(), IView {
         return mTitleBar
     }
 
-    fun addContentView(view: View){
+    fun addContentViewToFragment(view: View){
+        if(view.parent != null) return
         if(mRootView is FrameLayout){
             (mRootView as FrameLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        }else if(mContainer is FrameLayout){
-            (mContainer as FrameLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }else if(mRootView is ConstraintLayout){
+            val lp = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+            lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            (mRootView as ConstraintLayout).addView(view, lp)
+        }else if(mRootView is RelativeLayout){
+            (mRootView as RelativeLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         }
     }
 
-    fun removeContentView(view: View){
+    fun removeContentViewFromFragment(view: View){
         if(mRootView is FrameLayout){
             (mRootView as FrameLayout).removeView(view)
-        }else if(mContainer is FrameLayout){
+        }else if(mRootView is ConstraintLayout){
+            (mRootView as ConstraintLayout).removeView(view)
+        }else if(mRootView is RelativeLayout){
+            (mRootView as RelativeLayout).removeView(view)
+        }
+    }
+
+    fun addContentViewToParent(view: View){
+        if(view.parent != null) return
+        if(mContainer is FrameLayout){
+            (mContainer as FrameLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }else if(mContainer is ConstraintLayout){
+            val lp = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT)
+            lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+            lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+            (mContainer as ConstraintLayout).addView(view, lp)
+        }else if(mContainer is RelativeLayout){
+            (mContainer as RelativeLayout).addView(view, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        }
+    }
+
+    fun removeContentViewFromParent(view: View){
+        if(mContainer is FrameLayout){
             (mContainer as FrameLayout).removeView(view)
+        }else if(mContainer is ConstraintLayout){
+            (mContainer as ConstraintLayout).removeView(view)
+        }else if(mContainer is RelativeLayout){
+            (mContainer as RelativeLayout).removeView(view)
         }
     }
 

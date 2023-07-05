@@ -251,7 +251,7 @@ class StateLayout : FrameLayout {
         postDelayed({ switchLayout(State.Content) }, createSwitchTimeDiff())
     }
 
-    fun showEmpty(@DrawableRes icon: Int? = null, text: CharSequence? = null, isEmptyViewClick: Boolean = false, useContentBg: Boolean = true){
+    fun showEmpty(text: CharSequence? = null, @DrawableRes icon: Int? = null, isEmptyViewClick: Boolean = false, useContentBg: Boolean = true){
         this.isEmptyViewClick = isEmptyViewClick
         postDelayed( {
             if(icon != null){
@@ -264,7 +264,7 @@ class StateLayout : FrameLayout {
         }, createSwitchTimeDiff())
     }
 
-    fun showError(icon: Int? = null, text: CharSequence? = null, useContentBg: Boolean = true){
+    fun showError(text: CharSequence? = null, @DrawableRes icon: Int? = null, useContentBg: Boolean = true){
         postDelayed( {
             if(icon != null){
                 errorView?.findViewById<ImageView>(R.id.ivErrorIcon)?.setImageResource(icon)

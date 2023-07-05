@@ -3,8 +3,6 @@ package com.tdxtxt.baselib.callback;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.OnLifecycleEvent;
 
-import java.lang.ref.WeakReference;
-
 /**
  * <pre>
  *     author : ton
@@ -13,13 +11,12 @@ import java.lang.ref.WeakReference;
  * </pre>
  */
 public class LifecycleObserver implements androidx.lifecycle.LifecycleObserver {
-    WeakReference<LifecycleMethod> method;
+    private final LifecycleMethod method;
     public LifecycleObserver(LifecycleMethod method){
-        this.method = new WeakReference<>(method);
+        this.method = method;
     }
     LifecycleMethod getMethod(){
-        if(method == null) return null;
-        return method.get();
+        return method;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -44,5 +41,6 @@ public class LifecycleObserver implements androidx.lifecycle.LifecycleObserver {
     public void onDestroy() {
         LifecycleMethod method = getMethod();
         if(method != null) method.onDestroy();
+        method = null;
     }
 }
