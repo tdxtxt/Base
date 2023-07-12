@@ -158,8 +158,9 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     }
 
     override fun pause() {
+        val isPlaying = isPlaying()
         getPlayer()?.pause()
-        if(isPlaying()){
+        if(isPlaying){
             sendPauseEvent()//因为SDK没有暂停这一事件，所以就自己实现
         }
     }
