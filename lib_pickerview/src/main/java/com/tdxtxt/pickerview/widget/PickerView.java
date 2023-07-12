@@ -38,7 +38,7 @@ public class PickerView<T> extends BasePickerView<T> {
   private int mOutTextSize; // 最小的字体
   private int mCenterTextSize; // 最大的字体
   /** default center text color */
-  public static int sCenterColor = Color.parseColor("#5c96f0");
+  public static int sCenterColor = Color.parseColor("#1b71ea");
   /** default out text color */
   public static int sOutColor = Color.parseColor("#919191");
   // 字体渐变颜色

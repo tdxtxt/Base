@@ -874,7 +874,7 @@ public class TimePicker extends BasePicker
       }
       picker.setFormatter(mFormatter);
       picker.initPicker();
-      if (mSelectedDate < 0) {
+      if (mSelectedDate == -1) {
         picker.reset();
       } else {
         picker.setSelectedDate(mSelectedDate);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pickerview_dialog_leftmenu_textcolor">#888888</color>
+    <color name="pickerview_dialog_center_textcolor">#253238</color>
+    <color name="pickerview_dialog_rightmenu_textcolor">#1b71ea</color>
+
+    <color name="pickerview_wheel_out_textcolor">#919191</color>
+    <color name="pickerview_wheel_center_textcolor">#1b71ea</color>
+    <color name="pickerview_wheel_center_linecolor">#e5e5e5</color>
+</resources>
