@@ -99,8 +99,8 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     override fun getProgressBar(): ProgressDialog? {
-        if (mProgressDialog == null) mProgressDialog = ProgressDialog.createProgressDialog(this, "正在加载...", true)
-        return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(true) }
+        if (mProgressDialog == null) mProgressDialog = ProgressDialog.createProgressDialog(this, "正在加载...")
+        return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(ProgressDialog.mGlobalCancelable).setCancelableOnTouchOutside(ProgressDialog.mGlobalOutsideCancelable) }
     }
 
     override fun hideProgressBar() {
@@ -113,11 +113,11 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     override fun showProgressBar(desc: String, isCancel: Boolean) {
-        getProgressBar()?.setDesc(desc)?.setCancelable(isCancel)?.show();
+        getProgressBar()?.setDesc(desc)?.setCancelable(isCancel)?.show()
     }
 
     override fun <T> bindLifecycle(): LifecycleTransformer<T> {
-        return this.bindUntilEvent(ActivityEvent.DESTROY);
+        return this.bindUntilEvent(ActivityEvent.DESTROY)
     }
 
     override fun <T> bindUIThread(): UIThreadTransformer<T> {

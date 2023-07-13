@@ -27,7 +27,7 @@
         android:layout_marginTop="12dp"
         android:paddingLeft="14dp"
         android:paddingRight="14dp"
-        android:text="数据获取失败，请重试！"
+        android:text="网络不可用，点击重试"
         android:textColor="#505c73"
         android:textSize="14dp" />
 

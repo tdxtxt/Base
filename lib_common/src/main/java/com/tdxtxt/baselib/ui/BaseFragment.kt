@@ -120,11 +120,11 @@ abstract class BaseFragment : RxFragment(), IView {
                     if(fragmentActivity == null || fragmentActivity?.isFinishing() != false || fragmentActivity?.isDestroyed != false){
                         return null
                     }
-                    mProgressDialog = ProgressDialog.createProgressDialog(fragmentActivity!!, "正在加载...", true)
+                    mProgressDialog = ProgressDialog.createProgressDialog(fragmentActivity!!, "正在加载...")
                 }
             }
         }
-        mProgressDialog?.setDesc("正在加载...")?.setCancelable(true);
+        mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(ProgressDialog.mGlobalCancelable).setCancelableOnTouchOutside(ProgressDialog.mGlobalOutsideCancelable) }
         return mProgressDialog
     }
 

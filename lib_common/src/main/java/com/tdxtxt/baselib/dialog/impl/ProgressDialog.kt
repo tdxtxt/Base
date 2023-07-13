@@ -39,6 +39,8 @@ class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
     }
 
     companion object{
+        var mGlobalCancelable = true
+        var mGlobalOutsideCancelable = true
         private var layoutResId = R.layout.baselib_dialog_commprogress_view
         @JvmStatic
         fun setLayoutId(resId: Int){
@@ -48,8 +50,14 @@ class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
         }
 
         @JvmStatic
-        fun createProgressDialog(activity: FragmentActivity, desc: String = "加载中...", cancelable: Boolean): ProgressDialog {
-            return ProgressDialog(activity).apply { setDesc(desc).setCancelable(cancelable) }
+        fun setGlobalCancel(cancelable: Boolean, outsideCancelable: Boolean){
+            this.mGlobalCancelable = cancelable
+            this.mGlobalOutsideCancelable = outsideCancelable
+        }
+
+        @JvmStatic
+        fun createProgressDialog(activity: FragmentActivity, desc: String = "加载中...", cancelable: Boolean? = null, outsideCancelable: Boolean? = null): ProgressDialog {
+            return ProgressDialog(activity).apply { setDesc(desc).setCancelable(cancelable?: mGlobalCancelable).setCancelableOnTouchOutside(outsideCancelable?: mGlobalOutsideCancelable) }
         }
     }
 }
