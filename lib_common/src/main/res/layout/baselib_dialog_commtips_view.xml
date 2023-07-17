@@ -35,7 +35,8 @@
             android:paddingHorizontal="24dp"
             android:textColor="#505c73"
             android:textSize="14dp"
-            tools:text="内容" />
+            android:maxHeight="250dp"
+            tools:text="内容内容内容内容内容" />
     </LinearLayout>
 
     <View

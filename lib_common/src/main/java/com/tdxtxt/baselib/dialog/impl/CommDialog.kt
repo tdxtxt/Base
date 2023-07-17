@@ -1,6 +1,7 @@
 package com.tdxtxt.baselib.dialog.impl
 
 import android.text.TextUtils
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -136,6 +137,9 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         tvBtnRight = findViewById(R.id.btn_common_prompt_right)
         viewLine = findViewById(R.id.view_line)
         layoutMenu = findViewById(R.id.layout_menu)
+
+        //超过maxHeight支持滑动
+        tvContent?.movementMethod = ScrollingMovementMethod.getInstance()
 
         setTitle(title)
         setContent(content)

@@ -38,6 +38,7 @@ import com.tdxtxt.baselib.callback.LifecycleObserver;
 public class BaseWebView extends WebView {
     protected ProgressBar progressBar;//进度条
     protected WebChromeClient chromeClient;
+    protected boolean mEnableRefresh = false;
 
     public BaseWebView(@NonNull Context context) {
         super(context);
@@ -140,6 +141,7 @@ public class BaseWebView extends WebView {
     }
 
     private SmartRefreshLayout getParentRefreshLayout(){
+        if(!mEnableRefresh) return null;
         ViewParent viewParent = getParent();
         if(viewParent instanceof SmartRefreshLayout){
             return (SmartRefreshLayout) viewParent;
@@ -219,6 +221,10 @@ public class BaseWebView extends WebView {
             fragment.getLifecycle().removeObserver(lifecycleObserver);
             fragment.getLifecycle().addObserver(lifecycleObserver);
         }
+    }
+
+    public void setEnableRefresh(boolean enabled){
+        mEnableRefresh = enabled;
     }
 
     private void initLifecycle(){
