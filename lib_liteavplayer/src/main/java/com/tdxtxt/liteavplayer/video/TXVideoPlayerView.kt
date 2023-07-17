@@ -14,13 +14,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
+import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.controller.GestureController
 import com.tdxtxt.liteavplayer.video.controller.NetworkController
 import com.tdxtxt.liteavplayer.video.controller.OrientationController
-import com.tdxtxt.liteavplayer.video.controller.view.BasicControllerView
-import com.tdxtxt.liteavplayer.video.controller.view.BrightControllerView
-import com.tdxtxt.liteavplayer.video.controller.view.MultipleControllerView
-import com.tdxtxt.liteavplayer.video.controller.view.VolumeControllerView
+import com.tdxtxt.liteavplayer.video.controller.view.*
 import com.tdxtxt.liteavplayer.video.inter.*
 import com.tencent.rtmp.TXVodPlayer
 import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
@@ -44,11 +42,12 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     private lateinit var mVolumeControllerView: VolumeControllerView
     private lateinit var mBrightControllerView: BrightControllerView
     private lateinit var mMultipleControllerView: MultipleControllerView
+    private lateinit var mBitrateControllerView: BitrateControllerView
     private val mControllerList: MutableList<IController> = ArrayList()
     private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
     private var mMultipleList: List<Float>? = null
 
-    private var mFullChangelisenter: ((isFullScreen: Boolean) -> Unit)? = null
+    private var mScreenChangelisenter: MutableList<(ScreenChangeLisenter)>? = null
     private var mOrientationType = OrientationController.VERITCAL
 
     fun setVideoManager(manager: VideoMananger){
@@ -99,9 +98,13 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mBrightControllerView.attach(this)
         mControllerList.add(mBrightControllerView)
 
-        mMultipleControllerView = MultipleControllerView(context)
+        mMultipleControllerView = MultipleControllerView()
         mMultipleControllerView.attach(this)
         mControllerList.add(mMultipleControllerView)
+
+        mBitrateControllerView = BitrateControllerView()
+        mBitrateControllerView.attach(this)
+        mControllerList.add(mBitrateControllerView)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -128,6 +131,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     fun getBrightControllerView() = mBrightControllerView
     fun getVolumeControllerView() = mVolumeControllerView
     fun getMultipleControllerView() = mMultipleControllerView
+    fun getBitrateControllerView() = mBitrateControllerView
 
     /**
      * 设置标题
@@ -217,7 +221,9 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mOrientationType = OrientationController.VERITCAL
 
         LiteavPlayerUtils.showSysBar(activity)
-        mFullChangelisenter?.invoke(isFullScreen())
+        mScreenChangelisenter?.forEach {
+            it.onChange(isFullScreen())
+        }
 
         getBaicView().updateFullScreen(isFullScreen())
         getBaicView().moveBasicTopMenuLayout()
@@ -246,7 +252,9 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         }
 
         LiteavPlayerUtils.hideSysBar(activity)
-        mFullChangelisenter?.invoke(isFullScreen())
+        mScreenChangelisenter?.forEach {
+            it.onChange(isFullScreen())
+        }
 
         getBaicView().updateFullScreen(isFullScreen())
         val parentView = getBaicView().parent
@@ -263,14 +271,23 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         return null
     }
 
-    fun setFullChangeLisenter(lisenter: (isFullScreen: Boolean) -> Unit){
-        this.mFullChangelisenter = lisenter
+    fun addScreenChangeLisenter(lisenter: ScreenChangeLisenter?){
+        if(lisenter == null) return
+        mScreenChangelisenter?.remove(lisenter)
+        if(mScreenChangelisenter == null) mScreenChangelisenter = ArrayList()
+        mScreenChangelisenter?.add(lisenter)
+    }
+
+    fun removeScreenChangeLisenter(lisenter: ScreenChangeLisenter?){
+        if(lisenter == null) return
+        mScreenChangelisenter?.remove(lisenter)
     }
 
     override fun onPlayStateChanged(state: Int, value: Any?) {
         when(state){
             TXPlayerListener.PlayerState.EVENT_PREPARED -> {
                 getBaicView().hideLoading()
+                getBaicView().updateBitrate(getCurrentBitrate())
             }
             TXPlayerListener.PlayerState.EVENT_START -> {
                 keepScreenOn = true//禁止熄屏
@@ -316,7 +333,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         }
         mPlayerEventListenerListRef?.clear()
         mControllerList.clear()
-        mFullChangelisenter = null
+        mScreenChangelisenter?.clear()
+        mScreenChangelisenter = null
     }
 
     /************************************* 播放相关方法重写开始 *************************************/
@@ -349,8 +367,12 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         return mVideoMgr?.getDataSource()
     }
 
+    /**
+     * autoPlay如果为自动播放，需要注意可能存在自动播放失败的情况，因此加上延迟代码 post { resume() }
+     */
     override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {
         mVideoMgr?.setDataSource(path, startTime, autoPlay)
+        if(autoPlay) post { resume() } //解决下一次设置资源后无法自动播放的问题
         getBaicView().showBasicMenuLayout()
         getBaicView().showLoading()
     }
@@ -424,6 +446,20 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     override fun getMultiple(): Float {
         return mVideoMgr?.getMultiple()?: 1f
     }
+
+    override fun getSupportedBitrates(): List<BitrateItem>? {
+        return mVideoMgr?.getSupportedBitrates()
+    }
+
+    override fun getCurrentBitrate(): BitrateItem? {
+        return mVideoMgr?.getCurrentBitrate()
+    }
+
+    override fun setBitrate(bit: BitrateItem?) {
+        getBaicView().updateBitrate(bit)
+        mVideoMgr?.setBitrate(bit)
+    }
+
 
     /************************************* 生命周期方法 *************************************/
     private var isBackgroundPlaying = false //是否允许后台播放

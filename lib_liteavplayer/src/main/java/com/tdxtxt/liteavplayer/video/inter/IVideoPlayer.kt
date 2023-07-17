@@ -1,6 +1,6 @@
 package com.tdxtxt.liteavplayer.video.inter
 
-import android.content.Context
+import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tencent.rtmp.TXVodPlayer
 
 /**
@@ -120,5 +120,20 @@ interface IVideoPlayer {
      * 获取倍速
      */
     fun getMultiple(): Float
+
+    /**
+     * 支持的视频清晰度
+     */
+    fun getSupportedBitrates(): List<BitrateItem>?
+
+    /**
+     * 获取当前播放的清晰度
+     */
+    fun getCurrentBitrate(): BitrateItem?
+
+    /**
+     * 设置播放器清晰度
+     */
+    fun setBitrate(bit: BitrateItem?)
 
 }

@@ -184,9 +184,29 @@
                     android:textColor="@android:color/white"
                     android:textSize="12dp" />
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="end">
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/basic_bitrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:gravity="center"
+                        tools:text="1080p"
+                        android:paddingVertical="4dp"
+                        android:paddingHorizontal="4dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp" />
+
 
                     <TextView
                         android:id="@+id/basic_multiple"
@@ -195,9 +215,8 @@
                         android:layout_gravity="end|center_vertical"
                         android:gravity="center"
                         android:text="1.0X"
-                        android:layout_marginEnd="32dp"
                         android:paddingVertical="4dp"
-                        android:paddingStart="8dp"
+                        android:paddingHorizontal="4dp"
                         android:textColor="@android:color/white"
                         android:textSize="14dp" />
 
@@ -209,19 +228,11 @@
                         android:paddingVertical="2dp"
                         android:layout_gravity="end|center_vertical"
                         android:src="@mipmap/liteavlib_ic_orient_large" />
-                </FrameLayout>
+                </LinearLayout>
 
 
             </LinearLayout>
         </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/basic_multiple_placeholder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginEnd="28dp"
-            android:layout_marginBottom="40dp"/>
     </FrameLayout>
 
     <com.tdxtxt.liteavplayer.weight.DynamicWatermarkView

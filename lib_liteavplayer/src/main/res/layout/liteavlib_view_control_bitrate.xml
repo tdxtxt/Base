@@ -8,12 +8,11 @@
     android:background="@drawable/liteavlib_background_multiple">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/multiple_list"
+        android:id="@+id/bitrate_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="4"
         tools:listitem="@layout/liteavlib_item_bitrate" />
 

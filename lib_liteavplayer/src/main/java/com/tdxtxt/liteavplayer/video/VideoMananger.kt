@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.utils.NetworkState
+import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.controller.PlayerAudioFocusController
 import com.tdxtxt.liteavplayer.video.controller.PlayerHeadsetController
 import com.tdxtxt.liteavplayer.video.inter.IPlayerController
@@ -50,9 +51,9 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
                     put("Referer", referer)
                 }
             }
-            isSmoothSwitchBitrate = true //开启平滑切换码率
             progressInterval = 1000  // 设置进度回调间隔，单位毫秒
-//                maxBufferSize = 100 // 播放时最大缓冲大小。单位：MB
+            maxBufferSize = 30 // 播放时最大缓冲大小。单位：MB
+//            isSmoothSwitchBitrate = true //开启平滑切换码率
         })
         player?.setVodListener(object : ITXVodPlayListener {
             override fun onPlayEvent(player: TXVodPlayer?, event: Int, param: Bundle?) {
@@ -239,6 +240,39 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
 
     override fun getMultiple(): Float {
         return mMultipleSpeed
+    }
+
+    override fun getSupportedBitrates(): List<BitrateItem>? {
+        return getPlayer()?.supportedBitrates?.map { BitrateItem(it.height, it.index) }
+    }
+
+    override fun getCurrentBitrate(): BitrateItem? {
+        val bitrates = getPlayer()?.supportedBitrates
+
+        val height = getPlayer()?.height
+        if(bitrates == null || bitrates.size == 0){
+//            return BitrateItem(height, null)
+            return null
+        }
+
+        val index = getPlayer()?.bitrateIndex
+        if(index == -1000 || index == -1){ //表示没有设置过或者自适应
+            val default = bitrates.firstOrNull { it.height == height }
+            if(default != null){
+                return BitrateItem(default.height, default.index)
+            }
+            return BitrateItem(height, index)
+        }
+
+        val default = bitrates.firstOrNull{ it.index == index }?: bitrates.firstOrNull { it.height == height }
+        return BitrateItem(default?.height?: height, default?.index)
+    }
+
+    override fun setBitrate(bit: BitrateItem?) {
+        val index = bit?.index
+        if(index != null){
+            getPlayer()?.bitrateIndex = index
+        }
     }
 
     /******************************************************发送播放事件开始*************************************************************************/

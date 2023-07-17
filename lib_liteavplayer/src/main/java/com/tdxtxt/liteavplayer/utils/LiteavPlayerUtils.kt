@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -13,7 +12,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.FrameLayout
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -62,15 +60,15 @@ object LiteavPlayerUtils {
 
     fun hideSysBar(activity: Activity?) {
         activity?.window?.apply {
-            var uiOptions = decorView.systemUiVisibility
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                uiOptions = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            }
+            val uiOptions = decorView.systemUiVisibility
 
-            decorView.systemUiVisibility = uiOptions
+            decorView.systemUiVisibility = uiOptions or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
             setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -80,44 +78,19 @@ object LiteavPlayerUtils {
 
     fun showSysBar(activity: Activity?) {
         activity?.window?.apply {
-            var uiOptions = decorView.systemUiVisibility
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                uiOptions = uiOptions and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                uiOptions = uiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
-            }
+            val uiOptions = decorView.systemUiVisibility
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                uiOptions = uiOptions and View.SYSTEM_UI_FLAG_HIDE_NAVIGATION.inv()
+//            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                uiOptions = uiOptions and View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY.inv()
+//            }
 
-            decorView.systemUiVisibility = uiOptions
+            decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
             clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
     }
 
-    /**
-     * 设置状态栏透明【内容全入侵】
-     * @param isLight: true-黑色文字；false-白色文字
-     */
-    fun setStatusBarFullTransparent(activity: Activity?, isLight: Boolean) {
-        if (activity == null) return
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            activity.window.apply {
-                clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-                decorView.apply {
-                    if(isLight){
-                        systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
-                    }else{
-                        systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-                    }
-                }
-                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                statusBarColor = Color.TRANSPARENT
-
-                activity.findViewById<FrameLayout?>(android.R.id.content)
-                    ?.getChildAt(0)?.fitsSystemWindows = false
-            }
-        }
-    }
 
     fun getApplicationByReflect(): Application? {
         try {

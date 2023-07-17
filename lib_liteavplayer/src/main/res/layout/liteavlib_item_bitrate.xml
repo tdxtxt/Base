@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_multiple"
+    android:id="@+id/tv_bitrate"
     android:layout_width="wrap_content"
     android:minWidth="52dp"
     android:minHeight="32dp"
     android:layout_height="wrap_content"
-    android:textColor="@android:color/white"
     android:gravity="center"
-    android:textSize="14dp"
-    tools:text="1.0X"
     android:includeFontPadding="false"
-    android:lineSpacingExtra="0dp"/>
+    android:lineSpacingExtra="0dp"
+    android:textColor="@android:color/white"
+    android:textSize="14dp"
+    tools:text="1080p" />

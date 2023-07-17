@@ -21,7 +21,19 @@ class MultipleAdapter : RecyclerView.Adapter<MultipleHolder>() {
     private var mData: List<Float> = mutableListOf(1f)
     private var mListener: ((value: Float) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MultipleHolder {
-        return MultipleHolder(LayoutInflater.from(parent.context).inflate(R.layout.liteavlib_item_multiple, parent, false))
+        val holder = MultipleHolder(LayoutInflater.from(parent.context).inflate(R.layout.liteavlib_item_multiple, parent, false))
+        holder.itemView.setOnClickListener {
+//            val lastSelectedPosition = mSelectedPosition
+//            mSelectedPosition = position
+//            if(lastSelectedPosition == mSelectedPosition) return@setOnClickListener
+//            notifyItemChanged(mSelectedPosition)
+//            notifyItemChanged(lastSelectedPosition)
+            val position = holder.absoluteAdapterPosition
+            if(position in 0 until itemCount){
+                mListener?.invoke(mData[position])
+            }
+        }
+        return holder
     }
     override fun getItemCount(): Int {
         return mData.size
@@ -37,14 +49,6 @@ class MultipleAdapter : RecyclerView.Adapter<MultipleHolder>() {
 //            holder.itemView.setBackgroundResource(R.drawable.liteavlib_item_multiple_normal)
 //            holder.tvMultiple.setTextColor(ContextCompat.getColor(holder.itemView.context, android.R.color.white))
 //        }
-        holder.itemView.setOnClickListener {
-//            val lastSelectedPosition = mSelectedPosition
-//            mSelectedPosition = position
-//            if(lastSelectedPosition == mSelectedPosition) return@setOnClickListener
-//            notifyItemChanged(mSelectedPosition)
-//            notifyItemChanged(lastSelectedPosition)
-            mListener?.invoke(mData[position])
-        }
     }
 
     fun setItemClickListenter(listener: (value: Float) -> Unit){

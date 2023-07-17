@@ -6,9 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.inter.IBasicController
 import com.tencent.rtmp.ui.TXCloudVideoView
 import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
@@ -28,6 +30,7 @@ class BasicControllerView : FrameLayout, IBasicController {
     private val mFadeBasicMenuLayoutRunnable = Runnable {
         basic_menu.visibility = View.GONE
         mPlayerView?.getMultipleControllerView()?.hide()
+        mPlayerView?.getBitrateControllerView()?.hide()
         moveBasicTopMenuLayout()
     }
 
@@ -52,6 +55,7 @@ class BasicControllerView : FrameLayout, IBasicController {
         clickView(basic_backward)
         clickView(basic_forward)
         clickView(basic_multiple)
+        clickView(basic_bitrate)
 
         updatePlayButton(!(mPlayerView?.isPlaying()?: false))
         showBasicMenuLayout()
@@ -59,7 +63,9 @@ class BasicControllerView : FrameLayout, IBasicController {
 
     fun getSeekBarControllerView(): SeekBarControllerView = seekBar
 
-    fun getMultiplePlaceHolder() = basic_multiple_placeholder
+    fun getMultipleTextView(): TextView? = basic_multiple
+
+    fun getBitrateTextView(): TextView? = basic_bitrate
 
     fun setTitle(title: CharSequence?){
         basic_back.text = title
@@ -104,6 +110,9 @@ class BasicControllerView : FrameLayout, IBasicController {
                 }
                 basic_multiple -> {
                     mPlayerView?.getMultipleControllerView()?.toggle()
+                }
+                basic_bitrate -> {
+                    mPlayerView?.getBitrateControllerView()?.toggle()
                 }
             }
         }
@@ -225,6 +234,11 @@ class BasicControllerView : FrameLayout, IBasicController {
 
     override fun updateMultiple(value: Float) {
         basic_multiple.text =  LiteavPlayerUtils.formatMultiple(value)
+    }
+
+    override fun updateBitrate(value: BitrateItem?) {
+        basic_bitrate.visibility = if(value == null) View.GONE else View.VISIBLE
+        basic_bitrate.text = value?.formatBitrate()
     }
 
     override fun attach(playerView: TXVideoPlayerView) {
