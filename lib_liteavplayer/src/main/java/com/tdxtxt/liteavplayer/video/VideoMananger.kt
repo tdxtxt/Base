@@ -243,18 +243,18 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     }
 
     override fun getSupportedBitrates(): List<BitrateItem>? {
-        return getPlayer()?.supportedBitrates?.map { BitrateItem(it.height, it.index) }
+        return getPlayer()?.supportedBitrates?.filter { it.height > 0 }?.map { BitrateItem(it.height, it.index) }
     }
 
     override fun getCurrentBitrate(): BitrateItem? {
-        val bitrates = getPlayer()?.supportedBitrates
+        val bitrates = getSupportedBitrates()
 
-        val height = getPlayer()?.height
-        if(bitrates == null || bitrates.size == 0){
+        if(bitrates == null || bitrates.isEmpty()){
 //            return BitrateItem(height, null)
             return null
         }
 
+        val height = getPlayer()?.height
         val index = getPlayer()?.bitrateIndex
         if(index == -1000 || index == -1){ //表示没有设置过或者自适应
             val default = bitrates.firstOrNull { it.height == height }
