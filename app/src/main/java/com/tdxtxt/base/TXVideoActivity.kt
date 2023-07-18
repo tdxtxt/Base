@@ -28,7 +28,7 @@ class TXVideoActivity : BaseActivity() {
 //        videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/6e52bafc243791576089935450/v.f100230.m3u8?t=646438e6&sign=444fe8ce44d379c54adda4670870ff8e")
 //        videoPlayer.setWaterMark("糖的东东", 12, Color.RED)
         videoPlayer.bindLifecycle(this)
-//        videoPlayer.setMultipleList(mutableListOf(0.75f, 1f, 1.2f, 1.5f, 2f))
+        videoPlayer.setMultipleList(mutableListOf(0.5f, 0.75f, 1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.75f, 2f))
 
         clickView(btn_1)
         clickView(btn_2)
@@ -40,7 +40,7 @@ class TXVideoActivity : BaseActivity() {
     private fun clickView(view: View?){
         view?.setOnClickListener {
             when(it){
-                btn_1 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7ad7e450387702302383294626/v.f100230.m3u8?t=64657bcd&sign=74297e5a44f5ff6d529b2c20b59e2ba7", autoPlay = true)
+                btn_1 -> videoPlayer.setDataSource("https://1500013132.vod2.myqcloud.com/439520bavodtranscq1500013132/33f688d03270835009952696971/adp.1441797.m3u8", autoPlay = true)
                 btn_2 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7ad7e450387702302383294626/v.f100230.m3u8?t=64657c02&sign=07e0fb71daf50036a1b9cfe84d5a83b3", autoPlay = true)
                 btn_3 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7d08e893387702302383374918/v.f100230.m3u8?t=64657c21&sign=7d7e70fa0d02ca7c943cac65be53ea2c", autoPlay = true)
                 btn_4 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7d08e893387702302383374918/v.f100230.m3u8?t=64657c3d&sign=16c37d02118131e9b68f5f7f577e93c6", autoPlay = true)
