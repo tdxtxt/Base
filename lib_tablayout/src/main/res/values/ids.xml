@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="tabview" type="id"/>
+    <item name="tablayout_mark" type="id"/>
 </resources>

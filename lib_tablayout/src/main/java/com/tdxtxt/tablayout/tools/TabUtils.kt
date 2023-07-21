@@ -4,10 +4,11 @@ import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.tdxtxt.tablayout.R
 import net.lucode.hackware.magicindicator.MagicIndicator
 
 
@@ -57,96 +58,46 @@ object TabUtils {
         })
     }
 
-    //https://mp.weixin.qq.com/s?__biz=MzAxNjg3MTIyMw==&mid=2650482117&idx=1&sn=4c4a16020d5db83f2e24c1654a44fe82&scene=21#wechat_redirect
-    @SuppressLint("ClickableViewAccessibility")
-    fun bindScrollView(magicIndicator: MagicIndicator?, scollview: NestedScrollView?, anchorViews: List<View?>?){
-        val tops = anchorViews?.map { it?.top?: -1 } ?: return
-        scollview?.setOnTouchListener(object : View.OnTouchListener{
+    fun bindRecyclerView(magicIndicator: MagicIndicator?, recyclerView: RecyclerView?){
+        recyclerView?.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                //当由scrollview触发时，isScroll 置true
-                if (event?.getAction() == MotionEvent.ACTION_DOWN) {
-                    scollview.tag = true //scrollview主动引起的滑动，这里表示手势操作引起的滑动
+                //当由recyclerView触发时，isScroll 置true
+                if (event?.getActionMasked() == MotionEvent.ACTION_DOWN || event?.getActionMasked() == MotionEvent.ACTION_MOVE ) {
+                    recyclerView.setTag(R.id.tablayout_mark, true) //recyclerView主动引起的滑动，这里表示手势操作引起的滑动
                 }
                 return false
             }
         })
-        scollview?.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (scollview.tag == false) { //scrollview被动引起的滑动，这里表示点击tablayout引起的滑动
-                return@OnScrollChangeListener
-            }
+        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (recyclerView.getTag(R.id.tablayout_mark) == false) { //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
+                    return@onScrolled
+                }
 
-            for (index in tops.size - 1 downTo 0) {
-                //根据滑动距离，对比各模块距离父布局顶部的高度判断
-                if (scrollY > tops[index] - 10) {
-                    magicIndicator?.onPageSelected(index)
-                    break
+                val layoutManager = recyclerView.layoutManager
+                if(layoutManager is LinearLayoutManager){
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    magicIndicator?.onPageSelected(firstVisibleItemPosition)
                 }
             }
         })
     }
 
-    /**
-     * 缓慢滚动
-     */
-    fun rvSmoothScrollToPosition(recyclerView: RecyclerView?, position: Int) {
+    fun smoothScrollPosition2Top(recyclerView: RecyclerView?, position: Int){
         if(recyclerView == null) return
-        val tempLayoutManager = recyclerView.layoutManager
-        val layoutManager: LinearLayoutManager? = if(tempLayoutManager is LinearLayoutManager) tempLayoutManager else null
-        if(layoutManager == null) return
-
-        var smoothScrolling = true
-
-        val firstPos: Int = layoutManager.findFirstVisibleItemPosition()
-        val lastPos: Int = layoutManager.findLastVisibleItemPosition()
-
-        if (position in (firstPos + 1) until lastPos) {
-            val childAt: View? = layoutManager.findViewByPosition(position)
-            val top = childAt?.top ?: 0
-            recyclerView.smoothScrollBy(0, top)
-        } else {
-            recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    if (smoothScrolling || newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        if (position in layoutManager.findFirstVisibleItemPosition() + 1..layoutManager.findLastVisibleItemPosition()) {
-                            val childAt: View? = layoutManager.findViewByPosition(position)
-                            val top = childAt?.top ?: 0
-                            recyclerView.scrollBy(0, top)
-                            recyclerView.removeOnScrollListener(this)
-                        }
-                        smoothScrolling = false
-                    }
+        val manager = recyclerView.layoutManager
+        if(manager is LinearLayoutManager){
+//            manager.scrollToPositionWithOffset(position, 0)
+            val smoothScroller = object : LinearSmoothScroller(recyclerView.context){
+                override fun getVerticalSnapPreference(): Int {
+                    return SNAP_TO_START
                 }
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {}
-            })
-            recyclerView.smoothScrollToPosition(position)
-        }
-
-    }
-
-
-    /**
-     * 直接跳转刷新Layout
-     */
-    fun rvScrollToPosition(recyclerView: RecyclerView?, position: Int) {
-        if(recyclerView == null) return
-        val tempLayoutManager = recyclerView.layoutManager
-        val layoutManager: LinearLayoutManager? = if(tempLayoutManager is LinearLayoutManager) tempLayoutManager else null
-        if(layoutManager == null) return
-
-        val firstPos = layoutManager.findFirstVisibleItemPosition()
-        val lastPos: Int = layoutManager.findLastVisibleItemPosition()
-
-        if (position <= firstPos) {
-            //当要置顶的项在当前显示的第一个项的前面时
-            recyclerView.scrollToPosition(position)
-        } else if (position <= lastPos) {
-            //当要置顶的项已经在屏幕上显示时,通过LayoutManager
-            val childAt: View? = layoutManager.findViewByPosition(position)
-            val top = childAt?.top ?: 0
-            recyclerView.scrollBy(0, top)
-        } else {
-            //当要置顶的项在当前显示的最后一项之后
-            layoutManager.scrollToPositionWithOffset(position, 0)
+            }
+            //如果选中的条目不在显示范围内，要滑动条目让该条目显示出来
+            smoothScroller.targetPosition = position
+            if(smoothScroller.targetPosition >= 0) manager.startSmoothScroll(smoothScroller)
         }
     }
 }
