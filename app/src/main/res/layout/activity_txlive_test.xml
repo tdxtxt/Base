@@ -8,7 +8,7 @@
         android:id="@+id/livePlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:txWidthRatio="16"
-        app:txHeightRatio="9"/>
+        app:tx_width_ratio="16"
+        app:tx_height_ratio="9"/>
 
 </FrameLayout>

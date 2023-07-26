@@ -1,5 +1,6 @@
 package com.tdxtxt.base
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import com.tdxtxt.baselib.tools.StatusBarHelper
@@ -23,7 +24,7 @@ class TXVideoActivity : BaseActivity() {
     }
 
     override fun initUi() {
-        videoPlayer.setVideoManager(LiteAVManager.getVideoManage(this))
+        videoPlayer.setVideoManager(LiteAVManager.getVideoManage(1))
 //        videoPlayer.setDataSource("https://mediaapi.juexiaotime.com/1111112023年法考资料/肖沛权/内部课/40diwuzhang.mp4", autoPlay = true)
 //        videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/6e52bafc243791576089935450/v.f100230.m3u8?t=646438e6&sign=444fe8ce44d379c54adda4670870ff8e")
 //        videoPlayer.setWaterMark("糖的东东", 12, Color.RED)
@@ -35,6 +36,7 @@ class TXVideoActivity : BaseActivity() {
         clickView(btn_3)
         clickView(btn_4)
         clickView(btn_5)
+        clickView(btn_6)
     }
 
     private fun clickView(view: View?){
@@ -44,7 +46,12 @@ class TXVideoActivity : BaseActivity() {
                 btn_2 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7ad7e450387702302383294626/v.f100230.m3u8?t=64657c02&sign=07e0fb71daf50036a1b9cfe84d5a83b3", autoPlay = true)
                 btn_3 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7d08e893387702302383374918/v.f100230.m3u8?t=64657c21&sign=7d7e70fa0d02ca7c943cac65be53ea2c", autoPlay = true)
                 btn_4 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/7d08e893387702302383374918/v.f100230.m3u8?t=64657c3d&sign=16c37d02118131e9b68f5f7f577e93c6", autoPlay = true)
-                btn_5 -> videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/77e1054e387702302383106974/v.f100230.m3u8?t=64657c58&sign=c7da1a6a7573cd4af9f8ca3666bb9317", autoPlay = true)
+                btn_5 -> {
+                    videoPlayer.setLiveStyle()
+                    videoPlayer.setDataSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.m3u8", autoPlay = true)
+                }
+//                btn_5 -> videoPlayer.setDataSource("https://pull-learn.changan.com.cn/live/67e07d23995e4054840554d57e191912_sd.m3u8", autoPlay = true)
+                btn_6 -> startActivity(Intent(this, TXVideo2Activity::class.java))
             }
         }
     }

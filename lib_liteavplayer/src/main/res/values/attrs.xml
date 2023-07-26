@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="txWidthRatio" format="integer"/>
-    <attr name="txHeightRatio" format="integer"/>
+    <attr name="tx_width_ratio" format="integer"/>
+    <attr name="tx_height_ratio" format="integer"/>
 
     <declare-styleable name="TXVideoPlayerView">
-        <attr name="txWidthRatio"/>
-        <attr name="txHeightRatio"/>
+        <attr name="tx_width_ratio"/>
+        <attr name="tx_height_ratio"/>
+        <attr name="tx_player_style" format="enum">
+            <enum name="VOD" value="0" />
+            <enum name="LIVE" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="TXLivePlayerView">
-        <attr name="txWidthRatio"/>
-        <attr name="txHeightRatio"/>
+        <attr name="tx_width_ratio"/>
+        <attr name="tx_height_ratio"/>
     </declare-styleable>
 </resources>

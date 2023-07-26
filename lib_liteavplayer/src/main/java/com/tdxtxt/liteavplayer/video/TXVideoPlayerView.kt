@@ -36,6 +36,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     private var mVideoMgr: VideoMananger? = null
     private var mWidthRatio = -1
     private var mHeightRatio = -1
+    private var mPlayerStyle = 0 //0表示点播样式，具有进度条等样式；1表示直播样式，不具有进度条等的样式
     private lateinit var mBaicView: BasicControllerView
     private lateinit var mGestureController: GestureController
     private lateinit var mOrientationController: OrientationController
@@ -66,8 +67,9 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     constructor(context: Context, attrs: AttributeSet?): super(context, attrs){
         if(attrs != null){
             val attributes = context.obtainStyledAttributes(attrs, R.styleable.TXVideoPlayerView)
-            mHeightRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txHeightRatio, -1)
-            mWidthRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txWidthRatio, -1)
+            mWidthRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_tx_width_ratio, -1)
+            mHeightRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_tx_height_ratio, -1)
+            mPlayerStyle = attributes.getInteger(R.styleable.TXVideoPlayerView_tx_player_style, 0)
             attributes.recycle()
         }
         initView(context)
@@ -134,12 +136,26 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     fun getMultipleControllerView() = mMultipleControllerView
     fun getBitrateControllerView() = mBitrateControllerView
 
+    override fun setVodStyle() {
+        mPlayerStyle = 0
+        getBaicView().configStyle()
+    }
+
+    override fun setLiveStyle() {
+        mPlayerStyle = 1
+        getBaicView().configStyle()
+    }
+
+    fun getPlayerStyle() = mPlayerStyle
+
     /**
      * 设置标题
      */
     override fun setTitle(title: CharSequence?){
-        getBaicView().setTitle(title)
+        getTitleView()?.text = title
     }
+
+    fun getTitleView() = getBaicView().getTitleTextView()
 
     /**
      * 设置动态水印

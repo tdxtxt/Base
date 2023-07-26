@@ -102,6 +102,16 @@ interface IVideoView {
      * 获取倍速选择列表
      */
     fun getMultipleList(): List<Float>
+
+    /**
+     * 设置为点播的样式，默认为该样式
+     */
+    fun setVodStyle()
+    /**
+     * 设置为直播的样式
+     */
+    fun setLiveStyle()
+
 }
 
 interface IBasicController : IController {

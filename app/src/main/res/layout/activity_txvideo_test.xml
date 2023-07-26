@@ -10,8 +10,8 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:txWidthRatio="16"
-        app:txHeightRatio="9"/>
+        app:tx_width_ratio="16"
+        app:tx_height_ratio="9"/>
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
         android:id="@+id/btn_1"
@@ -43,5 +43,10 @@
         android:text="播放地址5"
         android:layout_marginTop="5dp"/>
 
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_6"
+        style="@style/CommTextButtonStyle"
+        android:text="子页面"
+        android:layout_marginTop="5dp"/>
 
 </LinearLayout>

@@ -15,9 +15,11 @@ class TXLiveActivity : CommToolBarActivity() {
     override fun getLayoutResId() = R.layout.activity_txlive_test
 
     override fun initUi() {
-        livePlayer.setLiveManager(LiteAVManager.getLiveManage(applicationContext))
-
-        livePlayer.setLiveSource("")
+        livePlayer.setLiveManager(LiteAVManager.getLiveManage())
+//        livePlayer.setLiveSource("rtmp://liteavapp.qcloud.com/live/liteavdemoplayerstreamid")
+//        livePlayer.setLiveSource("webrtc://liteavapp.qcloud.com/live/liteavdemoplayerstreamid")
+        livePlayer.setLiveSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.flv")
+//        livePlayer.setLiveSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.m3u8")
     }
 
 }

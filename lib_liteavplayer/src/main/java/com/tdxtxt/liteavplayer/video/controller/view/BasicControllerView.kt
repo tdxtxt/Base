@@ -58,6 +58,8 @@ class BasicControllerView : FrameLayout, IBasicController {
 
         updatePlayButton(!(mPlayerView?.isPlaying()?: false))
         showBasicMenuLayout()
+
+        configStyle()
     }
 
     fun getSeekBarControllerView(): SeekBarControllerView = seekBar
@@ -66,9 +68,7 @@ class BasicControllerView : FrameLayout, IBasicController {
 
     fun getBitrateTextView(): TextView? = basic_bitrate
 
-    fun setTitle(title: CharSequence?){
-        basic_back.text = title
-    }
+    fun getTitleTextView(): TextView? = basic_back
 
     private fun clickView(view: View?){
         view?.setOnClickListener {
@@ -124,6 +124,17 @@ class BasicControllerView : FrameLayout, IBasicController {
     fun setWaterMark(dynamicWatermarkTip: String?, tipTextSize: Int, tipTextColor: Int){
         waterMark.setData(dynamicWatermarkTip, tipTextSize, tipTextColor)
         waterMark.show()
+    }
+
+    fun configStyle(){
+        val playerStyle = mPlayerView?.getPlayerStyle()?: 0
+        if(playerStyle == 0){ //显示进度条
+            seekBar.visibility = View.VISIBLE
+            basic_multiple.visibility = View.VISIBLE
+        }else if(playerStyle == 1){
+            seekBar.visibility = View.GONE
+            basic_multiple.visibility = View.GONE
+        }
     }
 
     override fun setCoverIds(resId: Int) {

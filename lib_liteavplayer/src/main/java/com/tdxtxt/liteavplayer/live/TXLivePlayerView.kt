@@ -27,7 +27,7 @@ import com.tencent.live2.V2TXLivePlayer
  * <pre>
  *     author : tangdexiang
  *     time   : 2023/5/15
- *     desc   : 直播播放器
+ *     desc   : 直播播放器 仅支持：RTMP播放流(rtmp 延迟较低、高并发有压力，1s左右延迟) WebRTC播放流(webrtc 延迟最低，低于1s延迟) FLV播放流(flv 成熟度高、高并发无压力，3s左右延迟)
  * </pre>
  */
 class TXLivePlayerView : FrameLayout, ILiveView, ILivePlayer, LifecycleObserver {
@@ -58,8 +58,8 @@ class TXLivePlayerView : FrameLayout, ILiveView, ILivePlayer, LifecycleObserver 
     constructor(context: Context, attrs: AttributeSet?): super(context, attrs){
         if(attrs != null){
             val attributes = context.obtainStyledAttributes(attrs, R.styleable.TXLivePlayerView)
-            mHeightRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txHeightRatio, -1)
-            mWidthRatio = attributes.getInteger(R.styleable.TXVideoPlayerView_txWidthRatio, -1)
+            mWidthRatio = attributes.getInteger(R.styleable.TXLivePlayerView_tx_width_ratio, -1)
+            mHeightRatio = attributes.getInteger(R.styleable.TXLivePlayerView_tx_height_ratio, -1)
             attributes.recycle()
         }
         initView(context)
