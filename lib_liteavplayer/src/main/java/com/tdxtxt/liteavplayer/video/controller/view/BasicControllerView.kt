@@ -12,7 +12,6 @@ import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.inter.IBasicController
-import com.tencent.rtmp.ui.TXCloudVideoView
 import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
 import kotlin.math.abs
 
@@ -197,7 +196,7 @@ class BasicControllerView : FrameLayout, IBasicController {
     }
 
     override fun unBindSurface() {
-        mPlayerView?.getPlayer()?.setPlayerView(null as (TXCloudVideoView))
+        basic_surface?.removeVideoView()
     }
 
     override fun updateNetspeed(speed: Int?) {

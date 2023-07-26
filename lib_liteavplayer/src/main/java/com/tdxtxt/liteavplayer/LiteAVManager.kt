@@ -2,17 +2,15 @@ package com.tdxtxt.liteavplayer
 
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
-import android.util.ArrayMap
 import android.util.SparseArray
-import androidx.core.util.valueIterator
 import com.tdxtxt.liteavplayer.live.LiveMananger
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.VideoMananger
-import com.tdxtxt.liteavplayer.video.inter.IVideoPlayer
-import com.tdxtxt.liteavplayer.video.inter.TXPlayerListener
-import com.tencent.live2.V2TXLivePlayer
-import com.tencent.rtmp.*
+import com.tencent.liteav.base.util.LiteavLog
+import com.tencent.rtmp.TXLiveBase
+import com.tencent.rtmp.TXLiveBaseListener
+import com.tencent.rtmp.TXVodPlayConfig
+import com.tencent.rtmp.TXVodPlayer
 
 
 /**
@@ -23,9 +21,8 @@ import com.tencent.rtmp.*
  * </pre>
  */
 object LiteAVManager {
-    private val videoKeyId = 0
+    private val defalutKeyId = 0
     private var videoMgrMap: SparseArray<VideoMananger> = SparseArray()
-    private val liveKeyId = 0
     private var liveMgrMap: SparseArray<LiveMananger> = SparseArray()
     private var mApp: Application? = null
     private var mReferer: String? = null
@@ -38,7 +35,9 @@ object LiteAVManager {
         mReferer = referer
         TXLiveBase.getInstance().setLicence(app.applicationContext, licenceURL, licenceKey)
         TXLiveBase.setListener(object : TXLiveBaseListener() {
-            override fun onLicenceLoaded(result: Int, reason: String) {}
+            override fun onLicenceLoaded(result: Int, reason: String) {
+                LiteavLog.i("TXVodPlayer", "onLicenceLoaded：result = $result; reason = $reason")
+            }
         })
     }
 
@@ -46,27 +45,35 @@ object LiteAVManager {
         return mReferer
     }
 
-    fun getVideoManage(context: Context? = mApp?: LiteavPlayerUtils.getApplicationByReflect()): VideoMananger {
-        if (videoMgrMap.indexOfKey(videoKeyId) < 0) {
-            videoMgrMap.put(videoKeyId, VideoMananger(context, System.currentTimeMillis()))
+    fun getVideoManage(keyId: Int = defalutKeyId, context: Context? = mApp?: LiteavPlayerUtils.getApplicationByReflect(), config: ((player: TXVodPlayer?, TXVodPlayConfig) -> Unit)? = null): VideoMananger {
+        if (videoMgrMap.indexOfKey(keyId) < 0) {
+            videoMgrMap.put(keyId, VideoMananger(context, keyId, config))
         }
 
-        if (videoMgrMap.get(videoKeyId).isRelease()) {
-            videoMgrMap.put(videoKeyId, VideoMananger(context, System.currentTimeMillis()))
+        if (videoMgrMap.get(keyId).isRelease()) {
+            videoMgrMap.put(keyId, VideoMananger(context, keyId, config))
         }
-        return videoMgrMap.get(videoKeyId)
+        return videoMgrMap.get(keyId)
     }
 
-    fun getLiveManage(context: Context? = mApp?: LiteavPlayerUtils.getApplicationByReflect()): LiveMananger {
-        if (liveMgrMap.indexOfKey(liveKeyId) < 0) {
-            liveMgrMap.put(liveKeyId, LiveMananger(context, System.currentTimeMillis()))
+    fun getLiveManage(keyId: Int = defalutKeyId, context: Context? = mApp?: LiteavPlayerUtils.getApplicationByReflect()): LiveMananger {
+        if (liveMgrMap.indexOfKey(keyId) < 0) {
+            liveMgrMap.put(keyId, LiveMananger(context, keyId))
         }
 
-        return liveMgrMap.get(liveKeyId)
+        return liveMgrMap.get(keyId)
     }
 
-    fun clearVideoManager(){
+    fun removeAllVideoManager(){
         videoMgrMap.clear()
+    }
+
+    fun removeVideoManager(key: Int){
+        videoMgrMap.remove(key)
+    }
+
+    fun removeLiveManager(key: Int){
+        liveMgrMap.remove(key)
     }
 
 }

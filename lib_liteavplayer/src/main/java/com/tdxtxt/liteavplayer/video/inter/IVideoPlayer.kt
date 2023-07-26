@@ -26,7 +26,7 @@ interface IVideoPlayer {
     /**
      * 播放，进度从当前播放停留的进度开始
      */
-    fun setDataSource(path: String?, startTime: Int? = null, autoPlay: Boolean = true)
+    fun setDataSource(path: String?, startTime: Int? = null, autoPlay: Boolean = true, enableHardWareDecode: Boolean? = null)
     /**
      * 获取播放url
      */
@@ -34,7 +34,7 @@ interface IVideoPlayer {
     /**
      * 重新播放，进度从0开始
      */
-    fun reStart()
+    fun reStart(reStartTime: Int? = null)
 
     /**
      * 恢复播放

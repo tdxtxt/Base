@@ -11,6 +11,7 @@ import com.tdxtxt.liteavplayer.video.controller.PlayerHeadsetController
 import com.tdxtxt.liteavplayer.video.inter.IPlayerController
 import com.tdxtxt.liteavplayer.video.inter.IVideoPlayer
 import com.tdxtxt.liteavplayer.video.inter.TXPlayerListener
+import com.tencent.liteav.base.util.LiteavLog
 import com.tencent.rtmp.*
 import kotlin.math.abs
 
@@ -21,13 +22,14 @@ import kotlin.math.abs
  *     desc   :
  * </pre>
  */
-class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPlayer {
+class VideoMananger constructor(val context: Context?, val id: Int, val config: ((player: TXVodPlayer?, TXVodPlayConfig) -> Unit)? = null) : IVideoPlayer {
     private var isDestory = false
     private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
     private var mPlayer: TXVodPlayer? = null
     private var mDataSource: String? = null
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
+    private var mCurrentPlayTime:Int? = null //当前的播放时间
     private val mControllerList: MutableList<IPlayerController> = ArrayList()
     init {
         mPlayer = TXVodPlayer(context)
@@ -44,6 +46,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     private fun configPlayer(player: TXVodPlayer?){
         player?.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION) //将图像等比例缩放，适配最长边，缩放后的宽和高都不会超过显示区域，居中显示，画面可能会留有黑边。
         player?.setBitrateIndex(-1) //SDK 支持 HLS 的多码流自适应，开启相关能力后播放器能够根据当前带宽，动态选择最合适的码率播放
+        player?.enableHardwareDecode(true) //硬解码
         player?.setConfig(TXVodPlayConfig().apply {
             val referer = LiteAVManager.getReferer()
             if(referer != null){
@@ -51,30 +54,41 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
                     put("Referer", referer)
                 }
             }
+            mediaType = TXVodConstants.MEDIA_TYPE_HLS_LIVE //
             progressInterval = 1000  // 设置进度回调间隔，单位毫秒
             maxBufferSize = 30 // 播放时最大缓冲大小。单位：MB
 //            isSmoothSwitchBitrate = true //开启平滑切换码率
+            config?.invoke(player, this)
         })
         player?.setVodListener(object : ITXVodPlayListener {
             override fun onPlayEvent(player: TXVodPlayer?, event: Int, param: Bundle?) {
+                LiteavLog.i("TXVodPlayer", "PlayEvent = $event")
                 if(event == TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED){
                     sendPreparedEvent()
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN){
                     sendStartEvent()
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_PROGRESS){
                     // 播放进度, 单位是秒
-                    val playProgress = param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS)?.let { it / 1000 }
+                    mCurrentPlayTime = param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS)?.let { it / 1000 }
                     // 加载进度, 单位是秒
                     val playableProgress = param?.getInt(TXLiveConstants.EVT_PLAYABLE_DURATION_MS)?.let { it / 1000 }
-                    sendPlayingEvent(Pair(playProgress?: 0, playableProgress?: 0))
+                    sendPlayingEvent(Pair(mCurrentPlayTime?: 0, playableProgress?: 0))
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_LOADING){
                     sendLoadingEvent(true)
                 }else if(event == TXLiveConstants.PLAY_EVT_VOD_LOADING_END){
                     sendLoadingEvent(false)
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_END){
+                    mCurrentPlayTime = null
                     sendCompleteEvent()
+                }else if(event == TXLiveConstants.PLAY_EVT_CHANGE_RESOLUTION){ //分辨率改变
+                    val height = param?.getInt(TXLiveConstants.EVT_PARAM2)
+                    sendResolutionChangeEvent(height)
                 }else{
-                    sendUnkownEvent(Pair(event, param))
+                    if(event < 0){
+                        sendErrorEvent("播放失败：code=$event")
+                    }else{
+                        sendUnkownEvent(Pair(event, param))
+                    }
                 }
             }
             override fun onNetStatus(player: TXVodPlayer?, param: Bundle?) {
@@ -127,16 +141,17 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         }
     }
 
-    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {
+    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?) {
         stop(true)//这里将之前的播放内容清除掉，不然频繁调用将会导致播放器卡死
+        if(enableHardWareDecode != null) getPlayer()?.enableHardwareDecode(enableHardWareDecode) //切换软硬解码必须放到stop之后,start之前
         val playRunnable = Runnable {
-            if (startTime != null) getPlayer()?.setStartTime(startTime.toFloat())
+            getPlayer()?.setStartTime(startTime?.toFloat()?: 0f)
             getPlayer()?.setAutoPlay(autoPlay)
             getPlayer()?.startVodPlay(path)
             mDataSource = path
         }
 
-        if(abs(System.currentTimeMillis() - mLastStartPlayTime) > 200){//间隔200毫秒，直接播放
+        if(abs(System.currentTimeMillis() - mLastStartPlayTime) > 200){//间隔超过200毫秒，直接播放
             mLastStartPlayTime = System.currentTimeMillis()
             playRunnable.run()
             mPlayRunnable = null
@@ -149,9 +164,8 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
 
     override fun getDataSource() = mDataSource
 
-    override fun reStart() {
-        getPlayer()?.setStartTime(0f)
-        resume()
+    override fun reStart(reStartTime: Int?) {
+        if(mDataSource != null) setDataSource(mDataSource, reStartTime)
     }
 
     override fun resume() {
@@ -168,6 +182,7 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
 
     override fun stop(clearFrame: Boolean) {
         mDataSource = null
+        mCurrentPlayTime = null
         getPlayer()?.stopPlay(clearFrame)
     }
 
@@ -190,18 +205,19 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
     override fun release() {
         stop(true)
         mControllerList.forEach { it.detach() }
+        mPlayer?.setVodListener(null)
         mPlayer = null
         mDataSource = null
         isDestory = true
         sendReleaseEvent()
         mPlayerEventListenerListRef?.clear()
-        LiteAVManager.clearVideoManager()
+        LiteAVManager.removeVideoManager(id)
     }
 
     override fun isRelease() = isDestory
 
     override fun getCurrentDuration(): Int {
-        return getPlayer()?.currentPlaybackTime?.toInt()?: 0
+        return mCurrentPlayTime?: getPlayer()?.currentPlaybackTime?.toInt()?: 0
     }
 
     override fun getDuration(): Int {
@@ -330,8 +346,16 @@ class VideoMananger constructor(val context: Context?, val id: Long) : IVideoPla
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_MULTIPLE, value)
     }
 
+    private fun sendResolutionChangeEvent(height: Int?){
+        sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_RESOLUTION, height)
+    }
+
     fun sendNetworkEvent(state: NetworkState){
         sendPlayerEvent(TXPlayerListener.PlayerState.CHANGE_NETWORK, state)
+    }
+
+    fun sendErrorEvent(errorMsg: String?){
+        sendPlayerEvent(TXPlayerListener.PlayerState.EVENT_ERROR, errorMsg)
     }
 
     fun sendNondragEvent(){

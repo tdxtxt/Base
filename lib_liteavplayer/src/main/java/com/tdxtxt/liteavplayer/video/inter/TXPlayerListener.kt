@@ -12,23 +12,25 @@ interface TXPlayerListener {
     @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
     annotation class PlayerState {
         companion object {
-            var EVENT_ERROR = -1    //播放错误
-            var EVENT_PREPARED = 1  //准备成功
-            var EVENT_START = 2     //播放开始
-            var EVENT_PLAYING = 3   //播放中
-            var EVENT_PAUSED = 4    //播放暂停
-            var EVENT_COMPLETED = 5 //播放完成
-//            var EVENT_STOP = 6      //播放停止
-            var EVENT_RELEASE = 7   //释放
-            var EVENT_LOADING = 8   //缓冲开始、缓冲结束
+            var EVENT_ERROR = -1               //播放错误
 
-            var CHANGE_NETSPEED = 20  //网速变化
-            var CHANGE_NETWORK = 21  //网络变化
-            var CHANGE_MULTIPLE = 22 //播放速度变化
+            var EVENT_PREPARED = 1             //准备成功
+            var EVENT_START = 2                //播放开始
+            var EVENT_PLAYING = 3              //播放中
+            var EVENT_PAUSED = 4               //播放暂停
+            var EVENT_COMPLETED = 5            //播放完成
+//            var EVENT_STOP = 6               //播放停止
+            var EVENT_RELEASE = 7              //释放
+            var EVENT_LOADING = 8              //缓冲开始、缓冲结束
 
-            var EVENT_NONDRAG = 30 // 不可拖拽
+            var CHANGE_NETSPEED = 20           //网速变化
+            var CHANGE_NETWORK = 21            //网络变化
+            var CHANGE_MULTIPLE = 22           //播放速度变化
+            var CHANGE_RESOLUTION = 23         //分辨率变化
 
-            var EVENT_UNKOWN = 100 //未知事件
+            var EVENT_NONDRAG = 30             //不可拖拽
+
+            var EVENT_UNKOWN = 100             //未知事件
         }
     }
     /**

@@ -18,6 +18,7 @@ import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.controller.GestureController
 import com.tdxtxt.liteavplayer.video.controller.NetworkController
 import com.tdxtxt.liteavplayer.video.controller.OrientationController
+import com.tdxtxt.liteavplayer.video.controller.PlayErrorController
 import com.tdxtxt.liteavplayer.video.controller.view.*
 import com.tdxtxt.liteavplayer.video.inter.*
 import com.tencent.rtmp.TXVodPlayer
@@ -322,6 +323,9 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             TXPlayerListener.PlayerState.CHANGE_MULTIPLE -> {
                 getBaicView().updateMultiple(getMultiple())
             }
+            TXPlayerListener.PlayerState.EVENT_ERROR -> {
+                showCustomView(PlayErrorController(value?.toString()))
+            }
         }
 
         mPlayerEventListenerListRef?.forEach { it.onPlayStateChanged(state, value) }
@@ -370,15 +374,20 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     /**
      * autoPlay如果为自动播放，需要注意可能存在自动播放失败的情况，因此加上延迟代码 post { resume() }
      */
-    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean) {
-        mVideoMgr?.setDataSource(path, startTime, autoPlay)
+    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?) {
+        mVideoMgr?.setDataSource(path, startTime, autoPlay, enableHardWareDecode)
         if(autoPlay) post { resume() } //解决下一次设置资源后无法自动播放的问题
         getBaicView().showBasicMenuLayout()
         getBaicView().showLoading()
+        hideCustomView()
     }
 
-    override fun reStart() {
-        mVideoMgr?.reStart()
+    override fun reStart(reStartTime: Int?) {
+        mVideoMgr?.reStart(reStartTime)
+        post { resume() } //解决下一次设置资源后无法自动播放的问题
+        getBaicView().showBasicMenuLayout()
+        getBaicView().showLoading()
+        hideCustomView()
     }
 
     override fun resume() {
