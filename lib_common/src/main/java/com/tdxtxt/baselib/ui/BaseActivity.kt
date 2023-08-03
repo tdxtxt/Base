@@ -31,6 +31,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     protected lateinit var fragmentActivity: FragmentActivity
     private var mProgressDialog: ProgressDialog? = null
     protected var autoHideSoftInput = false
+    protected var dispatchTouchEventCallBack: ((ev: MotionEvent?) -> Unit)? = null
     protected var interceptBackEvent = false
     protected var interceptCallBack: (() -> Unit)? = null
     private val stateLayouts = SparseArray<StateLayout>()
@@ -137,10 +138,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     /**
      * 拦截返回事件
      */
-    fun setInterceptBackEvent(
-            interceptBackEvent: Boolean,
-            interceptCallBack: (() -> Unit)? = null
-    ) {
+    fun setInterceptBackEvent(interceptBackEvent: Boolean, interceptCallBack: (() -> Unit)? = null) {
         this.interceptBackEvent = interceptBackEvent
         this.interceptCallBack = interceptCallBack
     }
@@ -156,6 +154,10 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         this.autoHideSoftInput = value
     }
 
+    fun setDispatchTouchEventLisenter(callBack: ((ev: MotionEvent?) -> Unit)? = null){
+        this.dispatchTouchEventCallBack = callBack
+    }
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if(autoHideSoftInput){
             if(ev?.action == MotionEvent.ACTION_DOWN){
@@ -168,10 +170,12 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
                 }
             }
         }
+        dispatchTouchEventCallBack?.invoke(ev)
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun isViewOutside(view: View, event: MotionEvent): Boolean{
+    fun isViewOutside(view: View, event: MotionEvent?): Boolean{
+        if(event == null) return false
         val location = IntArray(2)
         view.getLocationInWindow(location)
         val left = location[0]
@@ -187,5 +191,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     override fun onDestroy() {
         super.onDestroy()
         hideProgressBar()
+        dispatchTouchEventCallBack = null
+        interceptCallBack = null
     }
 }
