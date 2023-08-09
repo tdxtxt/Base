@@ -39,11 +39,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".TXVideo2Activity"
+        <activity android:name=".TXLiveActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".TXLiveActivity"
+        <activity android:name=".TXLiveHTSActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>

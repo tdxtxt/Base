@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/white_ffffff">
+
+    <com.tdxtxt.liteavplayer.video.TXVideoPlayerView
+        android:id="@+id/videoPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tx_width_ratio="16"
+        app:tx_height_ratio="9"
+        app:tx_player_style="LIVE"/>
+
+    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
+        android:id="@+id/btn_1"
+        style="@style/CommTextButtonStyle"
+        android:text="直播地址1"
+        android:layout_marginTop="12dp"/>
+
+</LinearLayout>

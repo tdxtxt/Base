@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:tx_width_ratio="16"
-        app:tx_height_ratio="9"/>
+        app:tx_height_ratio="9"
+        app:tx_player_style="VOD"/>
 
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
         android:id="@+id/btn_1"
@@ -40,13 +41,7 @@
     <com.tdxtxt.baselib.view.textview.RoundStyleTextView
         android:id="@+id/btn_5"
         style="@style/CommTextButtonStyle"
-        android:text="播放地址5"
-        android:layout_marginTop="5dp"/>
-
-    <com.tdxtxt.baselib.view.textview.RoundStyleTextView
-        android:id="@+id/btn_6"
-        style="@style/CommTextButtonStyle"
-        android:text="子页面"
+        android:text="HTS直播"
         android:layout_marginTop="5dp"/>
 
 </LinearLayout>
