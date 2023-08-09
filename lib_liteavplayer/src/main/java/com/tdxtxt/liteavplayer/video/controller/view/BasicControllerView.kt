@@ -58,8 +58,6 @@ class BasicControllerView : FrameLayout, IBasicController {
 
         updatePlayButton(!(mPlayerView?.isPlaying()?: false))
         showBasicMenuLayout()
-
-        configStyle()
     }
 
     fun getSeekBarControllerView(): SeekBarControllerView = seekBar
@@ -255,6 +253,7 @@ class BasicControllerView : FrameLayout, IBasicController {
         mPlayerView = playerView
         playerView.addView(this, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
         seekBar.attach(playerView)
+        configStyle()
     }
 
     override fun detach() {

@@ -46,7 +46,7 @@ class MultipleControllerView : AbsPopupWindowController(), ScreenChangeLisenter 
         super.detach()
     }
 
-    override fun onChange(isFullScreen: Boolean) {
+    override fun onScreenChange(isFullScreen: Boolean) {
         hide()
     }
 }

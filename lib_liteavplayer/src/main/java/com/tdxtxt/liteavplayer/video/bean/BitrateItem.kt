@@ -10,6 +10,7 @@ package com.tdxtxt.liteavplayer.video.bean
 class BitrateItem(val height: Int?, val index: Int?) {
 
     fun formatBitrate(): String{
+        if(index == -1) return "自动"
         if(height == null) return ""
         if(height >= 1080) return "${height}p" // 超清
         if(height >= 720) return "${height}p" // 高清

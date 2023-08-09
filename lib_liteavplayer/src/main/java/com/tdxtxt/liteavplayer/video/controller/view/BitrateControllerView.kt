@@ -3,9 +3,11 @@ package com.tdxtxt.liteavplayer.video.controller.view
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.tdxtxt.liteavplayer.R
+import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.adapter.BitrateAdapter
 import com.tdxtxt.liteavplayer.video.inter.AbsPopupWindowController
 import com.tdxtxt.liteavplayer.video.inter.ScreenChangeLisenter
+import com.tencent.live2.impl.V2TXLiveUtils
 
 /**
  * <pre>
@@ -23,7 +25,11 @@ class BitrateControllerView : AbsPopupWindowController(), ScreenChangeLisenter {
             mBitrateAdapter = BitrateAdapter()
             mBitrateAdapter?.setItemClickListenter { position, value ->
                 getPlayerView()?.setBitrate(value)
-                hide()
+                LiteavPlayerUtils.postRunnable({
+                    getPlayerView()?.resume()
+                    hide()
+                }, 300)
+
             }
             findViewById<RecyclerView>(R.id.bitrate_list)?.adapter = mBitrateAdapter
         }
@@ -36,7 +42,7 @@ class BitrateControllerView : AbsPopupWindowController(), ScreenChangeLisenter {
         return getPlayerView()?.getBaicView()?.getBitrateTextView()
     }
 
-    override fun onChange(isFullScreen: Boolean) {
+    override fun onScreenChange(isFullScreen: Boolean) {
         hide()
     }
 

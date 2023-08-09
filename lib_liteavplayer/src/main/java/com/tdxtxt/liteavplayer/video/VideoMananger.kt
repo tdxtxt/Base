@@ -54,7 +54,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
                     put("Referer", referer)
                 }
             }
-            mediaType = TXVodConstants.MEDIA_TYPE_HLS_LIVE //
+//            mediaType = TXVodConstants.MEDIA_TYPE_HLS_LIVE //HLS直播需要添加这个设置，否则第一次无法播放
             progressInterval = 1000  // 设置进度回调间隔，单位毫秒
             maxBufferSize = 30 // 播放时最大缓冲大小。单位：MB
 //            isSmoothSwitchBitrate = true //开启平滑切换码率
@@ -259,7 +259,13 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     }
 
     override fun getSupportedBitrates(): List<BitrateItem>? {
-        return getPlayer()?.supportedBitrates?.filter { it.height > 0 }?.map { BitrateItem(it.height, it.index) }
+        val supportedBitrates = getPlayer()?.supportedBitrates?.filter { it.height > 0 }?.map { BitrateItem(it.height, it.index) }
+        if(supportedBitrates?.isNotEmpty() == true){
+            val newSupportedBitrates = ArrayList(supportedBitrates)
+            newSupportedBitrates.add(BitrateItem(getPlayer()?.height, -1))
+            return newSupportedBitrates
+        }
+        return supportedBitrates
     }
 
     override fun getCurrentBitrate(): BitrateItem? {
@@ -277,7 +283,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
             if(default != null){
                 return BitrateItem(default.height, default.index)
             }
-            return BitrateItem(height, index)
+            return BitrateItem(height, -1)
         }
 
         val default = bitrates.firstOrNull{ it.index == index }?: bitrates.firstOrNull { it.height == height }

@@ -239,7 +239,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
         LiteavPlayerUtils.showSysBar(activity)
         mScreenChangelisenter?.forEach {
-            it.onChange(isFullScreen())
+            it.onScreenChange(isFullScreen())
         }
 
         getBaicView().updateFullScreen(isFullScreen())
@@ -270,7 +270,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
         LiteavPlayerUtils.hideSysBar(activity)
         mScreenChangelisenter?.forEach {
-            it.onChange(isFullScreen())
+            it.onScreenChange(isFullScreen())
         }
 
         getBaicView().updateFullScreen(isFullScreen())

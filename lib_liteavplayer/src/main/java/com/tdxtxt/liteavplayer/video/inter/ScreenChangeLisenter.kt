@@ -8,5 +8,5 @@ package com.tdxtxt.liteavplayer.video.inter
  * </pre>
  */
 interface ScreenChangeLisenter {
-    fun onChange(isFullScreen: Boolean)
+    fun onScreenChange(isFullScreen: Boolean)
 }
