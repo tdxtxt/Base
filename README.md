@@ -1,4 +1,4 @@
-# 快速搭建项目基础工具Base封装
+# 一、快速搭建项目
 
 在搭建新项目中经常会用选择使用MVP架构搭建，同时使用网络请求、本地存储、弹框、分享、支付等常用功能。
 
@@ -11,86 +11,289 @@
 * 封装日志打印
 * 封装统一弹窗
 * 封装常用控件：Toast、WebView、圆角容器、ViewState等
-* 支持微信分享、登录、支付功能。
-* 支持支付宝登录、支付功能。
-* 支持QQ分享、登录功能。
 
 
 ### 添加仓库依赖
-      maven { url "https://s01.oss.sonatype.org/content/groups/public" }
+```
+maven { url "https://s01.oss.sonatype.org/content/groups/public" }
+```
+### 基础库CommonLib
+```
+implementation 'io.github.tdxtxt:baselib_beta:0.0.34-release'
+```
+### 网络库NetLib
+```
+implementation 'io.github.tdxtxt:net_beta:0.0.2-release'
+```
 
-#### 基础库CommonLib
+# 二、三方分享、支付、登录的封装
 
-      implementation 'io.github.tdxtxt:baselib_beta:0.0.34-release'
+### 功能
+* 支持微信分享(小程序、朋友圈、好友)、支付、登录
+* 支持支付宝支付、登录
+* 支持QQ分享、登录
+* 支持企业微信分享
+* 支持钉钉分享（正在编码中...）
+* 支持微博分享、登录（正在编码中...）
 
-#### 网络库NetLib
+### 添加依赖（必须添加social-core）
+```
+maven { url "https://s01.oss.sonatype.org/content/groups/public" } //maven仓库地址
 
-      implementation 'io.github.tdxtxt:net_beta:0.0.2-release'
-
-#### 视频组件库VideoLib
-
-     implementation 'io.github.tdxtxt:video_beta:0.0.1-release'
-
-#### 三方分享、支付、登录库Social
-* 平台核心库SDK（使用单个平台时必须添加核心库SDK）
-
-      implementation 'io.github.tdxtxt:socialCore_beta:0.0.2-release'
-
-* QQ平台SDK
-
-      implementation 'io.github.tdxtxt:socialQQ_beta:0.0.1-release'
-
-* 微信平台SDK
-
-      implementation 'io.github.tdxtxt:socialWechat_beta:0.0.1-release'
-
-* 微博平台SDK
-
-      待验证...
-
-* 支付宝平台SDK
-
-      implementation 'io.github.tdxtxt:socialAlipay_beta:0.0.1-release'
-
+implementation 'io.github.tdxtxt:social-core_beta:0.0.1-release'//核心库
+implementation 'io.github.tdxtxt:social-wechat_beta:0.0.1-release'//微信平台
+implementation 'io.github.tdxtxt:social-alipay_beta:0.0.1-release'//阿里平台
+```
 
 ### 使用流程
-* 在Application中初始化第三方平台和配置各自的appkey
+#### 初始化
+```kotlin
+SocialGo.init(SocialRequestAdapter())
+SocialGo.registerWxPlatform(WxPlatform.Creator(AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET))
+```
+```kotlin
+class SocialRequestAdapter : IRequestAdapter{
+    override fun downloadImageSync(context: Context?, url: String?): File? {
+        return ImageLoader.downloadImageSync(context, url)
+    }
+}
+```
+* app可见性配置【在manifest根节点进行配置即可】
+```
+<queries>
+    <package android:name="com.tencent.mm" /> <!-- 指定微信包名 -->
+    <package android:name="com.tencent.mobileqq" /> <!-- 指定QQ包名 -->
+    <package android:name="com.sina.weibo" /> <!-- 指定微博包名 -->
+    <package android:name="com.eg.android.AlipayGphone" /> <!-- 指定支付宝包名 -->
+    <package android:name="hk.alipay.wallet" /> <!-- AlipayHK -->
+</queries>
+```
+#### 微信平台相关功能使用
 
-        SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
-            .registerWxPlatform(WxPlatform.Creator())
-            .registerWbPlatform(WbPlatform.Creator())
-            .registerQQPlatform(QQPlatform.Creator())
-            .registerAliPlatform(AliPlatform.Creator())
+* 微信sdk依赖
+```
+implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
+```
+* 回调activity配置
 
+```
+<activity
+     android:name="{packageName}.wxapi.WXEntryActivity"
+     android:exported="true"
+     android:launchMode="singleTask" />
+
+<activity-alias
+     android:name="${applicationId}.wxapi.WXPayEntryActivity"
+	 android:exported="true"
+     android:targetActivity="{packageName}.wxapi.WXEntryActivity" />
+<activity-alias
+     android:name="${applicationId}.wxapi.WXEntryActivity"
+     android:exported="true"
+     android:targetActivity="{packageName}.wxapi.WXEntryActivity" />
+```
+```kotiln
+class WXEntryActivity : BaseActionActivity(), IWXAPIEventHandler {
+    override fun onResp(resp: BaseResp) {
+        handleResp(resp)
+    }
+    override fun onReq(req: BaseReq?) {
+        handleReq(req)
+    }
+}
+```
+* 配置FileProvider
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--外部存储卡，谨慎使用： Environment.getExternalStorageDirectory() /storage/emulate/0-->
+    <!--<external-path name="external_path" path="." />-->
+    <!--根路径-->
+    <!--<root-path name="root_path" path=""/>-->
+
+    <!--Context.getCacheDir() /data/data/<包名>/cache-->
+    <cache-path name="cache-path" path="." />
+    <!--Context.getFilesDir() /data/data/<包名>/files-->
+    <files-path name="files-path" path="." />
+    <!--ContextCompat.getExternalMediaDirs()-->
+    <external-media-path name="external_media_path" path="." />
+    <!--ContextCompat.getExternalCacheDir() /storage/emulate/0/Android/data/<包名>/cache-->
+    <external-cache-path name="external-cache-path" path="." />
+    <!--ContextCompat.getExternalFilesDir(String) /storage/emulate/0/Android/data/<包名>/files-->
+    <external-files-path name="external-files-path" path="." />
+</paths>
+```
+* 分享
+```kotlin
+//shareTarget参数说明
+//微信朋友圈:Target.SHARE_WX_ZONE
+//微信好友:Target.SHARE_WX_FRIENDS
+
+//shareBean参数说明
+//分享文本:ShareEntity.buildTextObj()
+//分享图片:ShareEntity.buildImageObj()
+//分享web:ShareEntity.buildWebObj()
+SocialGo.doShare(this, shareTarget, shareBean, object : OnShareListener(){
+            override fun onSuccess() {
+                ToastHelper.showToast("分享成功")
+            }
+            override fun onFailure(msg: String?) {
+                ToastHelper.showToast("分享失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
 * 登录
+```kotlin
+//loginTarget参数说明
+//微信登录:Target.LOGIN_WX
+SocialGo.doLogin(this, loginTarget, object : OnLoginListener(){
+            override fun onSuccess(authCode: String?) {
+                ToastHelper.showToast(authCode)
+            }
+            override fun onFailure(msg: String?) {
+  				ToastHelper.showToast("登录失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+* 支付
+```kotlin
+//payTarget 参数说明
+//支付宝支付:Target.PAY_WX
+SocialGo.doPay(this, payTarget, "parmas", object: OnPayListener(){
+            override fun onSuccess(auth: AuthInfo?) {
+                ToastHelper.showToast(auth)
+            }
+            override fun onFailure(msg: String?) {
+  				ToastHelper.showToast("登录失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+#### 阿里平台相关功能使用
 
-        SocialSdk.LOGIN.wechat(this){
-                    onSuccess {  }
-                    onFailure {  }
-                }
+* 阿里sdk依赖
+```
+implementation files('libs/alipaySdk-15.8.05.aar')
+```
+* 登录
+```kotlin
+//loginTarget参数说明
+//支付宝登录:Target.LOGIN_ALI
+SocialGo.doLogin(this, loginTarget, object : OnLoginListener(){
+            override fun onSuccess(authCode: String?) {
+                ToastHelper.showToast(authCode)
+            }
+            override fun onFailure(msg: String?) {
+  				ToastHelper.showToast("登录失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+* 支付
+```kotlin
+//payTarget 参数说明
+//支付宝支付:Target.PAY_ALI
+SocialGo.doPay(this, payTarget, "parmas", object: OnPayListener(){
+            override fun onSuccess(auth: AuthInfo?) {
+                ToastHelper.showToast(auth)
+            }
+            override fun onFailure(msg: String?) {
+  				ToastHelper.showToast("登录失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+#### QQ平台相关功能使用
+
+* QQ依赖
+```
+implementation files('libs/open_sdk_r6020_lite.jar')
+```
 
 * 分享
+```kotlin
+//shareTarget参数说明
+//微信朋友圈:Target.SHARE_QQ_ZONE
+//微信好友:Target.SHARE_QQ_FRIENDS
 
-         SocialSdk.SHARE.wechatFriendsWeb(this, "title", "content", "https://baidu.com")
+//shareBean参数说明
+//分享文本:ShareEntity.buildTextObj()
+//分享图片:ShareEntity.buildImageObj()
+//分享web:ShareEntity.buildWebObj()
+SocialGo.doShare(this, shareTarget, shareBean, object : OnShareListener(){
+            override fun onSuccess() {
+                ToastHelper.showToast("分享成功")
+            }
+            override fun onFailure(msg: String?) {
+                ToastHelper.showToast("分享失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+#### 微博平台相关功能使用
 
+* 微博依赖
+```
+```
+* 分享
+```kotlin
 
-* 支付
+```
+* 登录
+```kotlin
 
-         SocialSdk.PAY.wechat(this, ""){
-                     onSuccess {  }
-                     onFailure {  }
-                 }
+```
+#### 企业微信平台相关功能使用
+* 企业微信依赖
+```
+implementation files('libs/lib_wwapi-2.0.12.11.aar')
+```
+* 分享
+```kotlin
+//shareTarget参数说明
+//微信朋友圈:Target.SHARE_QQ_ZONE
+//微信好友:Target.SHARE_QQ_FRIENDS
 
+//shareBean参数说明
+//分享文本:ShareEntity.buildTextObj()
+//分享图片:ShareEntity.buildImageObj()
+//分享web:ShareEntity.buildWebObj()
+SocialGo.doShare(this, shareTarget, shareBean, object : OnShareListener(){
+            override fun onSuccess() {
+                ToastHelper.showToast("分享成功")
+            }
+            override fun onFailure(msg: String?) {
+                ToastHelper.showToast("分享失败: $msg")
+            }
+            override fun printLog(log: String?) {
+                Log.i("tdxtxt===", log?: "")
+            }
+        })
+```
+#### 钉钉平台相关功能使用
 
-### 第三方底层SDK版本
-* QQ：`open_sdk_r6020_lite.jar`
-* 微信：`com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0`
-* 支付宝：`alipaysdk-15.8.05.aar`
+* 钉钉依赖
+```
+```
+* 分享
+```kotlin
 
+```
 
-
-
-# 腾讯直播、点播 播放器的封装
+# 三、腾讯直播、点播 播放器的封装
 
 ### 功能
 * 音视频播放
