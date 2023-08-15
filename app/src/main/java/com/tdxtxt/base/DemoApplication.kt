@@ -2,19 +2,20 @@ package com.tdxtxt.base
 
 import android.app.Application
 import android.content.Context
-import android.util.ArrayMap
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import com.pingerx.socialgo.ali.alipay.AliPlatform
-import com.pingerx.socialgo.core.SocialSdk
-import com.pingerx.socialgo.qq.QQPlatform
-import com.pingerx.socialgo.wechat.WxPlatform
 import com.tdxtxt.base.net.AppNetProvider
 import com.tdxtxt.baselib.app.ApplicationDelegate
+import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.CacheHelper
 import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.net.NetMgr
+import com.tdxtxt.social.alipay.AliPlatform
+import com.tdxtxt.social.core.SocialGo
+import com.tdxtxt.social.core.lisenter.IRequestAdapter
+import com.tdxtxt.social.wechat.WxPlatform
+import java.io.File
 
 
 /**
@@ -52,15 +53,23 @@ class ApplicationDelegateImpl constructor(val application: Application) : Applic
                 }
             })
         }
+        SocialGo.init(SocialRequestAdapter())
+        SocialGo.registerWxPlatform(WxPlatform.Creator(AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET))
+        SocialGo.registerAliPlatform(AliPlatform.Creator())
 
-        SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
-            .registerWxPlatform(WxPlatform.Creator())
-//            .registerWbPlatform(WbPlatform.Creator())
-            .registerQQPlatform(QQPlatform.Creator())
-            .registerAliPlatform(AliPlatform.Creator())
+//        SocialSdk.init(context, AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET, AppConstant.QQ_APP_ID)
+//            .registerWxPlatform(WxPlatform.Creator())
+////            .registerWbPlatform(WbPlatform.Creator())
+//            .registerQQPlatform(QQPlatform.Creator())
+//            .registerAliPlatform(AliPlatform.Creator())
 
 //        LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1253499804_1/v_cube.license", "341ea3d21fe51789da3ad8c3ad47bd0f", "https://1307664769.vod2.myqcloud.com")
         LiteAVManager.init(application, "https://license.vod2.myqcloud.com/license/v2/1307664769_1/v_cube.license", "a784ace47a32b8bf0ba85bdac884e767", "edu.changan.com.cn")
     }
+}
 
+class SocialRequestAdapter : IRequestAdapter{
+    override fun downloadImageSync(context: Context?, url: String?): File? {
+        return ImageLoader.downloadImageSync(context, url)
+    }
 }

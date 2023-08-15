@@ -1,6 +1,6 @@
 package com.juexiao.english.wxapi
 
-import com.pingerx.socialgo.core.uikit.BaseActionActivity
+import com.tdxtxt.social.core.activity.BaseActionActivity
 import com.tencent.mm.opensdk.modelbase.BaseReq
 import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler

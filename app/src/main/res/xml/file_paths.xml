@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path
-        name="external_storage_root"
-        path="." />
-    <external-files-path name="sharedata" path="shareData/"/>
+    <!--外部存储卡，谨慎使用： Environment.getExternalStorageDirectory() /storage/emulate/0-->
+    <!--<external-path name="external_path" path="." />-->
+    <!--根路径-->
+    <!--<root-path name="root_path" path=""/>-->
+
+    <!--Context.getCacheDir() /data/data/<包名>/cache-->
+    <cache-path name="cache-path" path="." />
+    <!--Context.getFilesDir() /data/data/<包名>/files-->
+    <files-path name="files-path" path="." />
+    <!--ContextCompat.getExternalMediaDirs()-->
+    <external-media-path name="external_media_path" path="." />
+    <!--ContextCompat.getExternalCacheDir() /storage/emulate/0/Android/data/<包名>/cache-->
+    <external-cache-path name="external-cache-path" path="." />
+    <!--ContextCompat.getExternalFilesDir(String) /storage/emulate/0/Android/data/<包名>/files-->
+    <external-files-path name="external-files-path" path="." />
 </paths>

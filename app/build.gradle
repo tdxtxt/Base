@@ -7,8 +7,8 @@ android {
     buildToolsVersion versions.buildTools
 
     defaultConfig {
-//        applicationId "com.juexiao.english"
-        applicationId "cn.com.changan.learning.android"
+        applicationId "com.juexiao.english"
+//        applicationId "cn.com.changan.learning.android"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
@@ -62,13 +62,15 @@ dependencies {
     implementation project(':lib_linkedview')
     implementation project(':lib_tablayout')
 
-    implementation project(':lib_socialcore')
-    implementation project(':lib_socialwechat')
-    implementation project(':lib_socialqq')
-    implementation project(':lib_socialalipay')
+    implementation project(':lib_social-core')
+    implementation project(':lib_social-wechat')
+    implementation project(':lib_social-alipay')
+//    implementation project(':lib_socialqq')
+//    implementation project(':lib_socialalipay')
 
     implementation files('libs/open_sdk_r6020_lite.jar')
     implementation files('libs/alipaySdk-15.8.05.aar')
+    implementation files('libs/lib_wwapi-2.0.12.11.aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
 //    implementation 'io.github.sinaweibosdk:core:11.6.0@aar'
 

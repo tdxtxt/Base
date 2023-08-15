@@ -82,7 +82,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mControllerList.add(mBaicView)
 
         mOrientationController = OrientationController()
-        mOrientationController.attach(this)
+        if(!isInEditMode) mOrientationController.attach(this)
         mControllerList.add(mOrientationController)
 
         mGestureController = GestureController()

@@ -1,5 +1,6 @@
 package com.tdxtxt.baselib.tools
 
+import android.os.Looper
 import android.os.SystemClock
 import android.view.Gravity
 import com.blankj.utilcode.util.ThreadUtils
@@ -44,8 +45,11 @@ object ToastHelper {
         }
         mLastMessage = message
         mLastTimeMillis = SystemClock.uptimeMillis()
-        ThreadUtils.runOnUiThread {
-            XToast.normal(Utils.getApp(), message).show()
+        val runnable = { XToast.normal(Utils.getApp(), message).show() }
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            runnable.invoke()
+        } else {
+            ThreadUtils.runOnUiThreadDelayed(runnable, 100)
         }
     }
 }
