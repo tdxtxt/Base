@@ -85,6 +85,13 @@ object RequestPermissionManager{
     }
 
     /**
+     * 请求读取联系人权限
+     */
+    fun requestContactsPermission(activity: FragmentActivity?, requestReason: String, listener: (PermissionListener.() -> Unit)?){
+        requestPermission(activity, listOf(Manifest.permission.READ_CONTACTS), requestReason, true, listener)
+    }
+
+    /**
      * 权限是否打开
      */
     fun isGranted(context: Context?, permission: String): Boolean{
