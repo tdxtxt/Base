@@ -57,7 +57,7 @@ class MainActivity : BaseActivity() {
             startActivity(Intent(this, TXLiveActivity::class.java))
         }
         btn_next_5.setOnClickListener {
-            startActivity(Intent(this, WebViewActivity::class.java))
+            startActivity(Intent(this, XTabLayoutActivity::class.java))
         }
     }
 

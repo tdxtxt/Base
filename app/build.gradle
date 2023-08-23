@@ -7,8 +7,8 @@ android {
     buildToolsVersion versions.buildTools
 
     defaultConfig {
-        applicationId "com.juexiao.english"
-//        applicationId "cn.com.changan.learning.android"
+//        applicationId "com.juexiao.english"
+        applicationId "cn.com.changan.learning.android"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
@@ -65,6 +65,7 @@ dependencies {
     implementation project(':lib_social-core')
     implementation project(':lib_social-wechat')
     implementation project(':lib_social-alipay')
+    implementation project(':lib_social-android')
 //    implementation project(':lib_socialqq')
 //    implementation project(':lib_socialalipay')
 

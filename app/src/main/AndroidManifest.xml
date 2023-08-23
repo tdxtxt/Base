@@ -28,7 +28,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.App.Theme">
+        android:theme="@style/Base.App.Theme"
+        tools:replace="android:allowBackup">
         <activity android:name=".WebViewActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".VideoActivity"

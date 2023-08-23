@@ -61,6 +61,7 @@ class SocialTestActivity : BaseActivity() {
                 R.id.rbPlatformQzon -> platformType = Target.SHARE_QQ_ZONE
                 R.id.rbPlatformWx -> platformType = Target.SHARE_WX_ZONE
                 R.id.rbPlatformWxFriend -> platformType = Target.SHARE_WX_FRIENDS
+                R.id.rbPlatformAndroid -> platformType = Target.SHARE_ANDROID
 //                R.id.rbPlatformSina -> platformType = Target.SHARE_WB
             }
         }

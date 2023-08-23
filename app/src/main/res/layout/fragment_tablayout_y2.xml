@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <com.tdxtxt.tablayout.vertical.YSlidingTabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="90dp"
+        android:layout_height="match_parent"
+        android:background="#f7f8fa"
+        app:tl_backgroundSelectColor="@color/white_ffffff"
+        app:tl_backgroundUnselectColor="#f7f8fa"
+        app:tl_indicator_color="#1b71ea"
+        app:tl_indicator_corner_radius="2dp"
+        app:tl_indicator_height="20dp"
+        app:tl_indicator_width="3dp"
+        app:tl_tab_height="48dp"
+        app:tl_tab_horizontal_padding="14dp"
+        app:tl_tab_vertical_padding="0dp"
+        app:tl_textLineLength="4"
+        app:tl_textMaxLine="2"
+        app:tl_textSelectBold="true"
+        app:tl_textSelectColor="#151d33"
+        app:tl_textSelectSize="14dp"
+        app:tl_textUnselectBold="false"
+        app:tl_textUnselectColor="#505c73"
+        app:tl_textUnselectSize="12dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_fragment_placeholde"/>
+
+</LinearLayout>

@@ -12,8 +12,10 @@ import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.liteavplayer.LiteAVManager
 import com.tdxtxt.net.NetMgr
 import com.tdxtxt.social.alipay.AliPlatform
+import com.tdxtxt.social.android.AndroidPlatform
 import com.tdxtxt.social.core.SocialGo
 import com.tdxtxt.social.core.lisenter.IRequestAdapter
+import com.tdxtxt.social.core.platform.Target
 import com.tdxtxt.social.wechat.WxPlatform
 import java.io.File
 
@@ -54,6 +56,7 @@ class ApplicationDelegateImpl constructor(val application: Application) : Applic
             })
         }
         SocialGo.init(SocialRequestAdapter())
+        SocialGo.registerAndroidPlatform(AndroidPlatform.Creator())
         SocialGo.registerWxPlatform(WxPlatform.Creator(AppConstant.WX_APP_ID, AppConstant.WX_APP_SECRET))
         SocialGo.registerAliPlatform(AliPlatform.Creator())
 

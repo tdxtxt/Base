@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import com.tdxtxt.base.fragment.RecyclerViewTabLayoutFragment
 import com.tdxtxt.base.fragment.ViewPager2TabLayoutFragment
 import com.tdxtxt.base.fragment.YTabLayoutFragment
+import com.tdxtxt.base.fragment.YTabLayoutFragment2
 import com.tdxtxt.baselib.adapter.viewpager.ViewPagerAdapter
 import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.ui.BaseActivity
@@ -30,6 +31,7 @@ class XTabLayoutActivity : BaseActivity() {
         fragments.add(Pair("RecyclerViewFragment", RecyclerViewTabLayoutFragment()))
         fragments.add(Pair("ViewPage2Fragment", ViewPager2TabLayoutFragment()))
         fragments.add(Pair("YTabLayoutFragment", YTabLayoutFragment()))
+        fragments.add(Pair("YTabLayoutFragment2", YTabLayoutFragment2()))
 //        fragments.add(Pair("职业素养", YTabLayoutFragment()))
 //        fragments.add(Pair("产品质量", YTabLayoutFragment()))
 //        fragments.add(Pair("财务及风险管理", YTabLayoutFragment()))

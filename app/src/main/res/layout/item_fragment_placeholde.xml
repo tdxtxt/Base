@@ -4,4 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="150dp">
 
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="123444444"
+        android:layout_gravity="center"/>
+
+    <View style="@style/line_horizontal"/>
+
 </FrameLayout>
