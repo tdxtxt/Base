@@ -25,11 +25,10 @@ class BitrateControllerView : AbsPopupWindowController(), ScreenChangeLisenter {
             mBitrateAdapter = BitrateAdapter()
             mBitrateAdapter?.setItemClickListenter { position, value ->
                 getPlayerView()?.setBitrate(value)
-                LiteavPlayerUtils.postRunnable({
-                    getPlayerView()?.resume()
-                    hide()
-                }, 300)
-
+//                LiteavPlayerUtils.postRunnable({
+//                    getPlayerView()?.resume()
+//                    hide()
+//                }, 300)
             }
             findViewById<RecyclerView>(R.id.bitrate_list)?.adapter = mBitrateAdapter
         }

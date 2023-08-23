@@ -65,6 +65,7 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
     private fun scrollValueProgress(progress: Int){
         val nowTime = progress2Time(progress)
         mPlayerView?.getBaicView()?.updateTextTime(nowTime, null)
+        mPlayerView?.getVideoManager()?.setLocalCurrentDuration(nowTime)
     }
 
     private fun progress2Time(progress: Int): Int{

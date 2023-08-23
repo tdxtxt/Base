@@ -29,7 +29,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     private var mDataSource: String? = null
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
-    private var mCurrentPlayTime:Int? = null //当前的播放时间
+    private var mLocalCurrentPlayTime:Int? = null //当前的播放时间
     private val mControllerList: MutableList<IPlayerController> = ArrayList()
     init {
         mPlayer = TXVodPlayer(context)
@@ -69,16 +69,16 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
                     sendStartEvent()
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_PROGRESS){
                     // 播放进度, 单位是秒
-                    mCurrentPlayTime = param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS)?.let { it / 1000 }
+                    setLocalCurrentDuration(param?.getInt(TXLiveConstants.EVT_PLAY_PROGRESS_MS)?.let { it / 1000 })
                     // 加载进度, 单位是秒
                     val playableProgress = param?.getInt(TXLiveConstants.EVT_PLAYABLE_DURATION_MS)?.let { it / 1000 }
-                    sendPlayingEvent(Pair(mCurrentPlayTime?: 0, playableProgress?: 0))
+                    sendPlayingEvent(Pair(mLocalCurrentPlayTime?: 0, playableProgress?: 0))
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_LOADING){
                     sendLoadingEvent(true)
                 }else if(event == TXLiveConstants.PLAY_EVT_VOD_LOADING_END){
                     sendLoadingEvent(false)
                 }else if(event == TXLiveConstants.PLAY_EVT_PLAY_END){
-                    mCurrentPlayTime = null
+                    setLocalCurrentDuration(null)
                     sendCompleteEvent()
                 }else if(event == TXLiveConstants.PLAY_EVT_CHANGE_RESOLUTION){ //分辨率改变
                     val height = param?.getInt(TXLiveConstants.EVT_PARAM2)
@@ -182,7 +182,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
 
     override fun stop(clearFrame: Boolean) {
         mDataSource = null
-        mCurrentPlayTime = null
+        mLocalCurrentPlayTime = null
         getPlayer()?.stopPlay(clearFrame)
     }
 
@@ -217,7 +217,11 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     override fun isRelease() = isDestory
 
     override fun getCurrentDuration(): Int {
-        return mCurrentPlayTime?: getPlayer()?.currentPlaybackTime?.toInt()?: 0
+        return mLocalCurrentPlayTime?: getPlayer()?.currentPlaybackTime?.toInt()?: 0
+    }
+
+    fun setLocalCurrentDuration(duration: Int?){
+        mLocalCurrentPlayTime = duration
     }
 
     override fun getDuration(): Int {
@@ -262,7 +266,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         val supportedBitrates = getPlayer()?.supportedBitrates?.filter { it.height > 0 }?.map { BitrateItem(it.height, it.index) }
         if(supportedBitrates?.isNotEmpty() == true){
             val newSupportedBitrates = ArrayList(supportedBitrates)
-            newSupportedBitrates.add(BitrateItem(getPlayer()?.height, -1))
+            newSupportedBitrates.add(BitrateItem(null, -1))
             return newSupportedBitrates
         }
         return supportedBitrates
@@ -279,10 +283,10 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         val height = getPlayer()?.height
         val index = getPlayer()?.bitrateIndex
         if(index == -1000 || index == -1){ //表示没有设置过或者自适应
-            val default = bitrates.firstOrNull { it.height == height }
-            if(default != null){
-                return BitrateItem(default.height, default.index)
-            }
+//            val default = bitrates.firstOrNull { it.height == height }
+//            if(default != null){
+//                return BitrateItem(default.height, default.index)
+//            }
             return BitrateItem(height, -1)
         }
 

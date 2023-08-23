@@ -1,6 +1,7 @@
 package com.tdxtxt.liteavplayer.video.controller
 
 import android.content.Context
+import android.provider.Settings
 import android.view.OrientationEventListener
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.inter.IController
@@ -49,19 +50,21 @@ class OrientationController: IController {
                     if (isVeritcal(orientation)) {
                         if (mOrientation == VERITCAL) return
                         mOrientation = VERITCAL
-//                        mPlayerView?.stopFullScreen()
+                        if(getRotationSwitch(context)){
+                            mPlayerView?.stopFullScreen()
+                        }
                     } else if (isReverseHorizontal(orientation)) {
                         if (mOrientation == HORIZONTA_REVERSE) return
                         mOrientation = HORIZONTA_REVERSE
-//                        if(mPlayerView?.isFullScreen() == true){
-//                            mPlayerView?.startFullScreen(true)
-//                        }
+                        if (mPlayerView?.isFullScreen() == true) {
+                            if(getRotationSwitch(context)) mPlayerView?.startFullScreen(true)
+                        }
                     } else if (isForwardHorizontal(orientation)) {
                         if (mOrientation == HORIZONTA_FORWARD) return
                         mOrientation = HORIZONTA_FORWARD
-//                        if(mPlayerView?.isFullScreen() == true){
-//                            mPlayerView?.startFullScreen(false)
-//                        }
+                        if(mPlayerView?.isFullScreen() == true){
+                            if(getRotationSwitch(context)) mPlayerView?.startFullScreen(false)
+                        }
                     }
                 }
             }
@@ -71,6 +74,11 @@ class OrientationController: IController {
     fun stopWatch(){
         mOrientationListener?.disable()
         mOrientationListener = null
+    }
+
+    private fun getRotationSwitch(context: Context?): Boolean {
+        if(context == null) return false
+        return Settings.System.getInt(context.contentResolver,Settings.System.ACCELEROMETER_ROTATION) > 0
     }
 
     override fun attach(playerView: TXVideoPlayerView) {
