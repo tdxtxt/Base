@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.tdxtxt.tablayout.R
+import com.tdxtxt.tablayout.listener.OnTabClickListener
 import com.tdxtxt.tablayout.tools.TabUtils
 import net.lucode.hackware.magicindicator.MagicIndicator
 import net.lucode.hackware.magicindicator.ViewPagerHelper
@@ -28,9 +29,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
  */
 class XSlidingTabLayout : MagicIndicator {
     private var mTitles: List<String>? = null
-    private var mViewPager: ViewPager? = null
-    private var mViewPager2: ViewPager2? = null
-    private var mRecyclerView: RecyclerView? = null
+    private var mTabClickListener: OnTabClickListener? = null
 
     private var mIndicatorColor: Int = ContextCompat.getColor(context, R.color.tl_indicator_color)
     private var mIndicatorHeight: Float = TabUtils.dp2px(3f)
@@ -49,8 +48,11 @@ class XSlidingTabLayout : MagicIndicator {
     private var mTabEqual: Boolean = false
     private var mTabHorizontalMargin: Float = 0f
     private var mTabHorizontalPadding: Float = 0f
+    private var mTabLabelsId = 0
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : super(context) {
+        initView(context)
+    }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.XSlidingTabLayout)
         mIndicatorColor = attributes.getColor(
@@ -94,20 +96,63 @@ class XSlidingTabLayout : MagicIndicator {
         mTabHorizontalPadding = attributes.getDimension(R.styleable.XSlidingTabLayout_tl_tab_horizontal_padding,
             TabUtils.dp2px(12f)
         )
-
+        if(attributes.hasValue(R.styleable.XSlidingTabLayout_tl_tab_labels)){
+            mTabLabelsId = attributes.getResourceId(R.styleable.XSlidingTabLayout_tl_tab_labels, 0)
+        }
         attributes.recycle()
 
+        initView(context)
+    }
+
+    private fun initView(context: Context){
+        if(mTabLabelsId != 0){
+            mTitles = listOf(*resources.getStringArray(mTabLabelsId))
+        }
+
         if(isInEditMode){
-            setViewPager(ViewPager(context), listOf("Tab一", "Tab二", "Tab三", "Tab四"))
+            if(mTitles?.isNotEmpty() != true){
+                mTitles = listOf("Tab1", "Tab2", "Tab3", "Tab4")
+            }
+            setTabText(mTitles, 0, null)
+//            setRecyclerView(RecyclerView(context), mTitles)
+//            setViewPager(ViewPager(context), mTitles)
+        }
+    }
+
+    fun setTabText(titles: List<String>?, defaultSelectPosition: Int? = null, tabClickLisenter: OnTabClickListener?){
+        mTitles = titles
+        mTabClickListener = tabClickLisenter
+        val navigator = createNavigator()
+        setNavigator(navigator)
+        // must after setNavigator
+        val titleContainer = navigator.titleContainer
+        titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+        titleContainer.dividerDrawable = object : ColorDrawable(){
+            override fun getIntrinsicWidth(): Int {
+                return mTabHorizontalPadding.toInt()
+            }
+        }
+        titleContainer.setPadding(mTabHorizontalMargin.toInt(), 0, mTabHorizontalMargin.toInt(), 0)
+
+        if(defaultSelectPosition != null){
+            onPageSelected(defaultSelectPosition)
+            mTabClickListener?.onTabClick(defaultSelectPosition)
         }
     }
 
     fun setRecyclerView(recyclerView: RecyclerView, titles: List<String>?, smoothScroll: Boolean = false){
         mTitles = titles
-        mRecyclerView = recyclerView
-        val navigator = createNavigator(smoothScroll)
-        setNavigator(navigator)
+        mTabClickListener = object : OnTabClickListener{
+            override fun onTabClick(position: Int) {
+                recyclerView.apply {
+                    setTag(R.id.tablayout_mark, false) //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
+                    TabUtils.smoothScrollPosition2Top(this, position)
+                }
+            }
+        }
 
+        val navigator = createNavigator()
+        setNavigator(navigator)
         // must after setNavigator
         val titleContainer = navigator.titleContainer
         titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
@@ -122,10 +167,13 @@ class XSlidingTabLayout : MagicIndicator {
 
     fun setViewPager2(viewPager: ViewPager2, titles: List<String>?, smoothScroll: Boolean = false){
         mTitles = titles
-        mViewPager2 = viewPager
-        val navigator = createNavigator(smoothScroll)
+        mTabClickListener = object : OnTabClickListener{
+            override fun onTabClick(position: Int) {
+                viewPager.setCurrentItem(position, smoothScroll)
+            }
+        }
+        val navigator = createNavigator()
         setNavigator(navigator)
-
         // must after setNavigator
         val titleContainer = navigator.titleContainer
         titleContainer.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
@@ -147,8 +195,12 @@ class XSlidingTabLayout : MagicIndicator {
 
     fun setViewPager(viewPager: ViewPager, titles: List<String>?, smoothScroll: Boolean = false) {
         mTitles = titles
-        mViewPager = viewPager
-        val navigator = createNavigator(smoothScroll)
+        mTabClickListener = object : OnTabClickListener{
+            override fun onTabClick(position: Int) {
+                viewPager.setCurrentItem(position, smoothScroll)
+            }
+        }
+        val navigator = createNavigator()
         setNavigator(navigator)
 
         // must after setNavigator
@@ -174,7 +226,7 @@ class XSlidingTabLayout : MagicIndicator {
         return null
     }
 
-    private fun createNavigator(smoothScroll: Boolean = false): CommonNavigator {
+    private fun createNavigator(): CommonNavigator {
         val navigator = CommonNavigator(context)
         navigator.setAdjustMode(mTabEqual)
 
@@ -189,14 +241,8 @@ class XSlidingTabLayout : MagicIndicator {
                 tabView.setTabTextView(mTitles?.getOrNull(index))
                 tabView.setEqual(mTabEqual)
                 tabView.setOnClickListener {
-                    mViewPager?.setCurrentItem(index, smoothScroll)
-                    mViewPager2?.setCurrentItem(index, smoothScroll)
-
-                    mRecyclerView?.apply {
-                        setTag(R.id.tablayout_mark, false) //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
-                        TabUtils.smoothScrollPosition2Top(this, index)
-                        navigator.onPageSelected(index)
-                    }
+                    navigator.onPageSelected(index)
+                    mTabClickListener?.onTabClick(index)
                 }
                 return tabView
             }

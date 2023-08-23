@@ -39,6 +39,8 @@
     <attr name="tl_tab_vertical_padding" format="dimension"/>
     <!-- 设置YSlidingTabLayout.Tab的marginLeft和marginRight -->
     <attr name="tl_tab_vertical_margin" format="dimension"/>
+    <!-- 设置SlidingTabLayout标签内容 -->
+    <attr name="tl_tab_labels" format="reference"/>
 
     <declare-styleable name="XSlidingTabLayout">
         <attr name="tl_indicator_color"/>
@@ -58,6 +60,7 @@
         <attr name="tl_tab_space_equal"/>
         <attr name="tl_tab_horizontal_margin"/>
         <attr name="tl_tab_horizontal_padding"/>
+        <attr name="tl_tab_labels"/>
     </declare-styleable>
 
     <declare-styleable name="YSlidingTabLayout">

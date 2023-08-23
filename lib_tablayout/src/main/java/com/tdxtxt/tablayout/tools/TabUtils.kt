@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.tdxtxt.tablayout.R
+import com.tdxtxt.tablayout.vertical.YSlidingTabLayout
 import net.lucode.hackware.magicindicator.MagicIndicator
 
 
@@ -80,6 +81,33 @@ object TabUtils {
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
                     val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
                     magicIndicator?.onPageSelected(firstVisibleItemPosition)
+                }
+            }
+        })
+    }
+
+    fun bindRecyclerView(ySlidingIndicator: YSlidingTabLayout?, recyclerView: RecyclerView?){
+        recyclerView?.setOnTouchListener(object : View.OnTouchListener{
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                //当由recyclerView触发时，isScroll 置true
+                if (event?.getActionMasked() == MotionEvent.ACTION_DOWN || event?.getActionMasked() == MotionEvent.ACTION_MOVE ) {
+                    recyclerView.setTag(R.id.tablayout_mark, true) //recyclerView主动引起的滑动，这里表示手势操作引起的滑动
+                }
+                return false
+            }
+        })
+        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (recyclerView.getTag(R.id.tablayout_mark) == false) { //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
+                    return@onScrolled
+                }
+
+                val layoutManager = recyclerView.layoutManager
+                if(layoutManager is LinearLayoutManager){
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    ySlidingIndicator?.getSimpleTabAdapter()?.checkIndex(firstVisibleItemPosition)
                 }
             }
         })

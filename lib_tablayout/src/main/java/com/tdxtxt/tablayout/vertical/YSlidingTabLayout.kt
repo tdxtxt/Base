@@ -153,7 +153,23 @@ class YSlidingTabLayout : FrameLayout {
 ////                manager.scrollToPositionWithOffset(startVisible + 1, 0) //这种方式是定位到指定项如果该项可以置顶就将其置顶显示
             }
         }
+    }
 
+    fun setRecyclerView(recyclerView: RecyclerView, titles: List<String>?, smoothScroll: Boolean = true){
+        getSimpleTabAdapter()?.apply {
+            setData(titles)
+            setItemClickListener(object : SimpleTabAdapter.OnItemClickListener {
+                override fun itemClick(view: View, position: Int) {
+                    getSimpleTabAdapter()?.checkIndex(position)
+                    recyclerView.apply {
+                        setTag(R.id.tablayout_mark, false) //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
+                        TabUtils.smoothScrollPosition2Top(this, position)
+                    }
+                }
+            })
+        }
+
+        TabUtils.bindRecyclerView(this, recyclerView)
     }
 
     fun setViewPager(viewPager: ViewPager, smoothScroll: Boolean = false) {
