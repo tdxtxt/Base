@@ -13,8 +13,8 @@ import com.tdxtxt.social.core.lisenter.OnShareListener
 import com.tdxtxt.social.core.platform.IPlatform
 import com.tdxtxt.social.core.platform.PlatformCreator
 import com.tdxtxt.social.core.platform.Target
-import com.tdxtxt.social.core.utils.FileUtils
-import com.tdxtxt.social.core.utils.ThreadUtils
+import com.tdxtxt.social.core.utils.SocialFileUtils
+import com.tdxtxt.social.core.utils.SocialThreadUtils
 
 
 /**
@@ -49,6 +49,10 @@ object SocialGo {
     @JvmStatic
     fun registerAliPlatform(creator: PlatformCreator?){
         mPlatformCreatorMap.put(Target.PLATFORM_ALI, creator)
+    }
+    @JvmStatic
+    fun registerAndroidPlatform(creator: PlatformCreator?){
+        mPlatformCreatorMap.put(Target.PLATFORM_ANDROID, creator)
     }
     @JvmStatic
     fun registerWxworkPlatform(creator: PlatformCreator?){
@@ -106,9 +110,9 @@ object SocialGo {
         if(context == null) return
         if(shareEntity == null) return
         listenter?.onStart()
-        ThreadUtils.getSinglePool().execute {
+        SocialThreadUtils.getSinglePool().execute {
             prepareImageInBackground(context, shareEntity, listenter)
-            ThreadUtils.runOnUiThread {
+            SocialThreadUtils.runOnUiThread {
                 startShare(context, shareTarget, shareEntity, listenter)
             }
         }
@@ -116,7 +120,7 @@ object SocialGo {
 
     private fun startShare(context: Context?, @Target.ShareTarget shareTarget: Int, shareEntity: ShareEntity?, listenter: OnShareListener?){
         val result = ShareEntity.checkValid(shareTarget, shareEntity)
-        if(result.first){//合规
+        if(result.first){//检测参数通过
             val platformTarget = Target.mapPlatform(shareTarget)
             val platform = makePlatform(context, platformTarget)
             if(platform == null){
@@ -151,7 +155,7 @@ object SocialGo {
             listenter?.printLog("下载网络图片缩略图:${shareEntity.thumbUrl}---->${shareEntity.thumbPath}【size = ${file?.length()}】")
         }else {
             if(shareEntity.thumbResId == null && shareEntity.thumbResId != 0) shareEntity.thumbResId = ShareEntity.DEFAULT_THUMB_RESID
-            shareEntity.thumbPath = FileUtils.mapResId2LocalPath(context, shareEntity.thumbResId)
+            shareEntity.thumbPath = SocialFileUtils.mapResId2LocalPath(context, shareEntity.thumbResId)
             listenter?.printLog("获取本地图片缩略图${shareEntity.thumbPath}")
         }
         //分享图下载

@@ -34,7 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *     desc  : utils about thread
  * </pre>
  */
-public final class ThreadUtils {
+public final class SocialThreadUtils {
 
     private static final Handler HANDLER = new Handler(Looper.getMainLooper());
 

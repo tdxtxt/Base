@@ -3,11 +3,10 @@ package com.tdxtxt.social.alipay.utils
 import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
-import android.util.Log
 import com.alipay.sdk.app.PayTask
 import com.tdxtxt.social.core.lisenter.OnPayListener
 import com.tdxtxt.social.core.lisenter.Recyclable
-import com.tdxtxt.social.core.utils.ThreadUtils
+import com.tdxtxt.social.core.utils.SocialThreadUtils
 import java.lang.Exception
 
 /**
@@ -27,7 +26,7 @@ class AliPayHelper : Recyclable {
                 listener?.printLog("支付宝版本:${payTask.version}")
                 val payResult = payTask.payV2(params, true)
                 listener?.printLog("支付宝支付结果:$payResult")
-                ThreadUtils.runOnUiThread {
+                SocialThreadUtils.runOnUiThread {
                     if (payResult == null){
                         listener?.onFailure("支付失败")
                         complete?.invoke()

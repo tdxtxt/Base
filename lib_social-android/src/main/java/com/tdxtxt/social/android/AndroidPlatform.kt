@@ -1,31 +1,31 @@
-package com.tdxtxt.social.dingtalk
+package com.tdxtxt.social.android
 
 import android.app.Activity
 import android.content.Context
+import com.tdxtxt.social.android.utils.AndroidShareHelper
 import com.tdxtxt.social.core.bean.ShareEntity
 import com.tdxtxt.social.core.lisenter.OnShareListener
 import com.tdxtxt.social.core.platform.AbsPlatform
 import com.tdxtxt.social.core.platform.IPlatform
 import com.tdxtxt.social.core.platform.PlatformCreator
-import com.tdxtxt.social.dingtalk.utils.DingtalkShareHelper
 
 /**
  * <pre>
  *     author : tangdexiang
  *     time   : 2023-08-14
- *     desc   : https://open.dingtalk.com/document/mobile-app-guide/android-sharing-sdk-access-process
+ *     desc   :
  * </pre>
  */
-class DingtalkPlatform() : AbsPlatform() {
-    private var mShareHelper: DingtalkShareHelper? = null
+class AndroidPlatform() : AbsPlatform() {
+    private var mShareHelper: AndroidShareHelper? = null
     class Creator constructor() : PlatformCreator {
         override fun create(context: Context?, target: Int, params: String?): IPlatform? {
-            return DingtalkPlatform()
+            return AndroidPlatform()
         }
     }
 
     override fun share(activity: Activity?, target: Int, entity: ShareEntity?, listener: OnShareListener?, complete: (() -> Unit)?) {
-        if(mShareHelper == null) mShareHelper = DingtalkShareHelper()
-//        mShareHelper?.share(activity, target, entity, listener, complete)
+        if(mShareHelper == null) mShareHelper = AndroidShareHelper()
+        mShareHelper?.share(activity, target, entity, listener, complete)
     }
 }

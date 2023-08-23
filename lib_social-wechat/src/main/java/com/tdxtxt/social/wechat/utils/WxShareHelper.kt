@@ -10,8 +10,8 @@ import com.tdxtxt.social.core.lisenter.OnShareListener
 import com.tdxtxt.social.core.lisenter.Recyclable
 import com.tdxtxt.social.core.platform.IShareAction
 import com.tdxtxt.social.core.platform.Target
-import com.tdxtxt.social.core.utils.ThreadUtils
-import com.tdxtxt.social.core.utils.Utils
+import com.tdxtxt.social.core.utils.SocialThreadUtils
+import com.tdxtxt.social.core.utils.SocialUtils
 import com.tencent.mm.opensdk.modelmsg.*
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import java.io.File
@@ -47,9 +47,9 @@ class WxShareHelper(private val wxApi: IWXAPI) : IShareAction, Recyclable {
             mListener?.onFailure("分享图片地址不存在")
             return
         }
-        ThreadUtils.getSinglePool().execute {
-            val thumbData = Utils.getStaticSizeBitmapByteByPath(entity.imagePath)
-            if(Utils.isGifFile(localPath)){
+        SocialThreadUtils.getSinglePool().execute {
+            val thumbData = SocialUtils.getStaticSizeBitmapByteByPath(entity.imagePath)
+            if(SocialUtils.isGifFile(localPath)){
                 val emoji = WXEmojiObject()
                 emoji.emojiPath = localPath
                 val msg = WXMediaMessage()
@@ -70,8 +70,8 @@ class WxShareHelper(private val wxApi: IWXAPI) : IShareAction, Recyclable {
     }
 
     override fun shareWeb(shareTarget: Int, activity: Activity?, entity: ShareEntity?) {
-        ThreadUtils.getSinglePool().execute {
-            val thumbData = Utils.getStaticSizeBitmapByteByPath(entity?.thumbPath)
+        SocialThreadUtils.getSinglePool().execute {
+            val thumbData = SocialUtils.getStaticSizeBitmapByteByPath(entity?.thumbPath)
             val webPage = WXWebpageObject()
             webPage.webpageUrl = entity?.webUrl
             val msg = WXMediaMessage(webPage)
@@ -83,8 +83,8 @@ class WxShareHelper(private val wxApi: IWXAPI) : IShareAction, Recyclable {
     }
 
     override fun shareMiniProgram(shareTarget: Int, activity: Activity?, entity: ShareEntity?) {
-        ThreadUtils.getSinglePool().execute{
-            val thumbData = Utils.getStaticSizeBitmapByteByPath(entity?.thumbPath)
+        SocialThreadUtils.getSinglePool().execute{
+            val thumbData = SocialUtils.getStaticSizeBitmapByteByPath(entity?.thumbPath)
             val miniProgram = WXMiniProgramObject()
             miniProgram.webpageUrl = entity?.webUrl
             miniProgram.miniprogramType =  WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE // 正式版:0，测试版:1，体验版:2

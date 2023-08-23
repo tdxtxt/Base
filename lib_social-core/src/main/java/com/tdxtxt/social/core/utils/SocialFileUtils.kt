@@ -17,7 +17,7 @@ import java.io.FileOutputStream
  *     desc   :
  * </pre>
  */
-object FileUtils {
+object SocialFileUtils {
     private const val SHARE_CACHE_DIR = "share"
 
     fun initCacheDir(context: Context, dirName: String): String {

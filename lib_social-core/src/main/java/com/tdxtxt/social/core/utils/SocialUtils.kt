@@ -14,7 +14,7 @@ import java.io.ByteArrayOutputStream
  *     desc   :
  * </pre>
  */
-object Utils {
+object SocialUtils {
     private const val THUMB_IMAGE_SIZE = 32 * 1024
     private const val POINT_GIF = ".gif"
     private const val POINT_JPG = ".jpg"
