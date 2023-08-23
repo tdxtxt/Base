@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,6 +47,7 @@ public class LabelsView extends ViewGroup implements View.OnClickListener, View.
     private int mMinSelect;
     private int mMaxLines;
     private int mMaxColumns;
+    private int mLabelTabsId;
     private boolean isSingleLine = false;
     private boolean isTextBold = false;
     private boolean useDefaultSelect = true;
@@ -181,7 +183,7 @@ public class LabelsView extends ViewGroup implements View.OnClickListener, View.
 
             isSingleLine = mTypedArray.getBoolean(R.styleable.LabelsView_singleLine, false);
             isTextBold = mTypedArray.getBoolean(R.styleable.LabelsView_isTextBold, false);
-
+            mLabelTabsId = mTypedArray.getResourceId(R.styleable.LabelsView_labelTabs, 0);
             mTypedArray.recycle();
         }
     }
@@ -190,18 +192,14 @@ public class LabelsView extends ViewGroup implements View.OnClickListener, View.
      * 编辑预览
      */
     private void showEditPreview() {
-        if (isInEditMode()) {
-//            测试的数据
-            ArrayList<String> label = new ArrayList<>();
-            label.add("Label 1");
-            label.add("Label 2");
-            label.add("Label 3");
-            label.add("Label 4");
-            label.add("Label 5");
-            label.add("Label 6");
-            label.add("Label 7");
-            setLabels(label);
+        List<String> mTabTexts = null;
+        if(mLabelTabsId != 0){
+            mTabTexts = Arrays.asList(getResources().getStringArray(mLabelTabsId));
         }
+        if(mTabTexts == null || mTabTexts.size() == 0){
+            if(isInEditMode()) mTabTexts = Arrays.asList("Label 1", "Label 2", "Label 1");
+        }
+        if(mTabTexts != null && mTabTexts.size() > 0) setLabels(mTabTexts);
     }
 
     @Override

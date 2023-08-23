@@ -72,5 +72,6 @@
         <attr name="labelBackground" format="reference|color" />
         <attr name="singleLine" format="boolean" />
         <attr name="isTextBold" format="boolean" />
+        <attr name="labelTabs" format="reference"/>
     </declare-styleable>
 </resources>
