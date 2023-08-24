@@ -16,7 +16,7 @@ android {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode 1
-        versionName "0.0.40"
+        versionName "0.0.41"
     }
 
     lintOptions {
@@ -45,8 +45,16 @@ dependencies {
     compileOnly rootProject.ext.multidex
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
-    implementation rootProject.ext.fastLibs
-    implementation (rootProject.ext.statusBarLibs) { exclude group : "androidx.appcompat" }
+    for (def library in rootProject.ext.fastLibs) {
+        implementation (library) {
+            exclude group: 'org.jetbrains.kotlin'
+            exclude group: 'androidx.appcompat'
+            exclude group: 'com.android.support'
+            exclude group: 'glide'
+        }
+    }
+//    implementation (rootProject.ext.fastLibs) { exclude group: 'org.jetbrains.kotlin' }
+//    implementation (rootProject.ext.statusBarLibs) { exclude group : "androidx.appcompat" }
 
     implementation(rootProject.ext.imageLibs.glide) { exclude group: "com.android.support" }
     implementation rootProject.ext.imageLibs.glideOkhttp

@@ -79,7 +79,14 @@ dependencies {
     implementation rootProject.ext.multidex
     implementation rootProject.ext.supprotLibs
     implementation rootProject.ext.netLibs
-    implementation rootProject.ext.fastLibs
+    for (def library in rootProject.ext.fastLibs) {
+        implementation (library) {
+            exclude group: 'org.jetbrains.kotlin'
+            exclude group: 'androidx.appcompat'
+            exclude group: 'com.android.support'
+            exclude group: 'glide'
+        }
+    }
 
     implementation 'com.orhanobut:logger:2.2.0'
 }

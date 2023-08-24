@@ -16,7 +16,7 @@ interface IBDialog {
     fun show(): IBDialog
     fun dismiss()
     fun hide()
-    fun getActivity(): Activity
+    fun getActivity(): Activity?
     fun getRootView(): View?
 
     fun setCancelListener(cancelListener: () -> Unit): IBDialog

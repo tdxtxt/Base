@@ -2,7 +2,6 @@ package com.tdxtxt.base
 
 import android.content.Intent
 import android.graphics.Color
-import com.blankj.utilcode.util.TimeUtils
 import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
@@ -10,7 +9,6 @@ import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.pickerview.dataset.OptionDataSet
-import com.tdxtxt.pickerview.util.PickerUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 

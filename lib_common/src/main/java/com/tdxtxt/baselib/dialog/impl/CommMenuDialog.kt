@@ -20,7 +20,7 @@ import com.tdxtxt.baselib.view.recycler.divider.LinearItemDecoration
  *     desc   : 菜单点击
  * </pre>
  */
-class CommMenuDialog constructor(activity: FragmentActivity): BottomBaseDialog(activity){
+class CommMenuDialog constructor(activity: FragmentActivity?): BottomBaseDialog(activity){
     var mAdapter: BaseQuickAdapter<MenuCallBack, BaseViewHolder>? = null
     var mData: MutableList<MenuCallBack>? = null
     var mTitle: String? = null

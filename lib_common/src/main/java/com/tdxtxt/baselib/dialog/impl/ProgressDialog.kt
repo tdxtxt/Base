@@ -30,11 +30,11 @@ class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
     override fun show(): CenterBaseDialog {
         popupView?.dismiss()
         return builder
-            .hasShadowBg(false)
-            .popupAnimation(PopupAnimation.ScaleAlphaFromCenter)
-            .isLightStatusBar(true)
-            .isLightNavigationBar(true)
-            .asCustom(dialog).apply { popupView = this }.show().lifecycleOwner(context)
+            ?.hasShadowBg(false)
+            ?.popupAnimation(PopupAnimation.ScaleAlphaFromCenter)
+            ?.isLightStatusBar(true)
+            ?.isLightNavigationBar(true)
+            ?.asCustom(dialog).apply { popupView = this }?.show()?.lifecycleOwner(context)
             .run { this@ProgressDialog }
     }
 

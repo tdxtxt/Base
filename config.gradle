@@ -83,18 +83,14 @@ ext{
             "adapter-recyclerview": 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4',
             /**沉浸式状态栏 https://github.com/gyf-dev/ImmersionBar **/
             "statusBar"           : 'com.gyf.immersionbar:immersionbar:3.0.0',
-            "XPopup"              : 'com.github.li-xiaojun:XPopup:2.7.5',
+            "XPopup"              : 'com.github.li-xiaojun:XPopup:2.9.19',
+            "statusbar": "com.gyf.immersionbar:immersionbar:3.0.0",
+            //https://github.com/gyf-dev/ImmersionBar
             "utilcodex"           : 'com.blankj:utilcodex:1.31.0'
     ].values()
 
     jsonLibs = [
             "gson": "com.google.code.gson:gson:2.8.5"
-    ].values()
-
-    //https://github.com/gyf-dev/ImmersionBar
-    statusBarLibs = [
-            "statusbar": "com.gyf.immersionbar:immersionbar:3.0.0"
-//            "statusbar-ktx" :   "com.geyifeng.immersionbar:immersionbar-ktx:3.2.2"
     ].values()
 
 //    annotationProcessorLibs = [image["glideCompiler"]]
