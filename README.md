@@ -68,6 +68,40 @@ class SocialRequestAdapter : IRequestAdapter{
     <package android:name="hk.alipay.wallet" /> <!-- AlipayHK -->
 </queries>
 ```
+* 配置FileProvider
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--外部存储卡，谨慎使用： Environment.getExternalStorageDirectory() /storage/emulate/0-->
+    <!--<external-path name="external_path" path="." />-->
+    <!--根路径-->
+    <!--<root-path name="root_path" path=""/>-->
+
+    <!--Context.getCacheDir() /data/data/<包名>/cache-->
+    <cache-path name="cache-path" path="." />
+    <!--Context.getFilesDir() /data/data/<包名>/files-->
+    <files-path name="files-path" path="." />
+    <!--ContextCompat.getExternalMediaDirs()-->
+    <external-media-path name="external_media_path" path="." />
+    <!--ContextCompat.getExternalCacheDir() /storage/emulate/0/Android/data/<包名>/cache-->
+    <external-cache-path name="external-cache-path" path="." />
+    <!--ContextCompat.getExternalFilesDir(String) /storage/emulate/0/Android/data/<包名>/files-->
+    <external-files-path name="external-files-path" path="." />
+</paths>
+```
+```
+<provider
+     android:name="androidx.core.content.FileProvider"
+     android:authorities="${applicationId}.fileprovider"
+     android:exported="false"
+     android:grantUriPermissions="true"
+     tools:replace="android:authorities">
+     <meta-data
+          android:name="android.support.FILE_PROVIDER_PATHS"
+          android:resource="@xml/file_paths"
+          tools:replace="android:resource" />
+</provider>
+```
 #### 微信平台相关功能使用
 
 * 微信sdk依赖
@@ -100,27 +134,6 @@ class WXEntryActivity : BaseActionActivity(), IWXAPIEventHandler {
         handleReq(req)
     }
 }
-```
-* 配置FileProvider
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <!--外部存储卡，谨慎使用： Environment.getExternalStorageDirectory() /storage/emulate/0-->
-    <!--<external-path name="external_path" path="." />-->
-    <!--根路径-->
-    <!--<root-path name="root_path" path=""/>-->
-
-    <!--Context.getCacheDir() /data/data/<包名>/cache-->
-    <cache-path name="cache-path" path="." />
-    <!--Context.getFilesDir() /data/data/<包名>/files-->
-    <files-path name="files-path" path="." />
-    <!--ContextCompat.getExternalMediaDirs()-->
-    <external-media-path name="external_media_path" path="." />
-    <!--ContextCompat.getExternalCacheDir() /storage/emulate/0/Android/data/<包名>/cache-->
-    <external-cache-path name="external-cache-path" path="." />
-    <!--ContextCompat.getExternalFilesDir(String) /storage/emulate/0/Android/data/<包名>/files-->
-    <external-files-path name="external-files-path" path="." />
-</paths>
 ```
 * 分享
 ```kotlin
