@@ -182,7 +182,10 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             tempMultipleList.sort()
             mMultipleList = tempMultipleList
         }else{
-            mMultipleList = multipleList
+            val tempMultipleList = mutableListOf<Float>()
+            tempMultipleList.addAll(multipleList)
+            tempMultipleList.sort()
+            mMultipleList = tempMultipleList
         }
     }
 
@@ -252,7 +255,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     }
 
     override fun startFullScreen(isReverse: Boolean?){
-        if(isReverseFullScreen() == isReverse) return
+        if(isReverse == true && isReverseFullScreen()) return
+        if(isReverse == false && isForwardFullScreen()) return
         val activity = getActivity() ?: return
 
         if(activity.isFinishing || activity.isDestroyed) return
@@ -488,12 +492,16 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     /************************************* 生命周期方法 *************************************/
     private var isBackgroundPlaying = false //是否允许后台播放
-    private var mPauseBeforePlaying: Boolean? = null //熄屏之前是否播放
+    private var isResumePlaying: Boolean? = null //切回界面后是否恢复播放
+    private var mPauseBeforePlaying: Boolean? = null //切换界面之前的播放状态
     fun setBackgroundPlaying(isPlaying: Boolean){
         isBackgroundPlaying = isPlaying
     }
+    fun setResumePlaying(isResume: Boolean){
+        isResumePlaying = isResume
+    }
     /**
-     * 绑定生命周期，用以控制熄屏后视频是否任然播放
+     * 绑定生命周期，用以控制切换界面后视频是否任然播放
      */
     fun bindLifecycle(owner: LifecycleOwner?) {
         owner?.lifecycle?.apply {
@@ -506,7 +514,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mControllerList.forEach { it.onResume() }
 
         if(!isBackgroundPlaying){
-            if(mPauseBeforePlaying == true) resume()
+            if(mPauseBeforePlaying == true && isResumePlaying == true) resume()
         }
     }
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

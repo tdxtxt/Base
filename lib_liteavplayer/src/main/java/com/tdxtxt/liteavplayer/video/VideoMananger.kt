@@ -85,6 +85,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
                     sendResolutionChangeEvent(height)
                 }else{
                     if(event < 0){
+                        pause()//暂停播放
                         sendErrorEvent("播放失败：code=$event")
                     }else{
                         sendUnkownEvent(Pair(event, param))
@@ -144,6 +145,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?) {
         stop(true)//这里将之前的播放内容清除掉，不然频繁调用将会导致播放器卡死
         if(enableHardWareDecode != null) getPlayer()?.enableHardwareDecode(enableHardWareDecode) //切换软硬解码必须放到stop之后,start之前
+        getPlayer()?.setBitrateIndex(-1)
         val playRunnable = Runnable {
             getPlayer()?.setStartTime(startTime?.toFloat()?: 0f)
             getPlayer()?.setAutoPlay(autoPlay)

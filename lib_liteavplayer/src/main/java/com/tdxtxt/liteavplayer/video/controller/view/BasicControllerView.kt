@@ -24,7 +24,7 @@ import kotlin.math.abs
  */
 class BasicControllerView : FrameLayout, IBasicController {
     private var mPlayerView: TXVideoPlayerView? = null
-    private val mDefaultFadeTimeout = 7000L
+    private val mDefaultFadeTimeout = 5000L
     private var mLastBasicMenuLayoutShowTime = 0L
     private val mFadeBasicMenuLayoutRunnable = Runnable {
         basic_menu.visibility = View.GONE

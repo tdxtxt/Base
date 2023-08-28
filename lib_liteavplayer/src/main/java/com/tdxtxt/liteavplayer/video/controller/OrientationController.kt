@@ -49,22 +49,16 @@ class OrientationController: IController {
 
                     if (isVeritcal(orientation)) {
                         if (mOrientation == VERITCAL) return
+                        if(getRotationSwitch(context)) mPlayerView?.stopFullScreen()
                         mOrientation = VERITCAL
-                        if(getRotationSwitch(context)){
-                            mPlayerView?.stopFullScreen()
-                        }
                     } else if (isReverseHorizontal(orientation)) {
                         if (mOrientation == HORIZONTA_REVERSE) return
+                        if(getRotationSwitch(context)) mPlayerView?.startFullScreen(true)
                         mOrientation = HORIZONTA_REVERSE
-                        if (mPlayerView?.isFullScreen() == true) {
-                            if(getRotationSwitch(context)) mPlayerView?.startFullScreen(true)
-                        }
                     } else if (isForwardHorizontal(orientation)) {
                         if (mOrientation == HORIZONTA_FORWARD) return
+                        if(getRotationSwitch(context)) mPlayerView?.startFullScreen(false)
                         mOrientation = HORIZONTA_FORWARD
-                        if(mPlayerView?.isFullScreen() == true){
-                            if(getRotationSwitch(context)) mPlayerView?.startFullScreen(false)
-                        }
                     }
                 }
             }
