@@ -29,7 +29,8 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     private var mDataSource: String? = null
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
-    private var mLocalCurrentPlayTime:Int? = null //当前的播放时间
+    private var mLocalCurrentPlayTime: Int? = null //当前的播放时间
+    private var mLocalMaxPlayTime: Int? = null //当前视频播放到的最大时间
     private val mControllerList: MutableList<IPlayerController> = ArrayList()
     init {
         mPlayer = TXVodPlayer(context)
@@ -185,6 +186,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     override fun stop(clearFrame: Boolean) {
         mDataSource = null
         mLocalCurrentPlayTime = null
+        mLocalMaxPlayTime = null
         getPlayer()?.stopPlay(clearFrame)
     }
 
@@ -222,8 +224,13 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         return mLocalCurrentPlayTime?: getPlayer()?.currentPlaybackTime?.toInt()?: 0
     }
 
+    override fun getMaxPlayDuration(): Int {
+        return mLocalMaxPlayTime?: 0
+    }
+
     fun setLocalCurrentDuration(duration: Int?){
         mLocalCurrentPlayTime = duration
+        mLocalMaxPlayTime = if(duration == null) null else Math.max(mLocalMaxPlayTime?: 0, duration)
     }
 
     override fun getDuration(): Int {

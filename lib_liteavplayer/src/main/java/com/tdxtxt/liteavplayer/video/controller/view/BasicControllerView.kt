@@ -66,7 +66,7 @@ class BasicControllerView : FrameLayout, IBasicController {
 
     fun getBitrateTextView(): TextView? = basic_bitrate
 
-    fun getTitleTextView(): TextView? = basic_back
+    fun getTitleTextView(): TextView? = basic_title
 
     private fun clickView(view: View?){
         view?.setOnClickListener {

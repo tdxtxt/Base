@@ -84,6 +84,11 @@ interface IVideoPlayer {
     fun getCurrentDuration(): Int
 
     /**
+     * 最大播放时间
+     */
+    fun getMaxPlayDuration(): Int
+
+    /**
      * 获取视频总时长，单位秒
      * @return  获取视频总时长
      */

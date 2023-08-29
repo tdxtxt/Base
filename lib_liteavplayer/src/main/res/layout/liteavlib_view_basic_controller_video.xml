@@ -72,8 +72,22 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:textColor="@android:color/white"
-                android:textSize="16dp"
-                tools:text="视频标题" />
+                android:textSize="16dp"/>
+
+            <TextView
+                android:id="@+id/basic_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_marginHorizontal="32dp"
+                android:textColor="@android:color/white"
+                android:textSize="17dp"
+                tools:text="视频标题"
+                android:visibility="invisible"
+                tools:visibility="visible"/>
         </FrameLayout>
 
         <LinearLayout

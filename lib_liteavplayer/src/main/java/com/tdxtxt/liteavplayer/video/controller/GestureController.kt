@@ -2,7 +2,6 @@ package com.tdxtxt.liteavplayer.video.controller
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
@@ -128,8 +127,8 @@ class GestureController : IController {
         mPlayerView?.getBaicView()?.hideBasicMenuLayout()
 
         val deltaX = donwY - nowY
-        val height = mPlayerView?.getBaicView()?.getViewWidth()?: 1
-        val changePercent = deltaX * 2 / height
+        val height = mPlayerView?.getBaicView()?.getViewHeight()?: 1
+        val changePercent = deltaX * 2f / height.toFloat()
         mPlayerView?.getBrightControllerView()?.show(changePercent)
     }
 
@@ -139,8 +138,8 @@ class GestureController : IController {
         mPlayerView?.getBaicView()?.hideBasicMenuLayout()
 
         val deltaX = donwY - nowY
-        val height = mPlayerView?.getBaicView()?.getViewWidth()?: 1
-        val changePercent = deltaX * 2 / height
+        val height = mPlayerView?.getBaicView()?.getViewHeight()?: 1
+        val changePercent = deltaX * 2f / height.toFloat()
         mPlayerView?.getVolumeControllerView()?.show(changePercent)
     }
 

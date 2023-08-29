@@ -179,12 +179,12 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             val tempMultipleList = mutableListOf<Float>()
             tempMultipleList.add(1f)
             if(multipleList != null) tempMultipleList.addAll(multipleList)
-            tempMultipleList.sort()
+            tempMultipleList.sortDescending()
             mMultipleList = tempMultipleList
         }else{
             val tempMultipleList = mutableListOf<Float>()
             tempMultipleList.addAll(multipleList)
-            tempMultipleList.sort()
+            tempMultipleList.sortDescending()
             mMultipleList = tempMultipleList
         }
     }
@@ -241,6 +241,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         mOrientationType = OrientationController.VERITCAL
 
         LiteavPlayerUtils.showSysBar(activity)
+        getTitleView()?.visibility = View.INVISIBLE
         mScreenChangelisenter?.forEach {
             it.onScreenChange(isFullScreen())
         }
@@ -273,6 +274,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         }
 
         LiteavPlayerUtils.hideSysBar(activity)
+        getTitleView()?.visibility = View.VISIBLE
         mScreenChangelisenter?.forEach {
             it.onScreenChange(isFullScreen())
         }
@@ -335,7 +337,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
                 }
             }
             TXPlayerListener.PlayerState.EVENT_COMPLETED -> {
-
+                getBaicView().updatePlayButton(true)
+                getBaicView().moveBasicTopMenuLayout()
             }
             TXPlayerListener.PlayerState.EVENT_RELEASE -> {
                 destoryView()
@@ -446,6 +449,10 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     override fun getCurrentDuration(): Int {
         return mVideoMgr?.getCurrentDuration()?: 0
+    }
+
+    override fun getMaxPlayDuration(): Int {
+        return mVideoMgr?.getMaxPlayDuration()?: 0
     }
 
     override fun getDuration(): Int {

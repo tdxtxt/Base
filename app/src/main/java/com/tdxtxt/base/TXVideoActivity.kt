@@ -24,6 +24,7 @@ class TXVideoActivity : BaseActivity() {
     }
 
     override fun initUi() {
+        videoPlayer.setTitle("xxxxxxss")
         videoPlayer.setVideoManager(LiteAVManager.getVideoManage(1))
 //        videoPlayer.setDataSource("https://mediaapi.juexiaotime.com/1111112023年法考资料/肖沛权/内部课/40diwuzhang.mp4", autoPlay = true)
 //        videoPlayer.setDataSource("https://1307664769.vod2.myqcloud.com/83cdfc9bvodtranscq1307664769/6e52bafc243791576089935450/v.f100230.m3u8?t=646438e6&sign=444fe8ce44d379c54adda4670870ff8e")
