@@ -9,6 +9,7 @@ import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.interfaces.SimpleCallback
+import com.lxj.xpopup.util.XPopupUtils
 import com.tdxtxt.baselib.tools.lifecycleOwner
 
 /**
@@ -46,7 +47,7 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IB
             }
             override fun onShow(popupView: BasePopupView?) {
             }
-        }).enableDrag(false)
+        }).enableDrag(false).maxWidth(((Math.min(XPopupUtils.getAppWidth(context), XPopupUtils.getAppHeight(context))) * 0.8f).toInt())
     }
     var popupView: BasePopupView? = null
 
