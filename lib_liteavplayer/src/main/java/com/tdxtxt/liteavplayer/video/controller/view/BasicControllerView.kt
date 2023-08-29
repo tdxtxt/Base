@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import com.tdxtxt.liteavplayer.R
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
@@ -67,6 +68,8 @@ class BasicControllerView : FrameLayout, IBasicController {
     fun getBitrateTextView(): TextView? = basic_bitrate
 
     fun getTitleTextView(): TextView? = basic_title
+
+    fun getPlayButton(): ImageView? = basic_toggleplay_small
 
     private fun clickView(view: View?){
         view?.setOnClickListener {

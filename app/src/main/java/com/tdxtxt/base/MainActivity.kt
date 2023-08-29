@@ -5,6 +5,7 @@ import android.graphics.Color
 import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
+import com.tdxtxt.baselib.dialog.impl.CommDialog
 import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
@@ -31,7 +32,8 @@ class MainActivity : BaseActivity() {
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
 //            getStateView(R.id.iv_image).showEmpty("哈哈哈哈")
-            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
+//            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
+            CommDialog.showCommDialog(fragmentActivity, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
         }
         btn_next_2.setOnClickListener {
             AppRepository.queryArticleList(1)

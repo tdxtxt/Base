@@ -3,7 +3,7 @@ package com.tdxtxt.base.fragment
 import android.util.Pair
 import androidx.fragment.app.Fragment
 import com.tdxtxt.base.R
-import com.tdxtxt.base.adapter.FragmentAdapter
+import com.tdxtxt.baselib.adapter.viewpager.ViewPage2FixAdapter
 import com.tdxtxt.baselib.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_tablayout_recycler.*
 import java.util.*
@@ -26,7 +26,7 @@ class RecyclerViewTabLayoutFragment : BaseFragment() {
         fragments.add(Pair("职业素养", TestFragment()))
         fragments.add(Pair("职业素养", TestFragment()))
 
-        val adapter = FragmentAdapter(fragmentActivity, fragments)
+        val adapter = ViewPage2FixAdapter(fragmentActivity, fragments)
         recyclerView.adapter = adapter
         tabLayout.setRecyclerView(recyclerView, adapter.pageTitles)
 

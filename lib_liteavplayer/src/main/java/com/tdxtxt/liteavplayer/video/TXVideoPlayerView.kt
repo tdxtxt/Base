@@ -157,6 +157,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     fun getTitleView() = getBaicView().getTitleTextView()
 
+    fun getPlayButton() = getBaicView().getPlayButton()
+
     /**
      * 设置动态水印
      */
