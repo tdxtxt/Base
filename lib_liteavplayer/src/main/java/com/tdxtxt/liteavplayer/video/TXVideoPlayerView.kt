@@ -159,6 +159,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     fun getPlayButton() = getBaicView().getPlayButton()
 
+    fun getWaterMarkView() = getBaicView().getWaterMarkView()
+
     /**
      * 设置动态水印
      */
@@ -417,12 +419,10 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     override fun resume() {
         mVideoMgr?.resume()
-        waterMark?.show()
     }
 
     override fun pause() {
         mVideoMgr?.pause()
-        waterMark?.hide()
     }
 
     override fun stop(clearFrame: Boolean) {

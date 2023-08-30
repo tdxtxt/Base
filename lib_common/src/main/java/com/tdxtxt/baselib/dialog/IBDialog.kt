@@ -27,6 +27,8 @@ interface IBDialog {
 
     fun getDialogWidth(): Int
     fun getDialogHeight(): Int
+    fun getDialogMaxWidth(): Int
+
 
 
 }

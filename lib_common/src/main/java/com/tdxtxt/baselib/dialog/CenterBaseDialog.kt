@@ -47,7 +47,7 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IB
             }
             override fun onShow(popupView: BasePopupView?) {
             }
-        }).enableDrag(false).maxWidth(((Math.min(XPopupUtils.getAppWidth(context), XPopupUtils.getAppHeight(context))) * 0.8f).toInt())
+        }).enableDrag(false).maxWidth(getDialogMaxWidth())
     }
     var popupView: BasePopupView? = null
 
@@ -115,4 +115,8 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IB
     override fun getDialogWidth() = 0
 
     override fun getDialogHeight() = 0
+
+    override fun getDialogMaxWidth(): Int {
+        return ((Math.min(XPopupUtils.getAppWidth(context), XPopupUtils.getAppHeight(context))) * 0.8f).toInt()
+    }
 }

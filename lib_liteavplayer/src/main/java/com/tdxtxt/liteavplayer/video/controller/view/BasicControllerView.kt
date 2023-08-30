@@ -127,6 +127,8 @@ class BasicControllerView : FrameLayout, IBasicController {
         waterMark.show()
     }
 
+    fun getWaterMarkView() = waterMark
+
     fun configStyle(){
         val playerStyle = mPlayerView?.getPlayerStyle()?: 0
         if(playerStyle == 0){ //显示进度条

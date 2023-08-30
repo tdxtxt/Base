@@ -123,4 +123,6 @@ abstract class BottomBaseDialog(val context: FragmentActivity?) : IBDialog {
     override fun getDialogWidth() = 0
 
     override fun getDialogHeight() = 0
+
+    override fun getDialogMaxWidth() = 0
 }
