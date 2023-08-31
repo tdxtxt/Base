@@ -350,9 +350,9 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
             TXPlayerListener.PlayerState.CHANGE_MULTIPLE -> {
                 getBaicView().updateMultiple(getMultiple())
             }
-            TXPlayerListener.PlayerState.EVENT_ERROR -> {
-                showCustomView(PlayErrorController(value?.toString()))
-            }
+//            TXPlayerListener.PlayerState.EVENT_ERROR -> {
+//                showCustomView(PlayErrorController(value?.toString()))
+//            }
         }
 
         mPlayerEventListenerListRef?.forEach { it.onPlayStateChanged(state, value) }

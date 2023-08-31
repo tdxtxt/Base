@@ -1,6 +1,7 @@
 package com.tdxtxt.base
 
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import com.tdxtxt.baselib.tools.StatusBarHelper
@@ -31,7 +32,7 @@ class TXVideoActivity : BaseActivity() {
 //        videoPlayer.setWaterMark("糖的东东", 12, Color.RED)
         videoPlayer.bindLifecycle(this)
         videoPlayer.setMultipleList(mutableListOf(0.5f, 0.75f, 1f, 1.2f, 1.3f, 1.4f, 1.5f, 1.75f, 2f))
-
+        videoPlayer.setWaterMark("我是水印", 18, Color.WHITE)
         clickView(btn_1)
         clickView(btn_2)
         clickView(btn_3)

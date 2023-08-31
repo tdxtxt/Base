@@ -159,6 +159,8 @@ public class DynamicWatermarkView extends View {
             }
             this.dynamicWaterConfig = new DynamicWaterConfig(dynamicWatermarkTip, tipTextSize, tipTextColor);
             textPaint.setColor(this.dynamicWaterConfig.tipTextColor);
+            //设置阴影
+            textPaint.setShadowLayer(LiteavPlayerUtils.INSTANCE.dp2px(3), 0f, LiteavPlayerUtils.INSTANCE.dp2px(1), Color.argb(66, 0, 0, 0));
             calculateBgRectWH();
         } else {
             this.dynamicWaterConfig = null;
