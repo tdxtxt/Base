@@ -14,8 +14,10 @@ abstract class AbsObserverNetapi <R> : DisposableObserver<R>() {
     abstract fun host(): String
 
     abstract fun onSuccess(response: R)
-
-    abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorData: Any?)
+    /**
+     * errorBody:响应报文中的ErrorBody数据内容
+     */
+    abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorBody: String?)
 
     override fun onNext(response: R) {
         onSuccess(response)
@@ -28,8 +30,9 @@ abstract class AbsObserverNetapi <R> : DisposableObserver<R>() {
         val message = provider.throwable2Message(e)
         val code = provider.throwable2Code(e)
         val data = provider.throwable2Response(e)
+        val errorBody = provider.throwable2ErrorBody(e)
         provider.handleError(data, code, message)
-        onFailure(code, message, data)
+        onFailure(code, message, errorBody)
         onComplete()
     }
 

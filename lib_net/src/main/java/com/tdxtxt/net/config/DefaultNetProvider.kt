@@ -60,6 +60,17 @@ abstract class DefaultNetProvider : NetProvider {
         return null
     }
 
+    override fun throwable2ErrorBody(e: Throwable?): String? {
+        when (e) {
+            is HttpException -> {
+                val errorBody = e.response().errorBody()
+                val json = errorBody?.string()
+                return json
+            }
+            else -> return null
+        }
+    }
+
     override fun createOkHttpClient(builder: OkHttpClient.Builder): OkHttpClient {
         return builder.build()
     }

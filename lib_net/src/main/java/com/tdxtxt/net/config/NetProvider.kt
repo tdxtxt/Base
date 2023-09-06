@@ -16,6 +16,7 @@ interface NetProvider {
     fun throwable2Message(e: Throwable?): String
     fun throwable2Code(e: Throwable?): Int
     fun throwable2Response(e: Throwable?): AbsResponse?
+    fun throwable2ErrorBody(e: Throwable?): String?
     fun createOkHttpClient(builder: OkHttpClient.Builder): OkHttpClient
     fun configHttpClient(builder: OkHttpClient.Builder)
     fun getRequestHandler(): RequestHandler?

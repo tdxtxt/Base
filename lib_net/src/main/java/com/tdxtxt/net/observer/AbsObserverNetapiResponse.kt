@@ -16,7 +16,10 @@ abstract class AbsObserverNetapiResponse <R : AbsResponse> : DisposableObserver<
 
     abstract fun onSuccess(response: R)
 
-    abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorData: Any?)
+    /**
+     * errorBody:如果接口返回非200状态码，此时为响应报文中的ErrorBody数据内容，如果返回200状态码，此时为AbsResponse.getMeta()对象
+     */
+    abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorBody: Any?)
 
     override fun onNext(response: R) {
         if(filter(response)){
@@ -33,8 +36,9 @@ abstract class AbsObserverNetapiResponse <R : AbsResponse> : DisposableObserver<
         val message = provider.throwable2Message(e)
         val code = provider.throwable2Code(e)
         val data = provider.throwable2Response(e)
+        val errorBody = provider.throwable2ErrorBody(e)
         provider.handleError(data, code, message)
-        onFailure(code, message, data)
+        onFailure(code, message, errorBody)
         onComplete()
     }
 
