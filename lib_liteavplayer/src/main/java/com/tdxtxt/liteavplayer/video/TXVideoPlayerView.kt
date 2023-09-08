@@ -159,7 +159,13 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
     fun getPlayButton() = getBaicView().getPlayButton()
 
+    fun getRestartButton() = getBaicView().getRestartButton()
+
     fun getWaterMarkView() = getBaicView().getWaterMarkView()
+
+    fun showRestartButton(clickListener: OnClickListener?) = getBaicView().showRestartButton(clickListener)
+
+    fun hideRestartButton() = getBaicView().hideRestartButton()
 
     /**
      * 设置动态水印

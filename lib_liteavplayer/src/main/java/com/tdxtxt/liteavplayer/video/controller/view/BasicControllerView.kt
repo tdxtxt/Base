@@ -61,6 +61,8 @@ class BasicControllerView : FrameLayout, IBasicController {
         showBasicMenuLayout()
     }
 
+    fun getWaterMarkView() = waterMark
+
     fun getSeekBarControllerView(): SeekBarControllerView = seekBar
 
     fun getMultipleTextView(): TextView? = basic_multiple
@@ -70,6 +72,22 @@ class BasicControllerView : FrameLayout, IBasicController {
     fun getTitleTextView(): TextView? = basic_title
 
     fun getPlayButton(): ImageView? = basic_toggleplay_small
+
+    fun getRestartButton(): ImageView? = basic_restart_small
+
+    fun showRestartButton(clickListener: OnClickListener?){
+        basic_toggleplay_small.visibility = View.GONE
+        basic_restart_small.visibility = View.VISIBLE
+        basic_restart_small.setOnClickListener(clickListener)
+    }
+
+    fun hideRestartButton(){
+        if(basic_restart_small.visibility == View.VISIBLE){
+            basic_toggleplay_small.visibility = View.VISIBLE
+            basic_restart_small.visibility = View.GONE
+            basic_restart_small.setOnClickListener(null)
+        }
+    }
 
     private fun clickView(view: View?){
         view?.setOnClickListener {
@@ -126,8 +144,6 @@ class BasicControllerView : FrameLayout, IBasicController {
         waterMark.setData(dynamicWatermarkTip, tipTextSize, tipTextColor)
         waterMark.show()
     }
-
-    fun getWaterMarkView() = waterMark
 
     fun configStyle(){
         val playerStyle = mPlayerView?.getPlayerStyle()?: 0
@@ -218,6 +234,7 @@ class BasicControllerView : FrameLayout, IBasicController {
     }
 
     override fun updatePlayButton(isPlaying: Boolean) {
+        hideRestartButton()
         if(isPlaying){
             basic_toggleplay_small.setImageResource(R.mipmap.liteavlib_ic_playing_small)
             basic_toggleplay.setImageResource(R.mipmap.liteavlib_ic_playing)

@@ -15,6 +15,9 @@ import com.tdxtxt.baselib.dialog.impl.CommDialog
  * @since 2020.5.27
  */
 object RequestPermissionManager{
+    /**
+     * 直接请求权限，不进行解释弹框
+     */
     fun directreQuestPermission(activity: FragmentActivity?, permissions: List<String>, isToSettings: Boolean, listener: (PermissionListener.() -> Unit)?){
         if(activity == null) return
         var callback: PermissionListener? = null
@@ -24,9 +27,9 @@ object RequestPermissionManager{
         }
         PermissionX.init(activity)
                 .permissions(permissions)
-//                .onExplainRequestReason { scope, deniedList ->
-//                    scope.showRequestReasonDialog(deniedList, "xxx", "明白", "取消")
-//                }
+                .onExplainRequestReason { scope, deniedList ->
+                    scope.showRequestReasonDialog(deniedList, "xxx", "明白", "取消")
+                }
             .onForwardToSettings(ForwardToSettingsCallback { scope, deniedList -> if(isToSettings) scope.showForwardToSettingsDialog(deniedList, "您需要去应用程序设置当中手动开启权限", "去设置", "取消") })
             .request(RequestCallback { allGranted, grantedList, deniedList ->
                 if (allGranted) {//允许的权限 grantedList
@@ -36,6 +39,10 @@ object RequestPermissionManager{
                 }
             })
     }
+
+    /**
+     * 先解释弹框，再请求权限
+     */
     fun requestPermission(activity: FragmentActivity?, permissions: List<String>, requestReason: String, isToSettings: Boolean, listener: (PermissionListener.() -> Unit)?){
         if(activity == null) return
         if(activity.isDestroyed()) return
@@ -56,11 +63,17 @@ object RequestPermissionManager{
         if(isGranted){
             callback?.onGranted?.invoke(permissions)
         }else{
-            CommDialog.showCommDialog(activity, requestReason, MenuCallBack("取消"){
-                callback?.onDenied?.invoke(permissions)
-            }, MenuCallBack("确认"){
-                directreQuestPermission(activity, permissions, isToSettings, listener)
-            })?.setCancelable(false)
+            if(callback?.onExplainRequestReason == null){
+                CommDialog.showCommDialog(activity, requestReason, MenuCallBack("取消"){
+                    callback?.onDenied?.invoke(permissions)
+                }, MenuCallBack("确认"){
+                    directreQuestPermission(activity, permissions, isToSettings, listener)
+                })?.setCancelable(false)
+            }else{
+                val scopeYes = { directreQuestPermission(activity, permissions, isToSettings, listener) }
+                val scopeNo = { callback.onDenied?.invoke(permissions)?: Unit }
+                callback.onExplainRequestReason?.invoke(requestReason, scopeYes, scopeNo)
+            }
         }
     }
     /**
@@ -103,12 +116,16 @@ object RequestPermissionManager{
 abstract class PermissionListener{
     var onGranted: ((grantedList: List<String>?) -> Unit)? = null
     var onDenied: ((deniedList: List<String>?) -> Unit)? = null
+    var onExplainRequestReason: ((reason: String?, scopeConfirm: () -> Unit, scopeCancel: () -> Unit) -> Unit)? = null
 
     fun grantedPermission(granted: (grantedList: List<String>?) -> Unit){
         onGranted = granted
     }
     fun deniedPermission(denied: (deniedList: List<String>?) -> Unit){
         onDenied = denied
+    }
+    fun explainRequestReason(explainReason: ((reason: String?, scopeYes: () -> Unit, scopeNo: () -> Unit) -> Unit)?){
+        onExplainRequestReason = explainReason
     }
 }
 

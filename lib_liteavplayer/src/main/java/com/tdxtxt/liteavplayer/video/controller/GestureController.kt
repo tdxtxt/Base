@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
+import android.view.View
 import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.inter.IController
@@ -38,7 +39,11 @@ class GestureController : IController {
         }
 
         override fun onDoubleTap(e: MotionEvent?): Boolean {
-            mPlayerView?.togglePlay()
+            if(mPlayerView?.getRestartButton()?.visibility == View.VISIBLE){
+                mPlayerView?.getRestartButton()?.performClick()
+            }else{
+                mPlayerView?.togglePlay()
+            }
             return false
         }
 

@@ -168,12 +168,24 @@
                 android:paddingBottom="12dp"
                 android:paddingTop="6dp">
 
-                <ImageView
-                    android:id="@+id/basic_toggleplay_small"
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:src="@mipmap/liteavlib_ic_playing_small" />
+                    android:layout_marginEnd="10dp">
+
+                    <ImageView
+                        android:id="@+id/basic_toggleplay_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/liteavlib_ic_playing_small" />
+
+                    <ImageView
+                        android:id="@+id/basic_restart_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/liteavlib_ic_restart_small"
+                        android:visibility="gone"/>
+                </FrameLayout>
 
                 <TextView
                     android:id="@+id/basic_current_time"

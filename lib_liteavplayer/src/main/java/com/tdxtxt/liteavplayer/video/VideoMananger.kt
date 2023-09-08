@@ -230,7 +230,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
 
     fun setLocalCurrentDuration(duration: Int?){
         mLocalCurrentPlayTime = duration
-        mLocalMaxPlayTime = if(duration == null) null else Math.max(mLocalMaxPlayTime?: 0, duration)
+        mLocalMaxPlayTime = Math.max(mLocalMaxPlayTime?: 0, duration?: 0)
     }
 
     override fun getDuration(): Int {

@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.ReflectUtils
 import com.tdxtxt.baselib.R
+import com.tdxtxt.baselib.adapter.viewpager.ViewPagerStateAdapter
 
 /**
  * <pre>
@@ -65,10 +66,20 @@ class XViewPager : ViewPager {
         return supportScroll && super.onInterceptTouchEvent(ev)
     }
 
+    /**
+     *  注意：仅仅支持adapter为FragmentPagerAdapter或者ViewPagerStateAdapter的viewpager
+     */
     inline fun <reified T : Fragment> getCurrentFragment() = getChildFragment<T>(currentItem)
 
+    /**
+     *  注意：仅仅支持adapter为FragmentPagerAdapter或者ViewPagerStateAdapter的viewpager
+     */
     inline fun <reified T : Fragment> getChildFragment(position: Int): T?{
         val adapter = adapter
+        if(adapter is ViewPagerStateAdapter<*>){
+            if(adapter.count <= position) return null
+            return adapter.getItem(position) as T
+        }
         val fm: FragmentManager? = if(adapter is FragmentPagerAdapter){
             ReflectUtils.reflect(adapter).field("mFragmentManager").get<FragmentManager>()
         }else if(adapter is FragmentStatePagerAdapter){
