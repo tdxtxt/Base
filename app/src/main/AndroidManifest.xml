@@ -63,6 +63,10 @@
 
         <activity  android:name="com.tdxtxt.base.XTabLayoutActivity"/>
 
+        <activity android:name="com.juexiao.english.ddshare.DDShareActivity"
+            android:exported="true"
+            android:launchMode="singleTask" />
+
         <activity
             android:name="com.juexiao.english.wxapi.WXEntryActivity"
             android:exported="true"

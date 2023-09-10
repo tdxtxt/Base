@@ -100,7 +100,7 @@ class WxPlatform constructor(context: Context, appId: String?, private val wxSec
         return WxActionActivity::class.java
     }
 
-    override fun onResponse(resp: Any) {
+    override fun onResponse(resp: Any?) {
         if (resp !is BaseResp) {
             return
         }

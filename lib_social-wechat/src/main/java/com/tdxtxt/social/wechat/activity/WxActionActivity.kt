@@ -9,7 +9,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler
  * @author Pinger
  * @since 2019/1/31 14:54
  */
-class WxActionActivity : BaseActionActivity(), IWXAPIEventHandler {
+open class WxActionActivity : BaseActionActivity(), IWXAPIEventHandler {
 
     override fun onResp(resp: BaseResp) {
         handleResp(resp)

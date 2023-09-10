@@ -50,7 +50,7 @@ abstract class AbsPlatform : IPlatform {
 
     }
 
-    override fun onResponse(resp: Any) {
+    override fun onResponse(resp: Any?) {
 
     }
 

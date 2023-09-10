@@ -17,6 +17,8 @@ import com.tencent.wework.api.WWAPIFactory
  *     author : tangdexiang
  *     time   : 2023-08-14
  *     desc   : https://developer.work.weixin.qq.com/document/path/91196
+ *              https://open.work.weixin.qq.com/help2/pc/17309
+ *              https://developers.weixin.qq.com/community/develop/doc/00002299838f00d446eb3a06d51400
  * </pre>
  */
 class WxworkPlatform(context: Context?, val schema: String?) : AbsPlatform() {

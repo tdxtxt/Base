@@ -32,7 +32,7 @@ open class BaseActionActivity : Activity() {
         }
     }
 
-    protected fun handleResp(resp: Any) {
+    protected fun handleResp(resp: Any?) {
         getPlatform()?.onResponse(resp)
         checkFinish()
     }

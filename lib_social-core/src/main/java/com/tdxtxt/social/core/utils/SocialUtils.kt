@@ -75,6 +75,16 @@ object SocialUtils {
     }
 
     /**
+     * 根据路径获取指定大小的图片
+     * @param path    路径
+     * @return byte[]
+     */
+    fun getStaticSizeBitmapByPath(path: String?): Bitmap? {
+        if(path == null) return null
+        return getMaxSizeBitmap(path, THUMB_IMAGE_SIZE)
+    }
+
+    /**
      * 使用 path decode 出来一个差不多大小的，此时因为图片质量的关系，可能大于kbNum
      *
      * @param filePath path

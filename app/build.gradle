@@ -65,14 +65,15 @@ dependencies {
     implementation project(':lib_social-core')
     implementation project(':lib_social-wechat')
     implementation project(':lib_social-alipay')
+    implementation project(':lib_social-dingtalk')
+    implementation project(':lib_social-wxwork')
     implementation project(':lib_social-android')
-//    implementation project(':lib_socialqq')
-//    implementation project(':lib_socialalipay')
 
     implementation files('libs/open_sdk_r6020_lite.jar')
     implementation files('libs/alipaySdk-15.8.05.aar')
     implementation files('libs/lib_wwapi-2.0.12.11.aar')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
+    implementation 'com.alibaba.android:ddsharesdk:1.1.0'
 //    implementation 'io.github.sinaweibosdk:core:11.6.0@aar'
 
     //google官方lib

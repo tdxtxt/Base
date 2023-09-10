@@ -44,6 +44,7 @@ dependencies {
     //google官方lib
     implementation rootProject.ext.supprotLibs
     compileOnly project(':lib_social-core')
+    compileOnly 'com.alibaba.android:ddsharesdk:1.1.0'
 }
 
 //上传到Maven仓库的task

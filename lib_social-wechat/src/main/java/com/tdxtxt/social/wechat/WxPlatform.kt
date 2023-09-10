@@ -25,7 +25,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
  * <pre>
  *     author : tangdexiang
  *     time   : 2023-08-11
- *     desc   :
+ *     desc   : https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/Android.html
  * </pre>
  */
 class WxPlatform constructor(context: Context?, appId: String?, wxSecret: String?): AbsPlatform() {
@@ -33,7 +33,7 @@ class WxPlatform constructor(context: Context?, appId: String?, wxSecret: String
     private var mLoginHelper: WxLoginHelper? = null
     private var mShareHelper: WxShareHelper? = null
     private var mPayHelper: WxPayHelper? = null
-    private var mCompleteCallback: (() -> Unit)?? = null
+    private var mCompleteCallback: (() -> Unit)? = null
 
     class Creator constructor(val appId: String?, val wxSecret: String?) : PlatformCreator {
         override fun create(context: Context?, target: Int, params: String?): IPlatform? {
@@ -85,7 +85,7 @@ class WxPlatform constructor(context: Context?, appId: String?, wxSecret: String
         mPayHelper?.doPay(params, listener, complete)
     }
 
-    override fun onResponse(resp: Any) {
+    override fun onResponse(resp: Any?) {
         super.onResponse(resp)
         if(resp !is BaseResp) return
         val logMsg = if(resp is SendAuth.Resp){

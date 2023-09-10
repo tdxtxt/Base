@@ -93,7 +93,7 @@ abstract class AbsPlatform(protected var appId: String?, protected var appName: 
 
     }
 
-    override fun onResponse(resp: Any) {
+    override fun onResponse(resp: Any?) {
 
     }
 

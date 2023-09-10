@@ -82,7 +82,7 @@ class WbPlatform constructor(context: Context, appId: String?, appName: String?,
         }
     }
 
-    override fun onResponse(resp: Any) {
+    override fun onResponse(resp: Any?) {
         if (resp is Int) {
             when (resp) {
 //                WBConstants.ErrorCode.ERR_OK ->     // 分享成功

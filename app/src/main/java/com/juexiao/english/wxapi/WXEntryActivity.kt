@@ -1,20 +1,5 @@
 package com.juexiao.english.wxapi
 
-import com.tdxtxt.social.core.activity.BaseActionActivity
-import com.tencent.mm.opensdk.modelbase.BaseReq
-import com.tencent.mm.opensdk.modelbase.BaseResp
-import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler
+import com.tdxtxt.social.wechat.activity.WxActionActivity
 
-class WXEntryActivity : BaseActionActivity(), IWXAPIEventHandler {
-    override fun onResp(resp: BaseResp) {
-        handleResp(resp)
-    }
-
-    /**
-     * 从微信启动App
-     * @param req
-     */
-    override fun onReq(req: BaseReq?) {
-        handleReq(req)
-    }
-}
+class WXEntryActivity : WxActionActivity()

@@ -61,7 +61,7 @@ open class BaseActionActivity : Activity() {
         checkFinish()
     }
 
-    protected fun handleResp(resp: Any) {
+    protected fun handleResp(resp: Any?) {
         getPlatform()?.onResponse(resp)
         checkFinish()
     }

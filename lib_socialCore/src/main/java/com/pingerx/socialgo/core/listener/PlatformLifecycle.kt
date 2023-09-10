@@ -12,7 +12,7 @@ interface PlatformLifecycle : Recyclable {
 
     fun handleIntent(activity: Activity)
 
-    fun onResponse(resp: Any)
+    fun onResponse(resp: Any?)
 
     fun onReq(activity: Activity, req: Any?)
 }
