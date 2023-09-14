@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.OrientationEventListener
 import com.tdxtxt.liteavplayer.live.TXLivePlayerView
 import com.tdxtxt.liteavplayer.live.inter.IController
-import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.controller.OrientationController
 
 

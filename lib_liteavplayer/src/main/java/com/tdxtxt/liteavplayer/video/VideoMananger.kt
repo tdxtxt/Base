@@ -58,7 +58,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
 //            mediaType = TXVodConstants.MEDIA_TYPE_HLS_LIVE //HLS直播需要添加这个设置，否则第一次无法播放
             progressInterval = 1000  // 设置进度回调间隔，单位毫秒
             maxBufferSize = 30 // 播放时最大缓冲大小。单位：MB
-//            isSmoothSwitchBitrate = true //开启平滑切换码率
+            isSmoothSwitchBitrate = true //开启平滑切换码率
             config?.invoke(player, this)
         })
         player?.setVodListener(object : ITXVodPlayListener {

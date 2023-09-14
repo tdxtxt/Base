@@ -108,9 +108,9 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ISeek
             isPlayOnTouchBefore = mPlayerView?.isPlaying()
             if(isPlayOnTouchBefore == true) mPlayerView?.pause()
         }else{//停止拖动
-            if(isPlayOnTouchBefore == true) mPlayerView?.resume()
-            isPlayOnTouchBefore = null
             mPlayerView?.seekTo(progress2Time(progress))
+            if(isPlayOnTouchBefore == true) mPlayerView?.resume() else mPlayerView?.pause()
+            isPlayOnTouchBefore = null
         }
     }
 

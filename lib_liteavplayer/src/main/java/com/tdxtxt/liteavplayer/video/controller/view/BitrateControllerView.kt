@@ -3,12 +3,10 @@ package com.tdxtxt.liteavplayer.video.controller.view
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.tdxtxt.liteavplayer.R
-import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.adapter.BitrateAdapter
 import com.tdxtxt.liteavplayer.video.inter.AbsPopupWindowController
 import com.tdxtxt.liteavplayer.video.inter.ScreenChangeLisenter
-import com.tencent.live2.impl.V2TXLiveUtils
 
 /**
  * <pre>

@@ -5,11 +5,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.adapter.MultipleAdapter
 import com.tdxtxt.video.player.controller.IControllerMultiple
-import kotlinx.android.synthetic.main.libvideo_view_control_multiple.view.*
 
 /**
  * <pre>
@@ -37,7 +37,7 @@ class MultipleControllerView : FrameLayout, IControllerMultiple {
             }
         }
 
-        multiple_list.adapter = mMultipleAdapter
+        findViewById<RecyclerView>(R.id.multiple_list)?.adapter = mMultipleAdapter
 
         setOnClickListener {
             hide()

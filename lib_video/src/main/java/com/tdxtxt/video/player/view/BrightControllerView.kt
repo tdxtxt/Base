@@ -7,10 +7,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.ProgressBar
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerGesture
-import kotlinx.android.synthetic.main.libvideo_view_control_volume_bright.view.*
 
 /**
  * <pre>
@@ -29,7 +30,7 @@ class BrightControllerView: FrameLayout, IControllerGesture {
     private fun initView(){
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         LayoutInflater.from(context).inflate(R.layout.libvideo_view_control_volume_bright, this, true)
-        iv_volume_bright.setImageResource(R.mipmap.libvideo_ic_bright)
+        findViewById<ImageView>(R.id.iv_volume_bright)?.setImageResource(R.mipmap.libvideo_ic_bright)
     }
 
     override fun show(changePercent: Float) {
@@ -49,7 +50,7 @@ class BrightControllerView: FrameLayout, IControllerGesture {
                 val lp = attributes
                 lp.screenBrightness = newBrightness
                 attributes = lp
-                progress_volume_bright.progress = (newBrightness * 100).toInt()
+                findViewById<ProgressBar>(R.id.progress_volume_bright)?.progress = (newBrightness * 100).toInt()
             }
         }
     }

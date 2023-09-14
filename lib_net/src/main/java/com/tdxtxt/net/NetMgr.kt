@@ -28,6 +28,7 @@ object NetMgr {
         providerMap.put(provider.host(), provider)
     }
 
+    @JvmStatic
     fun getProvider(host: String): NetProvider{
         var provider = providerMap.get(host)
         if(provider == null){

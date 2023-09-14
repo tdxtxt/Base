@@ -38,9 +38,9 @@ ext{
             "rxjava"                 : "io.reactivex.rxjava2:rxjava:2.2.12",
             "rxandroid"              : "io.reactivex.rxjava2:rxandroid:2.1.1",
             /**https://github.com/square/okhttp**/
-            "okhttp"                 : "com.squareup.okhttp3:okhttp:3.11.0",
+            "okhttp"                 : "com.squareup.okhttp3:okhttp:4.11.0",
             /**https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor**/
-            "okhttp-logging"         : "com.squareup.okhttp3:logging-interceptor:3.11.0",
+            "okhttp-logging"         : "com.squareup.okhttp3:logging-interceptor:4.11.0",
             /**https://github.com/square/retrofit**/
             "retrofit"               : "com.squareup.retrofit2:retrofit:2.4.0",
             "retrofit-converter-gson": "com.squareup.retrofit2:converter-gson:2.4.0",

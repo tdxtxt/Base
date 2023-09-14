@@ -2,13 +2,9 @@ package com.tdxtxt.video.player.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.SeekBar
-import androidx.core.content.ContextCompat
-import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerSeekBar
-import kotlinx.android.synthetic.main.libvideo_view_control_wrapper.view.*
 import kotlin.math.max
 
 /**
@@ -61,7 +57,7 @@ class SeekBarControllerView : androidx.appcompat.widget.AppCompatSeekBar , ICont
     }
 
     private fun scrollValueProgress(progress: Int){
-        val percent = progress.toFloat() / seekBar.max.toFloat()
+        val percent = progress.toFloat() / max.toFloat()
         val totalTime = mContainer?.getDuration()?: 0
         val nowTime = (totalTime * percent).toLong()
         mContainer?.seekTo(nowTime)

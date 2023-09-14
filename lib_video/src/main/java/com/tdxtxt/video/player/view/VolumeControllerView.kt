@@ -6,10 +6,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.ProgressBar
 import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerGesture
-import kotlinx.android.synthetic.main.libvideo_view_control_volume_bright.view.*
 
 /**
  * <pre>
@@ -29,7 +30,7 @@ class VolumeControllerView: FrameLayout, IControllerGesture {
     private fun initView(){
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         LayoutInflater.from(context).inflate(R.layout.libvideo_view_control_volume_bright, this, true)
-        iv_volume_bright.setImageResource(R.mipmap.libvideo_ic_volume)
+        findViewById<ImageView>(R.id.iv_volume_bright)?.setImageResource(R.mipmap.libvideo_ic_volume)
     }
 
     override fun show(changePercent: Float) {
@@ -44,11 +45,11 @@ class VolumeControllerView: FrameLayout, IControllerGesture {
         var newVolume = (mStreamVolume + streamMaxVolume * changePercent).toInt()
         if(newVolume < 0) newVolume = 0
         if(newVolume > streamMaxVolume) newVolume = streamMaxVolume
-        iv_volume_bright.setImageResource(if(newVolume == 0) R.mipmap.libvideo_ic_volume_off else R.mipmap.libvideo_ic_volume)
+        findViewById<ImageView>(R.id.iv_volume_bright)?.setImageResource(if(newVolume == 0) R.mipmap.libvideo_ic_volume_off else R.mipmap.libvideo_ic_volume)
         mAudioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, AudioManager.FLAG_PLAY_SOUND)
 
         val progress = if(streamMaxVolume == 0) 0 else (newVolume.toFloat() / streamMaxVolume * 100).toInt()
-        progress_volume_bright.progress = progress
+        findViewById<ProgressBar>(R.id.progress_volume_bright)?.progress = progress
     }
 
     override fun hide() {

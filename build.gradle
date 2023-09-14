@@ -2,9 +2,8 @@
 apply from:"config.gradle"
 
 buildscript {
-    //    TODO AS4.0
-    ext.kotlin_version = '1.4.10'
-//    ext.kotlin_version = '1.3.71'
+    //    TODO AS4.0 https://plugins.jetbrains.com/plugin/6954-kotlin/versions
+    ext.kotlin_version = '1.6.21'
     repositories {
         google()
         jcenter()

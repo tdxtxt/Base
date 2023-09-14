@@ -21,6 +21,8 @@ import kotlinx.android.synthetic.main.libvideo_view_control_wrapper.view.*
  */
 class WrapperControlView : FrameLayout,
     IControllerWrapper {
+
+
     private var mContainer: VideoPlayerView? = null
     private val mDefaultFadeTimeout = 7000L
     private val mFadeRunnable = Runnable { wrapper_menu.visibility = View.GONE }

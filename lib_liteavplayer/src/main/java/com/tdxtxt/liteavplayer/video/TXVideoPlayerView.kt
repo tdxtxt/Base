@@ -18,11 +18,9 @@ import com.tdxtxt.liteavplayer.video.bean.BitrateItem
 import com.tdxtxt.liteavplayer.video.controller.GestureController
 import com.tdxtxt.liteavplayer.video.controller.NetworkController
 import com.tdxtxt.liteavplayer.video.controller.OrientationController
-import com.tdxtxt.liteavplayer.video.controller.PlayErrorController
 import com.tdxtxt.liteavplayer.video.controller.view.*
 import com.tdxtxt.liteavplayer.video.inter.*
 import com.tencent.rtmp.TXVodPlayer
-import kotlinx.android.synthetic.main.liteavlib_view_basic_controller_video.view.*
 
 
 /**
@@ -178,7 +176,7 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
      * 可拖动的最大时长百分段，取值0到1 Control
      */
     override fun setDragMaxPercent(dragMaxPercent: Float?){
-        getBaicView().getSeekBarControllerView().setDragMaxPercent(dragMaxPercent)
+        getBaicView().getSeekBarControllerView()?.setDragMaxPercent(dragMaxPercent)
     }
 
     /**
