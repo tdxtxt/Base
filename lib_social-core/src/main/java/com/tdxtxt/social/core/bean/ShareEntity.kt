@@ -69,7 +69,7 @@ class ShareEntity(val shareObjType: Int): Parcelable {
         const val SHARE_TYPE_TEXT = 0x41   // 分享文字
         const val SHARE_TYPE_IMAGE = 0x42  // 分享图片
         const val SHARE_TYPE_WEB = 0x44    // 分享web
-        const val SHARE_TYPE_MINIPROGRAM = 0x88 //分享小程序
+        const val SHARE_TYPE_MINIPROGRAM = 0x45 //分享小程序
 
         // 分享文字，qq 好友原本不支持，使用intent兼容
         @JvmStatic
@@ -113,7 +113,7 @@ class ShareEntity(val shareObjType: Int): Parcelable {
             return shareMediaObj
         }
 
-        fun checkValid(@Target.ShareTarget loginTarget: Int, entity: ShareEntity?): Pair<Boolean, String?> {
+        fun checkValid(@Target.ShareTarget shareTarget: Int, entity: ShareEntity?): Pair<Boolean, String?> {
             if(entity == null) return Pair(false, "entity == null")
             when (entity.shareObjType){
                 SHARE_TYPE_TEXT -> {

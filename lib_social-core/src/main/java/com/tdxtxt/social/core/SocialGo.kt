@@ -264,6 +264,7 @@ object SocialGo {
         mLoginListener = null
         mPayListener = null
         mShareListener = null
+        SocialThreadUtils.cancel(SocialThreadUtils.getSinglePool())
         if (!activity.isFinishing) {
             activity.finish()
         }

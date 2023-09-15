@@ -2,27 +2,26 @@ package com.tdxtxt.base
 
 import android.content.Intent
 import android.graphics.Color
+import com.tdxtxt.base.databinding.ActivityMainBinding
 import com.tdxtxt.base.net.AppRepository
 import com.tdxtxt.base.net.data.BaseResponse
 import com.tdxtxt.base.net.observer.BaseObserverNetapi
-import com.tdxtxt.baselib.dialog.impl.CommDialog
 import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
 import com.tdxtxt.pickerview.dataset.OptionDataSet
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
-
-    override fun getLayoutResId() = R.layout.activity_main
+    private val viewbinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    override fun createViewBinding() = viewbinding
 
     override fun initUi() {
         getStateView(R.id.iv_image)
-        ImageLoader.loadImageCircle(iv_image, "https://n.sinaimg.cn/tech/transform/346/w179h167/20220119/090c-d3cbde60cd5d0eac46025e8c740c9e90.gif", 2f, Color.BLUE)
+        ImageLoader.loadImageCircle(viewbinding.ivImage, "https://n.sinaimg.cn/tech/transform/346/w179h167/20220119/090c-d3cbde60cd5d0eac46025e8c740c9e90.gif", 2f, Color.BLUE)
 
 //        ImageLoader.loadImageRoundRect(iv_image, "https://img95.699pic.com/photo/50136/1351.jpg_wh300.jpg", 12f)
-        btn_next_1.setOnClickListener {
+        viewbinding.btnNext1.setOnClickListener {
 //            PickerUtils.showTime(fragmentActivity, "选择时间",
 //                TimeUtils.string2Millis("1900-01-06", "yyyy-MM-dd"),
 //                TimeUtils.string2Millis("2024-10-06", "yyyy-MM-dd"),
@@ -34,7 +33,7 @@ class MainActivity : BaseActivity() {
 //            getStateView(R.id.iv_image).showEmpty("哈哈哈哈")
             startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
         }
-        btn_next_2.setOnClickListener {
+        viewbinding.btnNext2.setOnClickListener {
             AppRepository.queryArticleList(1)
                 .delay(3000, TimeUnit.MILLISECONDS)
                 .compose(bindUIThread())
@@ -49,13 +48,13 @@ class MainActivity : BaseActivity() {
 
                 })
         }
-        btn_next_3.setOnClickListener {
+        viewbinding.btnNext3.setOnClickListener {
             startActivity(Intent(this, TXVideoActivity::class.java))
         }
-        btn_next_4.setOnClickListener {
+        viewbinding.btnNext4.setOnClickListener {
             startActivity(Intent(this, TXLiveActivity::class.java))
         }
-        btn_next_5.setOnClickListener {
+        viewbinding.btnNext5.setOnClickListener {
             startActivity(Intent(this, XTabLayoutActivity::class.java))
         }
     }

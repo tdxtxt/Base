@@ -15,7 +15,7 @@ import com.tdxtxt.baselib.tools.lifecycleOwner
  * @传入参数说明： 无
  * @返回参数说明： 无
  */
-class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
+class ProgressDialog(context : FragmentActivity?) : CenterBaseDialog(context) {
     private var tvDesc: TextView? = null
 
     fun setDesc(desc: String?): ProgressDialog = tvDesc?.run { text = desc?: ""; this@ProgressDialog }?: this
@@ -56,7 +56,7 @@ class ProgressDialog(context : FragmentActivity) : CenterBaseDialog(context) {
         }
 
         @JvmStatic
-        fun createProgressDialog(activity: FragmentActivity, desc: String = "加载中...", cancelable: Boolean? = null, outsideCancelable: Boolean? = null): ProgressDialog {
+        fun createProgressDialog(activity: FragmentActivity?, desc: String = "加载中...", cancelable: Boolean? = null, outsideCancelable: Boolean? = null): ProgressDialog {
             return ProgressDialog(activity).apply { setDesc(desc).setCancelable(cancelable?: mGlobalCancelable).setCancelableOnTouchOutside(outsideCancelable?: mGlobalOutsideCancelable) }
         }
     }

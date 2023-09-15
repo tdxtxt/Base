@@ -9,11 +9,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
 import com.tdxtxt.baselib.tools.StatusBarHelper
+import com.tdxtxt.baselib.ui.viewbinding.ViewBindingDelegate
 import com.tdxtxt.baselib.view.viewstate.StateLayout
 import com.trello.rxlifecycle3.LifecycleTransformer
 import com.trello.rxlifecycle3.android.ActivityEvent
@@ -29,6 +31,9 @@ import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
  */
 abstract class BaseActivity : RxAppCompatActivity(), IView {
     protected lateinit var fragmentActivity: FragmentActivity
+    val viewBindingDelegate: ViewBindingDelegate<*>? by lazy {
+        createViewBinding().let { if(it == null) null else ViewBindingDelegate(it) }
+    }
     private var mProgressDialog: ProgressDialog? = null
     protected var autoHideSoftInput = false
     protected var dispatchTouchEventCallBack: ((ev: MotionEvent?) -> Unit)? = null
@@ -40,9 +45,18 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         super.onCreate(savedInstanceState)
         fragmentActivity = this
         parseParams(intent) //解析参数
-        if(getLayoutResId() != 0) setContentView(getLayoutResId())
+        val rootView = viewBindingDelegate?.binding?.root
+        if(rootView != null){
+            setContentView(rootView)
+        }else if(getLayoutResId() != 0){
+            setContentView(getLayoutResId())
+        }
         initStatusBar()
         initUi()
+    }
+
+    open fun createViewBinding(): ViewBinding?{
+        return null
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -50,7 +64,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         parseParams(intent) //解析参数
     }
 
-    abstract fun getLayoutResId(): Int
+    open fun getLayoutResId() = -1
     open fun initUi(){}
     open fun reload(){}
     open fun customConfigSateView(view: View, stateLayout: StateLayout){}
@@ -193,5 +207,6 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         hideProgressBar()
         dispatchTouchEventCallBack = null
         interceptCallBack = null
+        viewBindingDelegate?.binding = null
     }
 }

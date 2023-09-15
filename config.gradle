@@ -1,4 +1,5 @@
 ext{
+    jdkVersion = JavaVersion.VERSION_1_8
     mavenConfig = [
 //            "releasesRepoUrl"  : "https://s01.oss.sonatype.org/content/repositories/releases",
             "releasesRepoUrl"  : "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/",
