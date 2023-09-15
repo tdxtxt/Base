@@ -441,6 +441,10 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
         return mVideoMgr?.isPlaying()?: false
     }
 
+    override fun isPlayComplete(): Boolean {
+        return mVideoMgr?.isPlayComplete()?: false
+    }
+
     override fun seekTo(time: Int) {
         mVideoMgr?.seekTo(time)
     }
@@ -536,7 +540,8 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
 
         if(!isBackgroundPlaying){
             mPauseBeforePlaying = isPlaying()
-            pause()
+            //sdk存在bug：如果已完成状态下暂停会出现拖动进度条后视频播放没有进度的回调
+            if(!isPlayComplete()) pause()
         }
     }
 }

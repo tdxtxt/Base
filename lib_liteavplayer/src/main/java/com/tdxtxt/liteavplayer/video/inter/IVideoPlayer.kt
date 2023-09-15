@@ -63,6 +63,10 @@ interface IVideoPlayer {
     fun isPlaying(): Boolean
 
     /**
+     * 是否播放完成
+     */
+    fun isPlayComplete(): Boolean
+    /**
      * 调整进度
      */
     fun seekTo(time: Int)

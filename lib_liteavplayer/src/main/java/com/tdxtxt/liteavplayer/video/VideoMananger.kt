@@ -202,6 +202,12 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         return getPlayer()?.isPlaying == true
     }
 
+    override fun isPlayComplete(): Boolean {
+        val total = getPlayer()?.duration?: 0f
+        if(total == 0f) return false
+        return (getPlayer()?.currentPlaybackTime?: 0f) >= total
+    }
+
     override fun seekTo(time: Int) {
         getPlayer()?.seek(time)
     }
