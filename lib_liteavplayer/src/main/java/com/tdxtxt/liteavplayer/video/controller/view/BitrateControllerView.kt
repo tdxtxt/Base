@@ -3,6 +3,7 @@ package com.tdxtxt.liteavplayer.video.controller.view
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.tdxtxt.liteavplayer.R
+import com.tdxtxt.liteavplayer.utils.LiteavPlayerUtils
 import com.tdxtxt.liteavplayer.video.TXVideoPlayerView
 import com.tdxtxt.liteavplayer.video.adapter.BitrateAdapter
 import com.tdxtxt.liteavplayer.video.inter.AbsPopupWindowController
@@ -25,6 +26,9 @@ class BitrateControllerView : AbsPopupWindowController(), ScreenChangeLisenter {
             mBitrateAdapter?.setItemClickListenter { position, value ->
                 getPlayerView()?.setBitrate(value)
                 hide()
+                LiteavPlayerUtils.postRunnable({
+                    getPlayerView()?.resume() //延迟恢复播放，sdk设置分辨率不能继续播放
+                }, 300)
             }
             findViewById<RecyclerView>(R.id.bitrate_list)?.adapter = mBitrateAdapter
         }

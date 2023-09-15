@@ -306,7 +306,10 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     override fun setBitrate(bit: BitrateItem?) {
         val index = bit?.index
         if(index != null){
-            getPlayer()?.bitrateIndex = index
+            //由于sdk本身的bug，在无网络情况下设置分辨率导致视频直接不能播放，造成严重问题
+            if(LiteavPlayerUtils.hasNetworkCapability(context)){ //有网络才设置，这里并没有检测是否可以访问互联网，理论上存在漏洞
+                getPlayer()?.bitrateIndex = index
+            }
         }
     }
 
