@@ -5,12 +5,15 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.DeviceUtils
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.core.BottomPopupView
 import com.lxj.xpopup.interfaces.SimpleCallback
 import com.tdxtxt.baselib.tools.lifecycleOwner
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
+import com.tdxtxt.baselib.ui.viewbinding.ViewBindingWrapper
 
 /**
  * 功能描述:
@@ -18,6 +21,7 @@ import com.tdxtxt.baselib.tools.lifecycleOwner
  * @since 2020/7/28
  */
 abstract class BottomBaseDialog(val context: FragmentActivity?) : IBDialog {
+    internal val viewbindingWrapper by lazy { ViewBindingWrapper<ViewBinding>() }
     val dialog: BottomPopupView? by lazy {
         if(context == null) null else
         object : BottomPopupView(context) {
@@ -27,6 +31,12 @@ abstract class BottomBaseDialog(val context: FragmentActivity?) : IBDialog {
             }
             override fun getPopupHeight(): Int {
                 return getDialogHeight()
+            }
+            override fun onCreate() {
+                if(this@BottomBaseDialog is IViewBinding<*>){
+                    setViewBindingRoot(popupImplView)
+                }
+                onCreate(this@BottomBaseDialog)
             }
         }
     }
@@ -43,7 +53,6 @@ abstract class BottomBaseDialog(val context: FragmentActivity?) : IBDialog {
             override fun beforeShow(popupView: BasePopupView?) {
             }
             override fun onCreated(popupView: BasePopupView?) {
-                onCreate(this@BottomBaseDialog)
             }
             override fun beforeDismiss(popupView: BasePopupView?) {
             }

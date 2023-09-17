@@ -1,12 +1,13 @@
 package com.tdxtxt.base.fragment
 
 import android.util.Pair
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.tdxtxt.base.R
+import com.tdxtxt.base.databinding.FragmentTablayoutRecyclerBinding
 import com.tdxtxt.baselib.adapter.viewpager.ViewPage2FixAdapter
 import com.tdxtxt.baselib.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_tablayout_recycler.*
-import java.util.*
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 
 
 /**
@@ -16,8 +17,12 @@ import java.util.*
  *     desc   :
  * </pre>
  */
-class RecyclerViewTabLayoutFragment : BaseFragment() {
+class RecyclerViewTabLayoutFragment : BaseFragment(),
+    IViewBinding<FragmentTablayoutRecyclerBinding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_recycler
+    override fun viewbind(rootView: View): FragmentTablayoutRecyclerBinding {
+        return FragmentTablayoutRecyclerBinding.bind(rootView)
+    }
 
     override fun initUi() {
         val fragments: MutableList<Pair<String, Fragment>> = ArrayList()
@@ -27,8 +32,10 @@ class RecyclerViewTabLayoutFragment : BaseFragment() {
         fragments.add(Pair("职业素养", TestFragment()))
 
         val adapter = ViewPage2FixAdapter(fragmentActivity, fragments)
-        recyclerView.adapter = adapter
-        tabLayout.setRecyclerView(recyclerView, adapter.pageTitles)
+        viewbinding().recyclerView.adapter = adapter
+        viewbinding().tabLayout.setRecyclerView(viewbinding().recyclerView, adapter.pageTitles)
 
     }
+
+
 }

@@ -11,11 +11,14 @@ import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
+import com.tdxtxt.baselib.ui.viewbinding.ViewBindingWrapper
 import com.tdxtxt.baselib.view.titlebar.OnTitleBarListener
 import com.tdxtxt.baselib.view.titlebar.TitleBar
 import com.tdxtxt.baselib.view.viewstate.StateLayout
@@ -27,16 +30,15 @@ abstract class BaseFragment : RxFragment(), IView {
     open var fragmentActivity: FragmentActivity? = null
     protected lateinit var mRootView: View
     private var mContainer: ViewGroup? = null
-    //    private var unbinder: Unbinder? = null
-//    private var stateLayout: StateLayout? = null
     private var stateLayouts = SparseArray<StateLayout>()
     private var mProgressDialog: ProgressDialog? = null
     private var mTitleBar: TitleBar? = null
     private var realMenuCallBack: MenuCallBack? = null
     protected var interceptBackEvent = false
     protected var interceptCallBack: (() -> Unit)? = null
+    internal val viewbindingWrapper by lazy { ViewBindingWrapper<ViewBinding>() }
 
-    protected abstract fun getLayoutId(): Int
+    open fun getLayoutId(): Int = 0
     /**
      * 布局中TitleBar控件id默认R.id.titlebar，若自定义id，需要重写此方法
      */
@@ -62,10 +64,17 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mContainer = container
+//        if(this is IViewBindingFragment<*>){
+//            mRootView = createViewBindingRoot(inflater, container, false)
+//        }else{
+//            mRootView = inflater.inflate(getLayoutId(), container, false)
+//        }
         mRootView = inflater.inflate(getLayoutId(), container, false)
+        if(this is IViewBinding<*>){
+            setViewBindingRoot(mRootView)
+        }
         mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
-//        unbinder = ButterKnife.bind(this, mRootView)
-        return mRootView //initStateView().apply { stateLayout = this }
+        return mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -158,8 +167,17 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        getProgressBar()?.dismiss()
-        stateLayouts.clear();
+        hideProgressBar()
+        stateLayouts.clear()
+        if(this is IViewBinding<*>){
+            destory()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        interceptCallBack = null
+        realMenuCallBack = null
     }
 
     fun <T : Activity> getParentActivity() : T?{
@@ -224,10 +242,7 @@ abstract class BaseFragment : RxFragment(), IView {
     /**
      * 拦截返回事件
      */
-    fun setInterceptBackEvent(
-        interceptBackEvent: Boolean,
-        interceptCallBack: (() -> Unit)? = null
-    ) {
+    fun setInterceptBackEvent(interceptBackEvent: Boolean, interceptCallBack: (() -> Unit)? = null) {
         this.interceptBackEvent = interceptBackEvent
         this.interceptCallBack = interceptCallBack
     }
@@ -240,6 +255,9 @@ abstract class BaseFragment : RxFragment(), IView {
         return mTitleBar
     }
 
+    /**
+     * 添加到fragment层：仅支持父布局为 FrameLayout ConstraintLayout RelativeLayout的视图
+     */
     fun addContentViewToFragment(view: View){
         if(view.parent != null) return
         if(mRootView is FrameLayout){
@@ -266,6 +284,9 @@ abstract class BaseFragment : RxFragment(), IView {
         }
     }
 
+    /**
+     * 添加到activity层：仅支持父布局为 FrameLayout ConstraintLayout RelativeLayout的视图
+     */
     fun addContentViewToParent(view: View){
         if(view.parent != null) return
         if(mContainer is FrameLayout){

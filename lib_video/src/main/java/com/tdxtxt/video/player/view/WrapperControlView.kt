@@ -10,7 +10,6 @@ import com.tdxtxt.video.R
 import com.tdxtxt.video.player.VideoPlayerView
 import com.tdxtxt.video.player.controller.IControllerWrapper
 import com.tdxtxt.video.utils.PlayerUtils
-import kotlinx.android.synthetic.main.libvideo_view_control_wrapper.view.*
 
 /**
  * <pre>

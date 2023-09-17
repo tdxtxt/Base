@@ -15,8 +15,4 @@ interface IView {
     fun <T> bindUIThread(): UIThreadTransformer<T>
     fun <T> bindProgress(): ProgressTransformer<T>
     fun <T> bindProgress(bindDialog: Boolean): ProgressTransformer<T>
-//    fun showLoadingView()
-//    fun showContentView()
-//    fun showEmptyView()
-//    fun showErrorView(e: Throwable)
 }

@@ -5,12 +5,15 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentActivity
+import androidx.viewbinding.ViewBinding
 import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import com.lxj.xpopup.core.CenterPopupView
 import com.lxj.xpopup.interfaces.SimpleCallback
 import com.lxj.xpopup.util.XPopupUtils
 import com.tdxtxt.baselib.tools.lifecycleOwner
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
+import com.tdxtxt.baselib.ui.viewbinding.ViewBindingWrapper
 
 /**
  * 功能描述:
@@ -18,6 +21,7 @@ import com.tdxtxt.baselib.tools.lifecycleOwner
  * @since 2020/7/27
  */
 abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IBDialog {
+    internal val viewbindingWrapper by lazy { ViewBindingWrapper<ViewBinding>() }
     val dialog: CenterPopupView? by lazy {
         if(context == null) null else
         object : CenterPopupView(context){
@@ -28,6 +32,12 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IB
             override fun getPopupHeight(): Int {
                 return getDialogHeight()
             }
+            override fun onCreate() {
+                if(this@CenterBaseDialog is IViewBinding<*>){
+                    setViewBindingRoot(popupImplView)
+                }
+                onCreate(this@CenterBaseDialog)
+            }
         }
     }
     val builder: XPopup.Builder? by lazy {
@@ -37,11 +47,13 @@ abstract class CenterBaseDialog constructor(val context: FragmentActivity?) : IB
 
             override fun onDismiss(popupView: BasePopupView?) {
                 mCancelListener?.invoke()
+                if(this@CenterBaseDialog is IViewBinding<*>){
+                    dismiss()
+                }
             }
             override fun beforeShow(popupView: BasePopupView?) {
             }
             override fun onCreated(popupView: BasePopupView?) {
-                onCreate(this@CenterBaseDialog)
             }
             override fun beforeDismiss(popupView: BasePopupView?) {
             }

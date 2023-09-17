@@ -60,7 +60,6 @@ dependencies {
 
     implementation project(':lib_common')
     implementation project(':lib_net')
-    implementation project(':lib_video')
     implementation project(":lib_liteavplayer")
     implementation project(':lib_pickerview')
     implementation project(':lib_linkedview')

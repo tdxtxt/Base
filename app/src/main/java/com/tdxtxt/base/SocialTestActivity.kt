@@ -3,8 +3,10 @@ package com.tdxtxt.base
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.View
+import com.tdxtxt.base.databinding.ActivitySocialTestBinding
 import com.tdxtxt.baselib.tools.ToastHelper
 import com.tdxtxt.baselib.ui.BaseActivity
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 import com.tdxtxt.social.core.SocialGo
 import com.tdxtxt.social.core.bean.AuthInfo
 import com.tdxtxt.social.core.bean.ShareEntity
@@ -12,9 +14,11 @@ import com.tdxtxt.social.core.lisenter.OnLoginListener
 import com.tdxtxt.social.core.lisenter.OnPayListener
 import com.tdxtxt.social.core.lisenter.OnShareListener
 import com.tdxtxt.social.core.platform.Target
-import kotlinx.android.synthetic.main.activity_social_test.*
 
-class SocialTestActivity : BaseActivity() {
+class SocialTestActivity : BaseActivity(), IViewBinding<ActivitySocialTestBinding> {
+    override fun viewbind(rootView: View): ActivitySocialTestBinding {
+        return ActivitySocialTestBinding.bind(rootView)
+    }
 
     override fun getLayoutResId() = R.layout.activity_social_test
 
@@ -31,13 +35,13 @@ class SocialTestActivity : BaseActivity() {
 
 
     private fun initView() {
-        tvConsole.movementMethod = ScrollingMovementMethod.getInstance()
-        rbTypeText.isChecked = true
-        rbPlatformQQ.isChecked = true
+        viewbinding().tvConsole.movementMethod = ScrollingMovementMethod.getInstance()
+        viewbinding().rbTypeText.isChecked = true
+        viewbinding().rbPlatformQQ.isChecked = true
     }
 
     private fun initEvent() {
-        containerType.setOnCheckedChangeListener { _, checkedId ->
+        viewbinding().containerType.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbTypeText -> {
                     shareMedia = ShareEntity.buildTextObj("我是文字分享的标题", "我是文字分享的内容")
@@ -55,7 +59,7 @@ class SocialTestActivity : BaseActivity() {
             }
         }
 
-        containerPlatform.setOnCheckedChangeListener { _, checkedId ->
+        viewbinding().containerPlatform.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbPlatformQQ -> platformType = Target.SHARE_QQ_FRIENDS
                 R.id.rbPlatformQzon -> platformType = Target.SHARE_QQ_ZONE
