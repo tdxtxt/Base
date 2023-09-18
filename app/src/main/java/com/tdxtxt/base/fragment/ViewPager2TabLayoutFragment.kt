@@ -1,13 +1,14 @@
 package com.tdxtxt.base.fragment
 
 import android.util.Pair
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.tdxtxt.base.R
+import com.tdxtxt.base.databinding.FragmentTablayoutViewpager2Binding
 import com.tdxtxt.baselib.adapter.viewpager.ViewPager2Adapter
 import com.tdxtxt.baselib.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_tablayout_viewpager2.*
-import java.util.*
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 
 /**
  * <pre>
@@ -16,19 +17,22 @@ import java.util.*
  *     desc   :
  * </pre>
  */
-class ViewPager2TabLayoutFragment : BaseFragment() {
+class ViewPager2TabLayoutFragment : BaseFragment(), IViewBinding<FragmentTablayoutViewpager2Binding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_viewpager2
+    override fun viewbind(rootView: View): FragmentTablayoutViewpager2Binding {
+        return FragmentTablayoutViewpager2Binding.bind(rootView)
+    }
 
     override fun initUi() {
-        viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+        viewbinding().viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
         val fragments: MutableList<Pair<String, Fragment>> = ArrayList()
         fragments.add(Pair("推荐", TestFragment()))
         fragments.add(Pair("创新与变革", TestFragment()))
         fragments.add(Pair("职业素养", TestFragment()))
 
         val adapter = ViewPager2Adapter(fragmentActivity, fragments)
-        viewPager.adapter = adapter
-        tabLayout.setViewPager2(viewPager, adapter.getPageTitles())
+        viewbinding().viewPager.adapter = adapter
+        viewbinding().tabLayout.setViewPager2(viewbinding().viewPager, adapter.getPageTitles())
     }
 
 }

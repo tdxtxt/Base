@@ -1,7 +1,9 @@
 package com.tdxtxt.base
 
 import android.util.Pair
+import android.view.View
 import androidx.fragment.app.Fragment
+import com.tdxtxt.base.databinding.ActivityTablayoutXBinding
 import com.tdxtxt.base.fragment.RecyclerViewTabLayoutFragment
 import com.tdxtxt.base.fragment.ViewPager2TabLayoutFragment
 import com.tdxtxt.base.fragment.YTabLayoutFragment
@@ -9,8 +11,7 @@ import com.tdxtxt.base.fragment.YTabLayoutFragment2
 import com.tdxtxt.baselib.adapter.viewpager.ViewPagerAdapter
 import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.ui.BaseActivity
-import kotlinx.android.synthetic.main.activity_tablayout_x.*
-import java.util.*
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 
 /**
  * <pre>
@@ -19,9 +20,11 @@ import java.util.*
  *     desc   :
  * </pre>
  */
-class XTabLayoutActivity : BaseActivity() {
+class XTabLayoutActivity : BaseActivity(), IViewBinding<ActivityTablayoutXBinding> {
     override fun getLayoutResId() = R.layout.activity_tablayout_x
-
+    override fun viewbind(rootView: View): ActivityTablayoutXBinding {
+        return ActivityTablayoutXBinding.bind(rootView)
+    }
     override fun initStatusBar() {
         StatusBarHelper.setLightMode(this)
     }
@@ -52,8 +55,8 @@ class XTabLayoutActivity : BaseActivity() {
 //        fragments.add(Pair("其他", YTabLayoutFragment()))
 //        fragments.add(Pair("222222222222222222", YTabLayoutFragment()))
 
-        viewPager.adapter = ViewPagerAdapter(supportFragmentManager, fragments)
-        tabLayout.setViewPager(viewPager)
+        viewbinding().viewPager.adapter = ViewPagerAdapter(supportFragmentManager, fragments)
+        viewbinding().tabLayout.setViewPager(viewbinding().viewPager)
     }
 
 

@@ -1,12 +1,13 @@
 package com.tdxtxt.base.fragment
 
 import android.util.Pair
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.tdxtxt.base.R
+import com.tdxtxt.base.databinding.FragmentTablayoutYBinding
 import com.tdxtxt.baselib.adapter.viewpager.ViewPagerAdapter
 import com.tdxtxt.baselib.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_tablayout_y.*
-import java.util.*
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 
 /**
  * <pre>
@@ -15,9 +16,11 @@ import java.util.*
  *     desc   :
  * </pre>
  */
-class YTabLayoutFragment : BaseFragment() {
+class YTabLayoutFragment : BaseFragment(), IViewBinding<FragmentTablayoutYBinding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_y
-
+    override fun viewbind(rootView: View): FragmentTablayoutYBinding {
+        return FragmentTablayoutYBinding.bind(rootView)
+    }
     override fun initUi() {
         val fragments: MutableList<Pair<String, Fragment>> = ArrayList()
         fragments.add(Pair("推荐", TestFragment()))
@@ -42,8 +45,8 @@ class YTabLayoutFragment : BaseFragment() {
         fragments.add(Pair("其他", TestFragment()))
         fragments.add(Pair("222222222222222222", TestFragment()))
 
-        viewPager.adapter = ViewPagerAdapter(childFragmentManager, fragments)
-        tabLayout.setViewPager(viewPager)
-        viewPager.setCurrentItem(22)
+        viewbinding().viewPager.adapter = ViewPagerAdapter(childFragmentManager, fragments)
+        viewbinding().tabLayout.setViewPager(viewbinding().viewPager)
+        viewbinding().viewPager.setCurrentItem(22)
     }
 }

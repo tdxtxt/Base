@@ -1,9 +1,11 @@
 package com.tdxtxt.base
 
+import android.view.View
+import com.tdxtxt.base.databinding.ActivityTxliveTestBinding
 import com.tdxtxt.baselib.tools.StatusBarHelper
 import com.tdxtxt.baselib.ui.CommToolBarActivity
+import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 import com.tdxtxt.liteavplayer.LiteAVManager
-import kotlinx.android.synthetic.main.activity_txlive_test.*
 
 /**
  * <pre>
@@ -12,7 +14,10 @@ import kotlinx.android.synthetic.main.activity_txlive_test.*
  *     desc   :
  * </pre>
  */
-class TXLiveActivity : CommToolBarActivity() {
+class TXLiveActivity : CommToolBarActivity(), IViewBinding<ActivityTxliveTestBinding> {
+    override fun viewbind(rootView: View): ActivityTxliveTestBinding {
+        return ActivityTxliveTestBinding.bind(rootView)
+    }
     override fun getLayoutResId() = R.layout.activity_txlive_test
 
     override fun initStatusBar() {
@@ -20,15 +25,15 @@ class TXLiveActivity : CommToolBarActivity() {
     }
 
     override fun initUi() {
-        livePlayer.setLiveManager(LiteAVManager.getLiveManage())
+        viewbinding().livePlayer.setLiveManager(LiteAVManager.getLiveManage())
 //        livePlayer.setLiveSource("rtmp://liteavapp.qcloud.com/live/liteavdemoplayerstreamid")
 //        livePlayer.setLiveSource("webrtc://liteavapp.qcloud.com/live/liteavdemoplayerstreamid")
 //        livePlayer.setLiveSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.flv")
-        livePlayer.setLiveSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.m3u8")
+        viewbinding().livePlayer.setLiveSource("http://liteavapp.qcloud.com/live/liteavdemoplayerstreamid.m3u8")
     }
 
     override fun onBackPressed() {
-        if(livePlayer.onBackPressed()){
+        if(viewbinding().livePlayer.onBackPressed()){
             super.onBackPressed()
         }
     }
