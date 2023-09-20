@@ -3,4 +3,5 @@
     <item name="tag_watcher_listener" type="id"/>
     <item name="titlebar" type="id"/>
     <item name="webview_video" type="id"/>
+    <item name="tag_viewbinding" type="id"/>
 </resources>
