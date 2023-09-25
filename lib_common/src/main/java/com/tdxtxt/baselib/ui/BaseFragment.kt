@@ -81,8 +81,8 @@ abstract class BaseFragment : RxFragment(), IView {
         initUi()
     }
 
-    fun <T : View> findView(resId: Int): T {
-        return mRootView.findViewById<View>(resId) as T
+    fun <T : View> findView(resId: Int): T? {
+        return mRootView.findViewById<View>(resId) as T?
     }
 
     fun getStateView(resId: Int) : StateLayout{

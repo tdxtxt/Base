@@ -112,7 +112,7 @@ implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
 
 ```
 <activity
-     android:name="{packageName}.wxapi.WXEntryActivity"
+     android:name="{packageName}.WXEntryActivity"
      android:exported="true"
      android:launchMode="singleTask" />
 
@@ -126,14 +126,7 @@ implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.8.0'
      android:targetActivity="{packageName}.wxapi.WXEntryActivity" />
 ```
 ```kotiln
-class WXEntryActivity : BaseActionActivity(), IWXAPIEventHandler {
-    override fun onResp(resp: BaseResp) {
-        handleResp(resp)
-    }
-    override fun onReq(req: BaseReq?) {
-        handleReq(req)
-    }
-}
+class WXEntryActivity : class WXEntryActivity : WxActionActivity()
 ```
 * 分享
 ```kotlin

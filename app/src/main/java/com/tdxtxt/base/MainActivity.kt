@@ -36,8 +36,8 @@ class MainActivity : BaseActivity(), IViewBinding<ActivityMainBinding> {
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
 //            getStateView(R.id.iv_image).showEmpty("哈哈哈哈")
-//            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
-            TestDialog(fragmentActivity).show()
+            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
+//            TestDialog(fragmentActivity).show()
         }
         viewbinding().btnNext2.setOnClickListener {
             AppRepository.queryArticleList(1)

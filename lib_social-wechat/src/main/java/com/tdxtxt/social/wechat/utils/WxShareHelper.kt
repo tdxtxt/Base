@@ -12,7 +12,13 @@ import com.tdxtxt.social.core.platform.IShareAction
 import com.tdxtxt.social.core.platform.Target
 import com.tdxtxt.social.core.utils.SocialThreadUtils
 import com.tdxtxt.social.core.utils.SocialUtils
-import com.tencent.mm.opensdk.modelmsg.*
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
+import com.tencent.mm.opensdk.modelmsg.WXEmojiObject
+import com.tencent.mm.opensdk.modelmsg.WXImageObject
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject
+import com.tencent.mm.opensdk.modelmsg.WXTextObject
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import java.io.File
 
@@ -131,11 +137,16 @@ class WxShareHelper(private val wxApi: IWXAPI) : IShareAction, Recyclable {
 
     private fun getFilePath(context: Context?, path: String): String {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && context != null) {
-            //要与`AndroidManifest.xml`里配置的`authorities`一致，假设你的应用包名为com.example.app
-            val uri = FileProvider.getUriForFile(context, context.packageName + ".fileprovider", File(path))
-            //授权给微信访问路径
-            context.grantUriPermission("com.tencent.mm", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            return uri.toString()
+            try{
+                //要与`AndroidManifest.xml`里配置的`authorities`一致，假设你的应用包名为com.example.app
+                val uri = FileProvider.getUriForFile(context, context.packageName + ".fileprovider", File(path))
+                //授权给微信访问路径
+                context.grantUriPermission("com.tencent.mm", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                return uri.toString()
+            }catch (e: Exception){
+                mListener?.printLog("AndroidManifest未配置{applicationId}.fileprovider")
+            }
+            return path
         }else{
             return path
         }

@@ -148,12 +148,12 @@
             <com.tdxtxt.liteavplayer.video.controller.view.SeekBarControllerView
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
+                android:layout_height="18dp"
                 android:paddingStart="6dp"
                 android:paddingEnd="6dp"
                 android:background="@android:color/transparent"
                 android:max="1000"
-                android:maxHeight="2dp"
+                android:maxHeight="4dp"
                 android:progressDrawable="@drawable/liteavlib_seekbar"
                 tools:secondaryProgress="800"
                 android:thumb="@mipmap/liteavlib_ic_seekbar_thumb"
@@ -166,7 +166,7 @@
                 android:orientation="horizontal"
                 android:paddingHorizontal="12dp"
                 android:paddingBottom="12dp"
-                android:paddingTop="6dp">
+                android:paddingTop="2dp">
 
                 <FrameLayout
                     android:layout_width="wrap_content"
