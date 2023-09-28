@@ -20,7 +20,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 class RecyclerViewTabLayoutFragment : BaseFragment(),
     IViewBinding<FragmentTablayoutRecyclerBinding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_recycler
-    override fun viewbind(rootView: View): FragmentTablayoutRecyclerBinding {
+    override fun view2Binding(rootView: View): FragmentTablayoutRecyclerBinding {
         return FragmentTablayoutRecyclerBinding.bind(rootView)
     }
 

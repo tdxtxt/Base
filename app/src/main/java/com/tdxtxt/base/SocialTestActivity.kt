@@ -16,7 +16,7 @@ import com.tdxtxt.social.core.lisenter.OnShareListener
 import com.tdxtxt.social.core.platform.Target
 
 class SocialTestActivity : BaseActivity(), IViewBinding<ActivitySocialTestBinding> {
-    override fun viewbind(rootView: View): ActivitySocialTestBinding {
+    override fun view2Binding(rootView: View): ActivitySocialTestBinding {
         return ActivitySocialTestBinding.bind(rootView)
     }
 

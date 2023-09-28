@@ -1,7 +1,7 @@
 package com.tdxtxt.net.observer
 
-import com.tdxtxt.net.model.AbsResponse
 import com.tdxtxt.net.NetMgr
+import com.tdxtxt.net.model.AbsResponse
 import io.reactivex.observers.DisposableObserver
 
 /**
@@ -21,6 +21,13 @@ abstract class AbsObserverNetapiResponse <R : AbsResponse> : DisposableObserver<
      */
     abstract fun onFailure(errorCode: Int?, errorMsg: String?, errorBody: Any?)
 
+    /**
+     * @return true 使用NetProvider.handleError方法处理错误; false 不使用NetProvider.handleError方法处理错误
+     */
+    open fun useProviderHandleError(errorCode: Int?, errorMsg: String?, errorBody: Any?): Boolean {
+        return true
+    }
+
     override fun onNext(response: R) {
         if(filter(response)){
             onSuccess(response)
@@ -37,7 +44,7 @@ abstract class AbsObserverNetapiResponse <R : AbsResponse> : DisposableObserver<
         val code = provider.throwable2Code(e)
         val data = provider.throwable2Response(e)
         val errorBody = provider.throwable2ErrorBody(e)
-        provider.handleError(data, code, message)
+        if(useProviderHandleError(code, message, errorBody)) provider.handleError(data, code, message)
         onFailure(code, message, errorBody)
         onComplete()
     }

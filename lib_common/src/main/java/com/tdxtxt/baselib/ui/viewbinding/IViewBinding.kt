@@ -18,20 +18,20 @@ import com.tdxtxt.baselib.ui.BaseFragment
  * </pre>
  */
 interface IViewBinding<T: ViewBinding> {
-    fun viewbind(rootView: View): T
+    fun view2Binding(rootView: View): T
 
     fun setViewBindingRoot(rootView: View) {
         if(this is BaseActivity){
-            viewbindingWrapper.viewbinding = viewbind(rootView)
+            viewbindingWrapper.viewbinding = view2Binding(rootView)
         }else if(this is BaseFragment){
-            viewbindingWrapper.viewbinding = viewbind(rootView)
+            viewbindingWrapper.viewbinding = view2Binding(rootView)
         }else if(this is BottomBaseDialog){
-            viewbindingWrapper.viewbinding = viewbind(rootView)
+            viewbindingWrapper.viewbinding = view2Binding(rootView)
         }else if(this is CenterBaseDialog){
-            viewbindingWrapper.viewbinding = viewbind(rootView)
+            viewbindingWrapper.viewbinding = view2Binding(rootView)
         }else if(this is View){
             if(viewbindingWrapper == null) viewbindingWrapper = ViewBindingWrapper()
-            viewbindingWrapper?.viewbinding = viewbind(rootView)
+            viewbindingWrapper?.viewbinding = view2Binding(rootView)
         }else{
             throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View的子类")
         }

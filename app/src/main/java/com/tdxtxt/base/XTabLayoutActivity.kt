@@ -22,7 +22,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
  */
 class XTabLayoutActivity : BaseActivity(), IViewBinding<ActivityTablayoutXBinding> {
     override fun getLayoutResId() = R.layout.activity_tablayout_x
-    override fun viewbind(rootView: View): ActivityTablayoutXBinding {
+    override fun view2Binding(rootView: View): ActivityTablayoutXBinding {
         return ActivityTablayoutXBinding.bind(rootView)
     }
     override fun initStatusBar() {

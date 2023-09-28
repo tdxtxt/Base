@@ -15,7 +15,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
  */
 class WebViewActivity : CommToolBarActivity(), IViewBinding<ActivityWebviewBinding> {
     override fun getLayoutResId() = R.layout.activity_webview
-    override fun viewbind(rootView: View): ActivityWebviewBinding {
+    override fun view2Binding(rootView: View): ActivityWebviewBinding {
         return ActivityWebviewBinding.bind(rootView)
     }
     override fun initUi() {

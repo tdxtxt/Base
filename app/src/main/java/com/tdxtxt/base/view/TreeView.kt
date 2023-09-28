@@ -28,6 +28,6 @@ class TreeView: LinearLayout, IViewBinding<LayoutAppTreeviewBinding> {
         viewbindingOrNull()?.tv1?.text = "TextView1"
         viewbindingOrNull()?.tv2?.text = "TextView2"
     }
-    override fun viewbind(rootView: View) = LayoutAppTreeviewBinding.bind(rootView)
+    override fun view2Binding(rootView: View) = LayoutAppTreeviewBinding.bind(rootView)
 
 }

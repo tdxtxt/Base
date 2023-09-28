@@ -22,6 +22,13 @@ public abstract class AbsObserverNetapi<R> extends DisposableObserver<R>{
 
     public abstract void onSuccess(R response);
 
+    /**
+     * @return true 使用NetProvider.handleError方法处理错误; false 不使用NetProvider.handleError方法处理错误
+     */
+    public boolean useProviderHandleError(int errorCode, String errorMsg, String errorBody){
+        return true;
+    }
+
     @Override
     public void onNext(@NotNull R response) {
         onSuccess(response);
@@ -37,7 +44,7 @@ public abstract class AbsObserverNetapi<R> extends DisposableObserver<R>{
             int code = provider.throwable2Code(e);
             AbsResponse data = provider.throwable2Response(e);
             String errorBody  = provider.throwable2ErrorBody(e);
-            provider.handleError(data, code, message);
+            if(useProviderHandleError(code, message, errorBody)) provider.handleError(data, code, message);
             onFailure(code, message, errorBody);
         }else{
             onFailure(-999, "provider is null", "");

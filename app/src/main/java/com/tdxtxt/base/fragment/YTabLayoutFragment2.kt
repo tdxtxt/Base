@@ -24,7 +24,7 @@ class YTabLayoutFragment2 : BaseFragment(), IViewBinding<FragmentTablayoutY2Bind
         }
     }
     override fun getLayoutId() = R.layout.fragment_tablayout_y2
-    override fun viewbind(rootView: View): FragmentTablayoutY2Binding {
+    override fun view2Binding(rootView: View): FragmentTablayoutY2Binding {
         return FragmentTablayoutY2Binding.bind(rootView)
     }
     override fun initUi() {

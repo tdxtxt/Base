@@ -17,7 +17,7 @@ import com.tencent.rtmp.TXVodConstants
  */
 class TXLiveHTSActivity : BaseActivity(), IViewBinding<ActivityTxliveTestHtsBinding> {
     override fun getLayoutResId() = R.layout.activity_txlive_test_hts
-    override fun viewbind(rootView: View): ActivityTxliveTestHtsBinding {
+    override fun view2Binding(rootView: View): ActivityTxliveTestHtsBinding {
         return ActivityTxliveTestHtsBinding.bind(rootView)
     }
     override fun initStatusBar() {

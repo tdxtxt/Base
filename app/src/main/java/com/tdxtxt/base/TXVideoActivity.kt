@@ -20,7 +20,7 @@ import com.tdxtxt.liteavplayer.LiteAVManager
  */
 class TXVideoActivity : BaseActivity(), IViewBinding<ActivityTxvideoTestBinding> {
     override fun getLayoutResId() = R.layout.activity_txvideo_test
-    override fun viewbind(rootView: View): ActivityTxvideoTestBinding {
+    override fun view2Binding(rootView: View): ActivityTxvideoTestBinding {
         return ActivityTxvideoTestBinding.bind(rootView)
     }
     override fun initStatusBar() {

@@ -18,7 +18,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
  */
 class YTabLayoutFragment : BaseFragment(), IViewBinding<FragmentTablayoutYBinding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_y
-    override fun viewbind(rootView: View): FragmentTablayoutYBinding {
+    override fun view2Binding(rootView: View): FragmentTablayoutYBinding {
         return FragmentTablayoutYBinding.bind(rootView)
     }
     override fun initUi() {

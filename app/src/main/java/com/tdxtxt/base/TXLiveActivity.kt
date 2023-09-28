@@ -15,7 +15,7 @@ import com.tdxtxt.liteavplayer.LiteAVManager
  * </pre>
  */
 class TXLiveActivity : CommToolBarActivity(), IViewBinding<ActivityTxliveTestBinding> {
-    override fun viewbind(rootView: View): ActivityTxliveTestBinding {
+    override fun view2Binding(rootView: View): ActivityTxliveTestBinding {
         return ActivityTxliveTestBinding.bind(rootView)
     }
     override fun getLayoutResId() = R.layout.activity_txlive_test

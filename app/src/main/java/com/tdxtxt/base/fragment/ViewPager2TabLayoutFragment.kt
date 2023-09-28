@@ -19,7 +19,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
  */
 class ViewPager2TabLayoutFragment : BaseFragment(), IViewBinding<FragmentTablayoutViewpager2Binding> {
     override fun getLayoutId() = R.layout.fragment_tablayout_viewpager2
-    override fun viewbind(rootView: View): FragmentTablayoutViewpager2Binding {
+    override fun view2Binding(rootView: View): FragmentTablayoutViewpager2Binding {
         return FragmentTablayoutViewpager2Binding.bind(rootView)
     }
 

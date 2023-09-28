@@ -19,7 +19,7 @@ import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
  */
 class TestDialog(activity: FragmentActivity?) : CenterBaseDialog(activity), IViewBinding<DialogAppTestBinding> {
     override fun getLayoutId() = R.layout.dialog_app_test
-    override fun viewbind(rootView: View): DialogAppTestBinding {
+    override fun view2Binding(rootView: View): DialogAppTestBinding {
         return DialogAppTestBinding.bind(rootView)
     }
     override fun onCreate(dialog: IBDialog) {
