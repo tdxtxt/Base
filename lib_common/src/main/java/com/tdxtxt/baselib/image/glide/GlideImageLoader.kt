@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory
 import com.tdxtxt.baselib.image.ILoader
 import com.tdxtxt.baselib.image.ImageLoader
+import com.tdxtxt.baselib.image.transform.SquareScaleCircleCropTransformation
 import jp.wasabeef.glide.transformations.CropCircleWithBorderTransformation
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import java.io.File
@@ -94,15 +95,17 @@ object GlideImageLoader : ILoader {
         loadImageCircle(view, url, ImageLoader.placeholderResId)
     }
 
-    override fun loadImageCircle(view: ImageView?, url: String?, placeholderResId: Int) {
+    override fun loadImageCircle(view: ImageView?, url: String?, placeholderResId: Int, centerCrop: Boolean) {
         if (view == null) return
         if(isDestory(view.context)) return
+
 
         val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .placeholder(placeholderResId)
             .error(placeholderResId)
-            .circleCrop()
+
+        val result = if (centerCrop) options.circleCrop() else options.transform(SquareScaleCircleCropTransformation())
 
         if(url?.startsWith("http") == true || url?.startsWith("file:///android_asset") == true){
             Glide.with(view.context).load(url).apply(options).into(view)

@@ -24,7 +24,7 @@ interface ILoader {
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float)
     fun loadImageRoundRect(view: ImageView?, url: String?, radiusdp: Float, @DrawableRes placeholderResId: Int)
     fun loadImageCircle(view: ImageView?, url: String?)
-    fun loadImageCircle(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int)
+    fun loadImageCircle(view: ImageView?, url: String?, @DrawableRes placeholderResId: Int, centerCrop: Boolean = true)
     fun loadImageCircle(view: ImageView?, url: String?, borderWidthDp: Float, @ColorInt borderColor: Int)
     fun loadImageCircle(view: ImageView?, url: String?, borderWidthDp: Float, @ColorInt borderColor: Int, @DrawableRes placeholderResId: Int)
     fun downloadImage(context: Context?, url: String?, callback: (file: File?) -> Unit)
