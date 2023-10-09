@@ -14,15 +14,17 @@ import com.tdxtxt.baselib.ui.BaseFragment
  * <pre>
  *     author : tangdexiang
  *     time   : 2023/9/16
- *     desc   : 支持的基类：BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View，需重写viewbind方法进行绑定视图
- *              自定义View、Dialog中的使用：1.必须在调用viewbinding方法前手动调用setViewBindingRoot(view)；2.不允许使用setTag(R.id.tag_viewbinding, Any)占用ViewBindingWrapper对象保存的坑位
+ *     desc   : 支持的基类：BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View、Dialog
  * </pre>
  */
 interface IViewBinding<T: ViewBinding> {
     fun view2Binding(rootView: View): T
 
     /**
-     * 如果是View或者Dialog，需要自己再初始化方法中手动调用
+     * 基类为 BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog  ➀重写viewbind方法绑定视图
+     * 基类为 View、Dialog   ➀创建方法中调用setViewBindingRoot方法；
+     *                      ➁重写viewbind方法绑定视图；
+     *                      ➂不允许使用setTag(R.id.tag_viewbinding, Any)占用ViewBindingWrapper对象保存的坑位
      */
     fun setViewBindingRoot(rootView: View) {
         if(this is BaseActivity){
@@ -40,7 +42,7 @@ interface IViewBinding<T: ViewBinding> {
             if(viewbindingWrapper == null) viewbindingWrapper = ViewBindingWrapper()
             viewbindingWrapper?.viewbinding = view2Binding(rootView)
         }else{
-            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View的子类")
+            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View、Dialog的子类")
         }
     }
 
@@ -58,7 +60,7 @@ interface IViewBinding<T: ViewBinding> {
         }else if(this is Dialog){
             return viewbindingWrapper?.viewbinding as T
         }else{
-            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View的子类")
+            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View、Dialog的子类")
         }
     }
 
@@ -76,7 +78,7 @@ interface IViewBinding<T: ViewBinding> {
         }else if(this is Dialog){
             return viewbindingWrapper?.viewbinding as T?
         }else{
-            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View的子类")
+            throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View、Dialog的子类")
         }
     }
 
