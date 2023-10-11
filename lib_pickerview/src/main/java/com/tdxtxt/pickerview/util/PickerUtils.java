@@ -102,8 +102,8 @@ public class PickerUtils {
         if(context == null) return;
         TimePicker timePicker = new TimePicker.Builder(context, showType, new TimePicker.OnTimeSelectListener() {
             @Override
-            public void onTimeSelect(TimePicker picker, Date date) {
-                if (listener != null) listener.onClickItem(date);
+            public void onTimeSelect(TimePicker picker, Date... dates) {
+                if (listener != null && dates != null && dates.length > 0) listener.onClickItem(dates[0]);
             }
         }).setFormatter(new TimePicker.Formatter() {
                     @Override

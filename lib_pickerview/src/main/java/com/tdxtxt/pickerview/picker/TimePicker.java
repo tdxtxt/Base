@@ -1,6 +1,8 @@
 package com.tdxtxt.pickerview.picker;
 
 import android.content.Context;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 
 import com.tdxtxt.pickerview.adapter.ArrayWheelAdapter;
@@ -66,6 +68,7 @@ public class TimePicker extends BasePicker
   private Calendar mEndDate;//终止时间
   // 聚合的日期模式
   private int mDayOffset = -1;
+  private boolean isResetRangDate;
 
   private int mStartYear;
   private int mEndYear;
@@ -86,6 +89,7 @@ public class TimePicker extends BasePicker
 
   private Formatter mFormatter;
   private OnTimeSelectListener mOnTimeSelectListener;
+  private OnWheelSelectListener mOnWheelSelectListener;
 
   private TimePicker(Context context, int type, OnTimeSelectListener listener) {
     super(context);
@@ -95,6 +99,10 @@ public class TimePicker extends BasePicker
 
   public void setFormatter(Formatter formatter) {
     mFormatter = formatter;
+  }
+
+  public void setWheelSelectListener(OnWheelSelectListener listener){
+    mOnWheelSelectListener = listener;
   }
 
   /**
@@ -141,6 +149,25 @@ public class TimePicker extends BasePicker
     ignoreSecond(calendar);
     calendar.add(Calendar.MINUTE, getValidTimeOffset(calendar, false));
     this.mEndDate = calendar;
+  }
+
+  public void resetRangDate(long startDate, long endDate){
+    if(startDate > endDate) return;
+    isResetRangDate = true;
+    if(mYearPicker != null) mYearPicker.setAdapter(null);
+    setRangDate(startDate, endDate);
+    reset();
+    isResetRangDate = false;
+  }
+
+  public void resetRangDateAndSelected(long startDate, long endDate, long millis){
+    if(startDate > endDate) return;
+    isResetRangDate = true;
+    if(mYearPicker != null) mYearPicker.setAdapter(null);
+    setRangDate(startDate, endDate);
+    updateSelectedDate(millis);
+    reset();
+    isResetRangDate = false;
   }
 
   /**
@@ -269,6 +296,38 @@ public class TimePicker extends BasePicker
     }
   }
 
+  /**
+   * 设置PM滚轮的显示与隐藏
+   */
+  public void setTimeWheelVisible(boolean visible){
+    if(mTimePicker == null) return;
+    mTimePicker.setVisibility(visible ? View.VISIBLE: View.GONE);
+  }
+
+  /**
+   * 设置日期滚轮的显示与隐藏
+   */
+  public void setDayWheelVisible(boolean visible){
+    if(mDayPicker == null) return;
+    mDayPicker.setVisibility(visible ? View.VISIBLE: View.GONE);
+  }
+
+  /**
+   * 设置月份滚轮的显示与隐藏
+   */
+  public void setMonthWheelVisible(boolean visible){
+    if(mMonthPicker == null) return;
+    mMonthPicker.setVisibility(visible ? View.VISIBLE: View.GONE);
+  }
+
+  /**
+   * 设置年份滚轮的显示与隐藏
+   */
+  public void setYearWheelVisible(boolean visible){
+    if(mYearPicker == null) return;
+    mYearPicker.setVisibility(visible ? View.VISIBLE: View.GONE);
+  }
+
   private void handleData() {
     if (mSelectedDate == null || mSelectedDate.getTimeInMillis() < mStartDate.getTimeInMillis()) {
       updateSelectedDate(mStartDate.getTimeInMillis());
@@ -280,7 +339,7 @@ public class TimePicker extends BasePicker
       mTimeMinuteOffset = 1;
     }
     // 因为区间不能改变，所以这里只进行一次初始化操作
-    if (mDayOffset == -1 || mStartYear == 0) {
+    if (mDayOffset == -1 || mStartYear == 0 || isResetRangDate) {
       if (hasType(TYPE_MIXED_DATE)) {
         mDayOffset = offsetStart(mEndDate);
       } else {
@@ -719,6 +778,11 @@ public class TimePicker extends BasePicker
         resetMinuteAdapter(false);
         break;
     }
+
+    if(mOnWheelSelectListener != null){
+      Date date = getSelectedDates();
+      if (date != null) mOnWheelSelectListener.onWheelSelect(this, date);
+    }
   }
 
   @Override
@@ -726,6 +790,18 @@ public class TimePicker extends BasePicker
     if (mOnTimeSelectListener != null) {
       Date date = getSelectedDates();
       if (date != null) mOnTimeSelectListener.onTimeSelect(this, date);
+    }
+  }
+
+  public void onConfirm(Date date){
+    if (mOnTimeSelectListener != null && date != null) {
+      mOnTimeSelectListener.onTimeSelect(this, date);
+    }
+  }
+
+  public void onConfirm(Date start, Date end){
+    if (mOnTimeSelectListener != null && start != null && end != null) {
+      mOnTimeSelectListener.onTimeSelect(this, start, end);
     }
   }
 
@@ -759,6 +835,8 @@ public class TimePicker extends BasePicker
 
     private Formatter mFormatter;
     private OnTimeSelectListener mOnTimeSelectListener;
+
+    private OnWheelSelectListener mOnWheelSelectListener;
     private Interceptor mInterceptor;
 
     // 时间分钟间隔
@@ -842,6 +920,11 @@ public class TimePicker extends BasePicker
       return this;
     }
 
+    public Builder setWheelSelectListener(OnWheelSelectListener listener) {
+      mOnWheelSelectListener = listener;
+      return this;
+    }
+
     public Builder setInterceptor(Interceptor interceptor) {
       mInterceptor = interceptor;
       return this;
@@ -865,6 +948,7 @@ public class TimePicker extends BasePicker
       picker.iPickerDialog = iPickerDialog;
       picker.initPickerView();
       picker.setInterceptor(mInterceptor);
+      picker.setWheelSelectListener(mOnWheelSelectListener);
       picker.mTimeMinuteOffset = mTimeMinuteOffset;
       picker.mContainsStarDate = mContainsStarDate;
       picker.mContainsEndDate = mContainsEndDate;
@@ -874,7 +958,7 @@ public class TimePicker extends BasePicker
       }
       picker.setFormatter(mFormatter);
       picker.initPicker();
-      if (mSelectedDate == -1) {
+      if (mSelectedDate == -1) { //这里仅判断是否等于-1即可，在1970年之前，mSelectedDate的值就是负数
         picker.reset();
       } else {
         picker.setSelectedDate(mSelectedDate);
@@ -934,9 +1018,17 @@ public class TimePicker extends BasePicker
   public interface OnTimeSelectListener {
     /**
      * 点击确定按钮选择时间后回调
+     * @param dates 选择的时间(段)，如果date数组元素个数为1表示选择的时间点；如果date数组元素为2，分别代码起止时间
+     */
+    void onTimeSelect(TimePicker picker, Date... dates);
+  }
+
+  public interface OnWheelSelectListener {
+    /**
+     * 滚轮滚动停止后选择时间后回调
      *
      * @param date 选择的时间
      */
-    void onTimeSelect(TimePicker picker, Date date);
+    void onWheelSelect(TimePicker picker, Date date);
   }
 }
