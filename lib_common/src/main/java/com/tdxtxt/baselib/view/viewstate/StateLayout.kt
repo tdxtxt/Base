@@ -49,6 +49,19 @@ class StateLayout : FrameLayout {
         mRetryAction = retryAction
     }
 
+    fun configViewAll(loadingView: View? = null, emptyView: View? = null, errorView: View? = null){
+        if(loadingView != null) this.loadingView = loadingView
+        if(emptyView != null) this.emptyView = emptyView
+        if(errorView != null) this.errorView = errorView
+    }
+
+    fun getEmptyView() = emptyView
+    fun getErrorView() = errorView
+    fun getLoadingView() = loadingView
+
+    /**
+     * 默认为居中，但如果想自己偏移相对距离，可调此方法进行手动设置
+     */
     fun configTopPadding(top: Float?){
         if(top == null) topPadding = null
         else topPadding = SizeUtils.dp2px(top)
@@ -96,7 +109,7 @@ class StateLayout : FrameLayout {
 
     private fun setLoadingLayout(): StateLayout{
         if (loadingView?.parent != null) removeView(loadingView)
-        loadingView = LayoutInflater.from(context).inflate(loadingLayoutId, this, false)
+        if(loadingView == null) loadingView = LayoutInflater.from(context).inflate(loadingLayoutId, this, false)
         loadingView?.apply {
             (layoutParams as LayoutParams).apply {
                 gravity = Gravity.CENTER
@@ -112,7 +125,7 @@ class StateLayout : FrameLayout {
     }
     private fun setEmptyLayout(){
         if (emptyView?.parent != null) removeView(emptyView)
-        emptyView = LayoutInflater.from(context).inflate(emptyLayoutId, this, false)
+        if(emptyView == null) emptyView = LayoutInflater.from(context).inflate(emptyLayoutId, this, false)
         emptyView?.apply {
             (layoutParams as LayoutParams).apply {
                 gravity = Gravity.CENTER
@@ -131,7 +144,7 @@ class StateLayout : FrameLayout {
     }
     private fun setErrorLayout(){
         if (errorView?.parent != null) removeView(errorView)
-        errorView = LayoutInflater.from(context).inflate(errorLayoutId, this, false)
+        if(errorView == null) errorView = LayoutInflater.from(context).inflate(errorLayoutId, this, false)
 
         errorView?.apply {
             (layoutParams as LayoutParams).apply {
