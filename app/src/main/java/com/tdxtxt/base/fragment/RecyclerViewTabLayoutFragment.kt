@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.tdxtxt.base.R
 import com.tdxtxt.base.databinding.FragmentTablayoutRecyclerBinding
-import com.tdxtxt.baselib.adapter.viewpager.ViewPage2FixAdapter
+import com.tdxtxt.baselib.adapter.viewpager.RecyclerViewFragmentAdapter
 import com.tdxtxt.baselib.ui.BaseFragment
 import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 
@@ -31,7 +31,11 @@ class RecyclerViewTabLayoutFragment : BaseFragment(),
         fragments.add(Pair("职业素养", TestFragment()))
         fragments.add(Pair("职业素养", TestFragment()))
 
-        val adapter = ViewPage2FixAdapter(fragmentActivity, fragments)
+        val adapter =
+            RecyclerViewFragmentAdapter(
+                fragmentActivity,
+                fragments
+            )
         viewbinding().recyclerView.adapter = adapter
         viewbinding().tabLayout.setRecyclerView(viewbinding().recyclerView, adapter.pageTitles)
 

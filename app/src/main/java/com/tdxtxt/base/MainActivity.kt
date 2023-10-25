@@ -24,7 +24,7 @@ class MainActivity : BaseActivity(), IViewBinding<ActivityMainBinding> {
     override fun getLayoutResId() = R.layout.activity_main
 
     override fun initUi() {
-        getStateView(R.id.iv_image)
+//        getStateView(R.id.iv_image).showLoading()
         ImageLoader.loadImageCircle(viewbinding().ivImage, "https://n.sinaimg.cn/tech/transform/346/w179h167/20220119/090c-d3cbde60cd5d0eac46025e8c740c9e90.gif", 2f, Color.BLUE)
 
 //        ImageLoader.loadImageRoundRect(iv_image, "https://img95.699pic.com/photo/50136/1351.jpg_wh300.jpg", 12f)
@@ -35,13 +35,13 @@ class MainActivity : BaseActivity(), IViewBinding<ActivityMainBinding> {
 //                TimeUtils.string2Millis("1910-03-06", "yyyy-MM-dd")) {
 //
 //            }
-            PickerUtils.showOneWheelStr(fragmentActivity, "", listOf("121", "21312", "2323")){
-                ToastHelper.showToast(it)
-            }
+//            PickerUtils.showOneWheelStr(fragmentActivity, "", listOf("121", "21312", "2323")){
+//                ToastHelper.showToast(it)
+//            }
 //            PickerUtils.showOneWheel(fragmentActivity, "xxx", mutableListOf(Dast("12"), Dast("34"), Dast("3fd"), Dast("3fd")), "34"){}
 
 //            getStateView(R.id.iv_image).showEmpty("哈哈哈哈")
-//            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
+            startActivity(Intent(fragmentActivity, SocialTestActivity::class.java))
 //            TestDialog(fragmentActivity).show()
         }
         viewbinding().btnNext2.setOnClickListener {

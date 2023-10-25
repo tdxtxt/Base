@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".DemoApplication"
+        android:name="com.tdxtxt.base.DemoApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -30,24 +30,24 @@
         android:supportsRtl="true"
         android:theme="@style/Base.App.Theme"
         tools:replace="android:allowBackup">
-        <activity android:name=".WebViewActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".TXVideoActivity"
+        <activity android:name="com.tdxtxt.base.WebViewActivity" android:screenOrientation="portrait"/>
+        <activity android:name="com.tdxtxt.base.TXVideoActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".TXLiveActivity"
+        <activity android:name="com.tdxtxt.base.TXLiveActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".TXLiveHTSActivity"
+        <activity android:name="com.tdxtxt.base.TXLiveHTSActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize|uiMode|screenLayout|smallestScreenSize|layoutDirection"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"/>
-        <activity android:name=".SocialTestActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.tdxtxt.base.SocialTestActivity" />
+        <activity android:name="com.tdxtxt.base.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

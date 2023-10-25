@@ -1,5 +1,9 @@
 package com.tdxtxt.baselib.adapter.viewpager;
 
+import static androidx.lifecycle.Lifecycle.State.RESUMED;
+import static androidx.lifecycle.Lifecycle.State.STARTED;
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,17 +27,16 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.StatefulAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.blankj.utilcode.util.ScreenUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static androidx.lifecycle.Lifecycle.State.RESUMED;
-import static androidx.lifecycle.Lifecycle.State.STARTED;
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 /**
  * <pre>
@@ -42,8 +45,8 @@ import static androidx.recyclerview.widget.RecyclerView.NO_ID;
  *     desc   : 仅仅用于RecyclerView中item是Fragment的情况
  * </pre>
  */
-public class ViewPage2FixAdapter<T extends Fragment> extends
-        RecyclerView.Adapter<ViewPage2FixAdapter.FragmentViewHolder> implements StatefulAdapter {
+public class RecyclerViewFragmentAdapter<T extends Fragment> extends
+        RecyclerView.Adapter<RecyclerViewFragmentAdapter.FragmentViewHolder> implements StatefulAdapter {
     private List<Pair<String, T>> mListFragment;
     private List<String> mTitles;
 
@@ -71,8 +74,7 @@ public class ViewPage2FixAdapter<T extends Fragment> extends
     @SuppressWarnings("WeakerAccess") // to avoid creation of a synthetic accessor
             boolean mIsInGracePeriod = false;
     private boolean mHasStaleFragments = false;
-
-    public ViewPage2FixAdapter(FragmentActivity fa, List<Pair<String, T>> list){
+    public RecyclerViewFragmentAdapter(FragmentActivity fa, List<Pair<String, T>> list){
         this(fa);
         this.mListFragment = list;
 
@@ -81,7 +83,6 @@ public class ViewPage2FixAdapter<T extends Fragment> extends
             mTitles.add(item.first);
         }
     }
-
     public List<String> getPageTitles(){
         return mTitles;
     }
@@ -116,20 +117,20 @@ public class ViewPage2FixAdapter<T extends Fragment> extends
      * @param fragmentActivity if the {@link ViewPager2} lives directly in a
      * {@link FragmentActivity} subclass.
      *
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(Fragment)
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(FragmentManager, Lifecycle)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(Fragment)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(FragmentManager, Lifecycle)
      */
-    public ViewPage2FixAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public RecyclerViewFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
         this(fragmentActivity.getSupportFragmentManager(), fragmentActivity.getLifecycle());
     }
 
     /**
      * @param fragment if the {@link ViewPager2} lives directly in a {@link Fragment} subclass.
      *
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(FragmentActivity)
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(FragmentManager, Lifecycle)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(FragmentActivity)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(FragmentManager, Lifecycle)
      */
-    public ViewPage2FixAdapter(@NonNull Fragment fragment) {
+    public RecyclerViewFragmentAdapter(@NonNull Fragment fragment) {
         this(fragment.getChildFragmentManager(), fragment.getLifecycle());
     }
 
@@ -137,11 +138,11 @@ public class ViewPage2FixAdapter<T extends Fragment> extends
      * @param fragmentManager of {@link ViewPager2}'s host
      * @param lifecycle of {@link ViewPager2}'s host
      *
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(FragmentActivity)
-     * @see ViewPage2FixAdapter#ViewPage2FixAdapter(Fragment)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(FragmentActivity)
+     * @see RecyclerViewFragmentAdapter#RecyclerViewFragmentAdapter(Fragment)
      */
-    public ViewPage2FixAdapter(@NonNull FragmentManager fragmentManager,
-                               @NonNull Lifecycle lifecycle) {
+    public RecyclerViewFragmentAdapter(@NonNull FragmentManager fragmentManager,
+                                       @NonNull Lifecycle lifecycle) {
         mFragmentManager = fragmentManager;
         mLifecycle = lifecycle;
         super.setHasStableIds(true);
@@ -795,6 +796,36 @@ public class ViewPage2FixAdapter<T extends Fragment> extends
 
         @NonNull FrameLayout getContainer() {
             return (FrameLayout) itemView;
+        }
+    }
+
+    public final static class OffscreenPageLimitLinearLayoutManager extends LinearLayoutManager{
+        private RecyclerView recyclerView;
+        private int mOffscreenPageLimit = 1;
+        public void setOffscreenPageLimit(int limit){
+            if(limit <= 0) return;
+            mOffscreenPageLimit = limit;
+        }
+        public OffscreenPageLimitLinearLayoutManager(RecyclerView recyclerView, int limit) {
+            super(recyclerView.getContext());
+            this.recyclerView = recyclerView;
+            setOffscreenPageLimit(limit);
+        }
+
+        @Override
+        protected void calculateExtraLayoutSpace(@NonNull RecyclerView.State state, @NonNull int[] extraLayoutSpace) {
+            if(mOffscreenPageLimit == 1) {
+                super.calculateExtraLayoutSpace(state, extraLayoutSpace);
+                return;
+            }
+            int offscreenSpace = getPageSize() * mOffscreenPageLimit;
+            extraLayoutSpace[0] = offscreenSpace;
+            extraLayoutSpace[1] = offscreenSpace;
+        }
+
+        private int getPageSize(){
+            if(recyclerView == null) return ScreenUtils.getScreenHeight();
+            return recyclerView.getHeight() - recyclerView.getPaddingTop() - recyclerView.getPaddingBottom();
         }
     }
 
