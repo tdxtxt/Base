@@ -28,4 +28,9 @@ class AndroidPlatform() : AbsPlatform() {
         if(mShareHelper == null) mShareHelper = AndroidShareHelper()
         mShareHelper?.share(activity, target, entity, listener, complete)
     }
+
+    override fun onDestory() {
+        super.onDestory()
+        mShareHelper?.onDestory()
+    }
 }

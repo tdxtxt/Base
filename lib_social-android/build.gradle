@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "social-android_beta"
+def modelName = "social-android"
 def debugNum = 1
 
 android {

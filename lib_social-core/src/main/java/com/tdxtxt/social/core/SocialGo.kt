@@ -188,6 +188,7 @@ object SocialGo {
     // 支付SDK
     ///////////////////////////////////////////////////////////////////////////
     private var mPayListener: OnPayListener? = null
+    @JvmStatic
     fun doPay(context: Context?, @Target.PayTarget target: Int, params: String, listenter: OnPayListener?){
         if(context == null) return
         listenter?.onStart()

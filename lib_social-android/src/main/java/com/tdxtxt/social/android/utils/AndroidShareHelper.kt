@@ -1,7 +1,6 @@
 package com.tdxtxt.social.android.utils
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -60,7 +59,7 @@ class AndroidShareHelper: IShareAction, Recyclable {
 
         val sendIntent = ShareCompat.IntentBuilder(activity)
             .setType("text/*") //包括 text/plain、text/rtf,、text/html、text/json
-            .setText("${entity?.title}${System.lineSeparator()}${entity?.content}${System.lineSeparator()}${entity?.webUrl}")
+            .setText("${entity?.title?:""}${entity?.content?:""}${entity?.webUrl?:""}")
             .setChooserTitle(entity?.title?:"")
             .createChooserIntent()
         startActivity(activity, sendIntent)
