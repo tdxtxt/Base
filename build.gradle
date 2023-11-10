@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from:"config.gradle"
+apply from:"common.android.gradle"
 
 buildscript {
     //    TODO AS4.0 https://plugins.jetbrains.com/plugin/6954-kotlin/versions
@@ -14,6 +15,7 @@ buildscript {
     }
     dependencies {
         //    TODO AS4.0
+//        classpath 'com.android.tools.build:gradle:7.0.2'
         classpath 'com.android.tools.build:gradle:4.0.0'
 //        classpath 'com.android.tools.build:gradle:3.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

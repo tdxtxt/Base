@@ -1,41 +1,16 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.kezong.fat-aar'
-apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def modelName = "net_beta"
-//def modelName = "net"
 def debugNum = 1
+def versionCode = 1
+def versionName = "0.0.7"
 
 android {
-    compileSdkVersion versions.compileSdk
-    buildToolsVersion versions.buildTools
-    defaultConfig {
-        minSdkVersion versions.minSdk
-        targetSdkVersion versions.targetSdk
-        versionCode 1
-        versionName "0.0.7"
-//        versionName "0.0.1"
-    }
-
-    lintOptions {
-        abortOnError false
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility jdkVersion
-        targetCompatibility jdkVersion
-    }
-
+    androidScope(it, versionCode, versionName)
 }
 
 dependencies {
@@ -45,45 +20,6 @@ dependencies {
     implementation rootProject.ext.netLibs
     implementation rootProject.ext.jsonLibs
 }
-
-//上传到Maven仓库的task
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            Properties properties = new Properties()
-            InputStream inputStream = project.rootProject.file(rootProject.ext.mavenConfig["pwd"]).newDataInputStream() ;
-            properties.load( inputStream )
-
-            //指定maven仓库url
-            repository(url : rootProject.ext.mavenConfig['releasesRepoUrl']){
-                authentication(userName: properties.getProperty("USERNAME"), password: properties.getProperty("PASSWORD"))
-            }
-            snapshotRepository(url : rootProject.ext.mavenConfig['snapshotsRepoUrl']) {
-                authentication(userName: properties.getProperty("USERNAME"), password: properties.getProperty("PASSWORD"))
-            }
-            pom {
-                groupId = rootProject.ext.mavenConfig['group']
-                artifactId = modelName
-                if ("debug".equals(android.defaultPublishConfig)) {
-                    /**
-                     * debug用于测试，会出现频繁更新的情况
-                     * 于是根据实际情况，修改末尾数值
-                     */
-                    version = android.defaultConfig.versionName + "-" + android.defaultPublishConfig + "-" + debugNum
-                    // 版本号
-                }else {
-                    /**
-                     * 打release包，用于实际的版本使用
-                     */
-                    version = android.defaultConfig.versionName
-                    // 版本号
-                }
-            }
-        }
-    }
-}
-
-
 
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set("sources")

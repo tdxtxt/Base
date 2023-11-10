@@ -1,0 +1,53 @@
+apply plugin: 'maven-publish'
+
+def RELEASE_REPOSITORY_URL = "http://172.16.1.188:8083/repository/thirdparty/android/"
+def NEXUS_USERNAME = "developer"
+def NEXUS_PASSWORD = "oOEV@yVZBBI"
+def GROUP_ID   = ""
+def MODEL_NAME = ""
+def VERSION    = ""
+
+//引用 maven { url 'http://172.16.1.188:8083/repository/thirdparty/android/' }
+//引用 implementation '${GROUP_ID}:${MODEL_NAME}:${VERSION}-release'  ???
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                allowInsecureProtocol = true
+                name("ReleaseMaven")
+                url = RELEASE_REPOSITORY_URL
+                credentials {
+                    username = NEXUS_USERNAME
+                    password = NEXUS_PASSWORD
+                }
+            }
+        }
+        publications {
+            Production(MavenPublication) {
+                from components.release
+                groupId = GROUP_ID
+                artifactId = MODEL_NAME
+                version = VERSION
+            }
+            /*Develop(MavenPublication) {
+                from components.debug
+                groupId = "com.common.base"
+                artifactId = "CAFTBase"
+                version = "${"1.0.0"}-SNAPSHOT"
+            }*/
+        }
+    }
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+artifacts {
+    archives androidSourcesJar
+}
+
+
+
+

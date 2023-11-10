@@ -1,0 +1,27 @@
+ext {
+    androidScope = { p_android, p_versionCode, p_versionName ->
+        p_android.with {
+            compileSdkVersion rootProject.ext.versions.compileSdk
+            buildToolsVersion rootProject.ext.versions.buildTools
+            defaultConfig {
+                minSdkVersion rootProject.ext.versions.minSdk
+                targetSdkVersion rootProject.ext.versions.targetSdk
+                versionCode p_versionCode
+                versionName p_versionName
+            }
+            lintOptions {
+                abortOnError false
+            }
+            buildTypes {
+                release {
+                    minifyEnabled false
+                    proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+                }
+            }
+            compileOptions {
+                sourceCompatibility rootProject.ext.jdkVersion
+                targetCompatibility rootProject.ext.jdkVersion
+            }
+        }
+    }
+}
