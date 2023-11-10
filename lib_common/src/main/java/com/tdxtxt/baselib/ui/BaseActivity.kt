@@ -207,7 +207,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
         interceptCallBack = null
         stateLayouts.clear()
         if(this is IViewBinding<*>){
-            destory()
+            viewbindingDestory()
         }
     }
 }

@@ -174,7 +174,7 @@ abstract class BaseFragment : RxFragment(), IView {
         hideProgressBar()
         stateLayouts.clear()
         if(this is IViewBinding<*>){
-            destory()
+            viewbindingDestory()
         }
     }
 

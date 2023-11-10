@@ -29,7 +29,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
  */
 class XSlidingTabLayout : MagicIndicator {
     private var mTitles: List<String>? = null
-    private var mTabClickListener: OnTabClickListener? = null
+    private var mInsideTabClickListener: OnTabClickListener? = null
+    private var mOutsideTabClickListener: OnTabClickListener? = null
 
     private var mIndicatorColor: Int = ContextCompat.getColor(context, R.color.tl_indicator_color)
     private var mIndicatorHeight: Float = TabUtils.dp2px(3f)
@@ -119,9 +120,9 @@ class XSlidingTabLayout : MagicIndicator {
         }
     }
 
-    fun setTabText(titles: List<String>?, defaultSelectPosition: Int? = null, tabClickLisenter: OnTabClickListener?){
+    fun setTabText(titles: List<String>?, defaultSelectPosition: Int? = null, tabClickLisenter: OnTabClickListener? = null){
         mTitles = titles
-        mTabClickListener = tabClickLisenter
+        mInsideTabClickListener = tabClickLisenter
         val navigator = createNavigator()
         setNavigator(navigator)
         // must after setNavigator
@@ -136,13 +137,13 @@ class XSlidingTabLayout : MagicIndicator {
 
         if(defaultSelectPosition != null){
             onPageSelected(defaultSelectPosition)
-            mTabClickListener?.onTabClick(defaultSelectPosition)
+            mInsideTabClickListener?.onTabClick(defaultSelectPosition)
         }
     }
 
     fun setRecyclerView(recyclerView: RecyclerView, titles: List<String>?, smoothScroll: Boolean = false){
         mTitles = titles
-        mTabClickListener = object : OnTabClickListener{
+        mInsideTabClickListener = object : OnTabClickListener{
             override fun onTabClick(position: Int) {
                 recyclerView.apply {
                     setTag(R.id.tablayout_mark, false) //recyclerView被动引起的滑动，这里表示点击tablayout引起的滑动
@@ -167,7 +168,7 @@ class XSlidingTabLayout : MagicIndicator {
 
     fun setViewPager2(viewPager: ViewPager2, titles: List<String>?, smoothScroll: Boolean = false){
         mTitles = titles
-        mTabClickListener = object : OnTabClickListener{
+        mInsideTabClickListener = object : OnTabClickListener{
             override fun onTabClick(position: Int) {
                 viewPager.setCurrentItem(position, smoothScroll)
             }
@@ -195,7 +196,7 @@ class XSlidingTabLayout : MagicIndicator {
 
     fun setViewPager(viewPager: ViewPager, titles: List<String>?, smoothScroll: Boolean = false) {
         mTitles = titles
-        mTabClickListener = object : OnTabClickListener{
+        mInsideTabClickListener = object : OnTabClickListener{
             override fun onTabClick(position: Int) {
                 viewPager.setCurrentItem(position, smoothScroll)
             }
@@ -214,6 +215,10 @@ class XSlidingTabLayout : MagicIndicator {
         titleContainer.setPadding(mTabHorizontalMargin.toInt(), 0, mTabHorizontalMargin.toInt(), 0)
 
         ViewPagerHelper.bind(this, viewPager)
+    }
+
+    fun setTabClickListener(listener: OnTabClickListener?){
+        mOutsideTabClickListener = listener
     }
 
     fun getTabView(position: Int): TabView?{
@@ -242,7 +247,8 @@ class XSlidingTabLayout : MagicIndicator {
                 tabView.setEqual(mTabEqual)
                 tabView.setOnClickListener {
                     navigator.onPageSelected(index)
-                    mTabClickListener?.onTabClick(index)
+                    mInsideTabClickListener?.onTabClick(index)
+                    mOutsideTabClickListener?.onTabClick(index)
                 }
                 return tabView
             }

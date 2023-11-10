@@ -81,8 +81,10 @@ interface IViewBinding<T: ViewBinding> {
             throw Throwable("你的界面必须是BaseActivity、BaseFragment、BottomBaseDialog、CenterBaseDialog、View、Dialog的子类")
         }
     }
-
-    fun destory(){
+    /**
+     * 释放ViewBindingWrapper对象占用的坑位
+     */
+    fun viewbindingDestory(){
         if(this is BaseActivity){
             viewbindingWrapper.viewbinding = null
         }else if(this is BaseFragment){
