@@ -405,12 +405,16 @@ class TXVideoPlayerView : FrameLayout, IVideoView, IVideoPlayer, TXPlayerListene
     /**
      * autoPlay如果为自动播放，需要注意可能存在自动播放失败的情况，因此加上延迟代码 post { resume() }
      */
-    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?) {
-        mVideoMgr?.setDataSource(path, startTime, autoPlay, enableHardWareDecode)
+    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?, businessObject: Any?) {
+        mVideoMgr?.setDataSource(path, startTime, autoPlay, enableHardWareDecode, businessObject)
         if(autoPlay) post { resume() } //解决下一次设置资源后无法自动播放的问题
         getBaicView().showBasicMenuLayout()
         getBaicView().showLoading()
         hideCustomView()
+    }
+
+    override fun getBusinessObject(): Any? {
+        return mVideoMgr?.getBusinessObject()
     }
 
     override fun reStart(reStartTime: Int?) {

@@ -7,7 +7,7 @@ apply plugin: 'signing'
 def modelName = "liteavplayer_beta"
 def debugNum = 1
 def versionCode = 1
-def versionName = "0.0.21"
+def versionName = "0.0.23"
 
 android {
     androidScope(it, versionCode, versionName)

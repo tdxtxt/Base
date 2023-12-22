@@ -27,6 +27,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
     private var mPlayerEventListenerListRef: MutableList<TXPlayerListener>? = null
     private var mPlayer: TXVodPlayer? = null
     private var mDataSource: String? = null
+    private var mBusinessObject: Any? = null  //业务对象，框架不用关注
     private var mMultipleSpeed = 1f //倍速
     private var mLastStartPlayTime = 0L //上一次开始播放视频的时间戳，主要用来防止用户连续不断的触发播放，导致播放器卡死
     private var mLocalCurrentPlayTime: Int? = null //当前的播放时间
@@ -143,7 +144,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         }
     }
 
-    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?) {
+    override fun setDataSource(path: String?, startTime: Int?, autoPlay: Boolean, enableHardWareDecode: Boolean?, businessObject: Any?) {
         stop(true)//这里将之前的播放内容清除掉，不然频繁调用将会导致播放器卡死
         if(enableHardWareDecode != null) getPlayer()?.enableHardwareDecode(enableHardWareDecode) //切换软硬解码必须放到stop之后,start之前
         getPlayer()?.setBitrateIndex(-1)
@@ -152,6 +153,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
             getPlayer()?.setAutoPlay(autoPlay)
             getPlayer()?.startVodPlay(path)
             mDataSource = path
+            mBusinessObject = businessObject
         }
 
         if(abs(System.currentTimeMillis() - mLastStartPlayTime) > 200){//间隔超过200毫秒，直接播放
@@ -165,10 +167,14 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         }
     }
 
+    override fun getBusinessObject(): Any? {
+        return mBusinessObject
+    }
+
     override fun getDataSource() = mDataSource
 
     override fun reStart(reStartTime: Int?) {
-        if(mDataSource != null) setDataSource(mDataSource, reStartTime)
+        if(mDataSource != null) setDataSource(mDataSource, reStartTime, businessObject = mBusinessObject)
     }
 
     override fun resume() {
@@ -187,6 +193,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         mDataSource = null
         mLocalCurrentPlayTime = null
         mLocalMaxPlayTime = null
+        mBusinessObject = null
         getPlayer()?.stopPlay(clearFrame)
     }
 
@@ -218,6 +225,7 @@ class VideoMananger constructor(val context: Context?, val id: Int, val config: 
         mPlayer?.setVodListener(null)
         mPlayer = null
         mDataSource = null
+        mBusinessObject = null
         isDestory = true
         sendReleaseEvent()
         mPlayerEventListenerListRef?.clear()

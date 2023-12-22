@@ -26,7 +26,12 @@ interface IVideoPlayer {
     /**
      * 播放，进度从当前播放停留的进度开始
      */
-    fun setDataSource(path: String?, startTime: Int? = null, autoPlay: Boolean = true, enableHardWareDecode: Boolean? = null)
+    fun setDataSource(path: String?, startTime: Int? = null, autoPlay: Boolean = true, enableHardWareDecode: Boolean? = null, businessObject: Any? = null)
+
+    /**
+     * 获取播放媒体Bean
+     */
+    fun getBusinessObject(): Any?
     /**
      * 获取播放url
      */
