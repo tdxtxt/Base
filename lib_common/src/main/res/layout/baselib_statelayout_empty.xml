@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:background="@color/white_ffffff"
-    android:orientation="vertical"
-    android:paddingBottom="50dp">
+    android:orientation="vertical">
 
     <Space
         android:layout_width="wrap_content"

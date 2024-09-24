@@ -193,6 +193,11 @@ public class BaseWebView extends WebView {
         catch (Exception ignored) { }
 
         // and finally destroy this view
+//        setWebChromeClient(null);
+//        setWebViewClient(null);
+//        loadUrl("about:blank");
+//        stopLoading();
+//        clearHistory();
         destroy();
     }
 

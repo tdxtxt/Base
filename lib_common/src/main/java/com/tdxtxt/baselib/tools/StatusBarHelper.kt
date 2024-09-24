@@ -102,21 +102,20 @@ object StatusBarHelper {
 
     fun hideSysBar(activity: Activity?) {
         activity?.window?.apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                attributes = attributes.apply {
-                    layoutInDisplayCutoutMode =
-                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
-                }
-            }
-            var uiOptions = decorView.systemUiVisibility
-            uiOptions = uiOptions or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            uiOptions = uiOptions or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            val uiOptions = decorView.systemUiVisibility
 
-            decorView.systemUiVisibility = uiOptions
+            decorView.systemUiVisibility = uiOptions or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
             setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
     }
+
 }

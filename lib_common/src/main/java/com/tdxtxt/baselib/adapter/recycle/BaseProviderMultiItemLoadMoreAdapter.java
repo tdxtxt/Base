@@ -12,7 +12,7 @@ import java.util.List;
  * <pre>
  *     author : tangdexiang
  *     time   : 2023/5/25
- *     desc   : 多布局
+ *     desc   : 多布局：支持加载更多、支持布局分开控制，使用addItemProvider添加单独的ItemProvider
  * </pre>
  */
 public abstract class BaseProviderMultiItemLoadMoreAdapter<T extends MultiItemEntity> extends BaseProviderMultiAdapter<T> {

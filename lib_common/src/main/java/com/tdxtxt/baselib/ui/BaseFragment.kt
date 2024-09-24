@@ -17,6 +17,7 @@ import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
+import com.tdxtxt.baselib.tools.FragmentTrackHelper
 import com.tdxtxt.baselib.ui.viewbinding.IViewBinding
 import com.tdxtxt.baselib.ui.viewbinding.ViewBindingWrapper
 import com.tdxtxt.baselib.view.titlebar.OnTitleBarListener
@@ -38,7 +39,7 @@ abstract class BaseFragment : RxFragment(), IView {
     protected var interceptCallBack: (() -> Unit)? = null
     internal val viewbindingWrapper by lazy { ViewBindingWrapper<ViewBinding>() }
 
-    open fun getLayoutId(): Int = 0
+    abstract fun getLayoutId(): Int
     /**
      * 布局中TitleBar控件id默认R.id.titlebar，若自定义id，需要重写此方法
      */
@@ -55,6 +56,7 @@ abstract class BaseFragment : RxFragment(), IView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getParams(arguments)
+        FragmentTrackHelper.trackFragmentCreated(this, arguments)
     }
 
     override fun onAttach(context: Context) {
@@ -64,21 +66,36 @@ abstract class BaseFragment : RxFragment(), IView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mContainer = container
-//        if(this is IViewBindingFragment<*>){
-//            mRootView = createViewBindingRoot(inflater, container, false)
-//        }else{
-//            mRootView = inflater.inflate(getLayoutId(), container, false)
-//        }
         mRootView = inflater.inflate(getLayoutId(), container, false)
         if(this is IViewBinding<*>){
             setViewBindingRoot(mRootView)
         }
         mRootView.isClickable = true //截断点击时间段扩散，防止多Fragment出现重叠以及点击穿透
+        FragmentTrackHelper.trackFragmentViewCreated(this, mRootView, savedInstanceState)
         return mRootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initUi()
+    }
+    override fun onResume() {
+        super.onResume()
+        FragmentTrackHelper.trackFragmentResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        FragmentTrackHelper.trackFragmentPause(this)
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        FragmentTrackHelper.trackFragmentSetUserVisibleHint(this, isVisibleToUser)
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        FragmentTrackHelper.trackFragmentOnHiddenChanged(this, hidden)
     }
 
     fun <T : View> findViewOrNull(resId: Int): T? {
@@ -176,17 +193,20 @@ abstract class BaseFragment : RxFragment(), IView {
         if(this is IViewBinding<*>){
             viewbindingDestory()
         }
+        FragmentTrackHelper.trackFragmentDestroyView(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        FragmentTrackHelper.trackFragmentDestroy(this)
         interceptCallBack = null
         realMenuCallBack = null
     }
 
-    fun <T : Activity> getParentActivity() : T?{
+    inline fun <reified T : Activity> getParentActivity() : T?{
         if(fragmentActivity == null) return null
-        return fragmentActivity as T
+        if(fragmentActivity is T) return fragmentActivity as T
+        return null
     }
 
     open fun setTitleBar(title: String?) {

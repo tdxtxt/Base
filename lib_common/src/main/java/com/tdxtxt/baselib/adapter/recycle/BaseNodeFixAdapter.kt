@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.entity.node.NodeFooterImp
  * <pre>
  *     author : ton
  *     time   : 2022/9/7
- *     desc   : 官方已经停止维护了，只能自己修复：最后一个item删除、替换崩溃问题
+ *     desc   : 收缩展开适配器；官方已经停止维护了，只能自己修复：最后一个item删除、替换会有崩溃问题
  * </pre>
  */
 abstract class BaseNodeFixAdapter(nodeList: MutableList<BaseNode>? = null) : BaseNodeAdapter(nodeList) {

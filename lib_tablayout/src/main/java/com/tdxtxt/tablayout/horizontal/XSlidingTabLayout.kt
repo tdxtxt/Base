@@ -50,6 +50,7 @@ class XSlidingTabLayout : MagicIndicator {
     private var mTabHorizontalMargin: Float = 0f
     private var mTabHorizontalPadding: Float = 0f
     private var mTabLabelsId = 0
+    private var mTabPosition = 0
 
     constructor(context: Context) : super(context) {
         initView(context)
@@ -100,6 +101,7 @@ class XSlidingTabLayout : MagicIndicator {
         if(attributes.hasValue(R.styleable.XSlidingTabLayout_tl_tab_labels)){
             mTabLabelsId = attributes.getResourceId(R.styleable.XSlidingTabLayout_tl_tab_labels, 0)
         }
+        mTabPosition = attributes.getInt(R.styleable.XSlidingTabLayout_tl_tab_position, 0)
         attributes.recycle()
 
         initView(context)
@@ -114,9 +116,12 @@ class XSlidingTabLayout : MagicIndicator {
             if(mTitles?.isNotEmpty() != true){
                 mTitles = listOf("Tab1", "Tab2", "Tab3", "Tab4")
             }
-            setTabText(mTitles, 0, null)
 //            setRecyclerView(RecyclerView(context), mTitles)
 //            setViewPager(ViewPager(context), mTitles)
+        }
+
+        if(mTitles?.isNotEmpty() == true){
+            setTabText(mTitles, mTabPosition, null)
         }
     }
 

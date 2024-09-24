@@ -7,7 +7,13 @@ import com.tdxtxt.baselib.adapter.recycle.bean.AbsListBody;
 
 import org.jetbrains.annotations.Nullable;
 import java.util.List;
-
+/**
+ * <pre>
+ *     author : tangdexiang
+ *     time   : 2023/5/25
+ *     desc   : 普通列表适配器，封装加载更多
+ * </pre>
+ */
 public abstract class BaseQuickLoadMoreAdapter<T, VH extends BaseViewHolder> extends BaseQuickAdapter<T, VH> implements LoadMoreModule {
     public BaseQuickLoadMoreAdapter(int layoutResId, @Nullable List<T> data) {
         super(layoutResId, data);

@@ -4,8 +4,10 @@ import android.util.Pair
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.tdxtxt.base.databinding.ActivityTablayoutXBinding
+import com.tdxtxt.base.fragment.HtmlFragment
 import com.tdxtxt.base.fragment.RecyclerViewTabLayoutFragment
 import com.tdxtxt.base.fragment.ViewPager2TabLayoutFragment
+import com.tdxtxt.base.fragment.XTabLayoutFragment
 import com.tdxtxt.base.fragment.YTabLayoutFragment
 import com.tdxtxt.base.fragment.YTabLayoutFragment2
 import com.tdxtxt.baselib.adapter.viewpager.ViewPagerAdapter
@@ -31,10 +33,12 @@ class XTabLayoutActivity : BaseActivity(), IViewBinding<ActivityTablayoutXBindin
 
     override fun initUi() {
         val fragments: MutableList<Pair<String, Fragment>> = ArrayList()
+        fragments.add(Pair("显示HTML", HtmlFragment()))
         fragments.add(Pair("RecyclerViewFragment", RecyclerViewTabLayoutFragment()))
         fragments.add(Pair("ViewPage2Fragment", ViewPager2TabLayoutFragment()))
         fragments.add(Pair("YTabLayoutFragment", YTabLayoutFragment()))
         fragments.add(Pair("YTabLayoutFragment2", YTabLayoutFragment2()))
+        fragments.add(Pair("XTabLayoutFragment", XTabLayoutFragment()))
 //        fragments.add(Pair("职业素养", YTabLayoutFragment()))
 //        fragments.add(Pair("产品质量", YTabLayoutFragment()))
 //        fragments.add(Pair("财务及风险管理", YTabLayoutFragment()))

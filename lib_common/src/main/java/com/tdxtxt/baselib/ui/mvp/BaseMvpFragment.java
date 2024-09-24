@@ -71,7 +71,8 @@ public abstract class BaseMvpFragment extends BaseFragment {
     }
 
     public <T extends Activity> T getMVPActivity(){
-        return getParentActivity();
+        if(getFragmentActivity() == null) return null;
+        return (T) getFragmentActivity();
     }
 
 }

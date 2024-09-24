@@ -151,4 +151,11 @@
             <enum name="HORIZONTAL" value="0"/>
         </attr>>
     </declare-styleable>
+
+    <declare-styleable name="CharSortBar">
+        <attr name="sortbarNormalTextSize" format="dimension"/>
+        <attr name="sortbarNormalTextColor" format="color"/>
+        <attr name="sortbarSelectTextSize" format="dimension"/>
+        <attr name="sortbarSelectTextColor" format="color"/>
+    </declare-styleable>
 </resources>

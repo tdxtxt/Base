@@ -33,7 +33,7 @@ abstract class TimerListener constructor(var countDownTimeSecond: Int, val key: 
     /**
      * 设置倒计时时长，单位秒
      */
-    fun setCountDownSecond(value: Int){
+    open fun setCountDownSecond(value: Int){
         if (value < 0) countDownTimeSecond = 0
         countDownTimeSecond = value
     }

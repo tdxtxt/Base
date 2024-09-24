@@ -7,7 +7,7 @@ apply plugin: 'signing'
 def modelName = "baselib_beta"
 def debugNum = 1
 def versionCode = 1
-def versionName = "0.0.48"
+def versionName = "0.0.50"
 
 android {
     androidScope(it, versionCode, versionName)

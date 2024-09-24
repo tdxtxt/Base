@@ -178,6 +178,7 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
                     if(isViewOutside(focusView, ev)){
                         //当前触摸位置不处于焦点控件中，需要隐藏软键盘
                         KeyboardUtils.hideSoftInput(focusView)
+                        focusView.clearFocus()
                     }
                 }
             }

@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 参考资料 ViewPager中Fragment状态保存 https://mp.weixin.qq.com/s/C7PsGcwKjMgRTZ7j0cLPfw
+ * 适用于多Fragment的情况：参考资料 ViewPager中Fragment状态保存 https://mp.weixin.qq.com/s/C7PsGcwKjMgRTZ7j0cLPfw
+ * 保存View状态前提：1、view要设置id；2、view要设置setSaveEnabled(true)，默认为ture；
+ * 注意：自定义状态请自行实现view相关的方法onSaveInstanceState、onRestoreInstanceState
  */
 public class ViewPagerStateAdapter<T extends Fragment> extends FragmentStatePagerAdapter {
     private List<Pair<String, T>> list;

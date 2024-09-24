@@ -6,6 +6,13 @@ import com.chad.library.adapter.base.module.LoadMoreModule;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.tdxtxt.baselib.adapter.recycle.bean.AbsListBody;
 
+/**
+ * <pre>
+ *     author : tangdexiang
+ *     time   : 2023/5/25
+ *     desc   : 多布局：支持加载更多
+ * </pre>
+ */
 public abstract class BaseMultiItemQuickLoadMoreAdapter<T extends MultiItemEntity, VH extends BaseViewHolder> extends BaseMultiItemQuickAdapter<T, VH> implements LoadMoreModule {
     public BaseMultiItemQuickLoadMoreAdapter(){
         super();
