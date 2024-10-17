@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="温馨提示">温馨提示</string>
+    <string name="加载中">加载中</string>
+    <string name="确认">确认</string>
+    <string name="取消">取消</string>
+    <string name="您需要去应用程序设置当中手动开启权限">您需要去应用程序设置当中手动开启权限</string>
+    <string name="去设置">去设置</string>
+    <string name="请选择">请选择</string>
+</resources>

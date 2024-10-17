@@ -11,6 +11,7 @@ import android.widget.EditText
 import androidx.fragment.app.FragmentActivity
 import androidx.viewbinding.ViewBinding
 import com.blankj.utilcode.util.KeyboardUtils
+import com.tdxtxt.baselib.R
 import com.tdxtxt.baselib.dialog.impl.ProgressDialog
 import com.tdxtxt.baselib.rx.transformer.ProgressTransformer
 import com.tdxtxt.baselib.rx.transformer.UIThreadTransformer
@@ -112,8 +113,8 @@ abstract class BaseActivity : RxAppCompatActivity(), IView {
     }
 
     override fun getProgressBar(): ProgressDialog? {
-        if (mProgressDialog == null) mProgressDialog = ProgressDialog.createProgressDialog(this, "正在加载...")
-        return mProgressDialog?.setDesc("正在加载...")?.apply { setCancelable(ProgressDialog.mGlobalCancelable).setCancelableOnTouchOutside(ProgressDialog.mGlobalOutsideCancelable) }
+        if (mProgressDialog == null) mProgressDialog = ProgressDialog.createProgressDialog(this)
+        return mProgressDialog?.setDesc(getString(R.string.加载中))?.apply { setCancelable(ProgressDialog.mGlobalCancelable).setCancelableOnTouchOutside(ProgressDialog.mGlobalOutsideCancelable) }
     }
 
     override fun hideProgressBar() {

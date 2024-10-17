@@ -24,7 +24,7 @@ class ProgressDialog(context : FragmentActivity?) : CenterBaseDialog(context) {
 
     override fun onCreate(dialog: IBDialog) {
         tvDesc = dialog.findViewById(R.id.tv_desc)
-        setDesc("加载中...")
+        setDesc(context?.getString(R.string.加载中))
     }
 
     override fun show(): CenterBaseDialog {
@@ -56,7 +56,7 @@ class ProgressDialog(context : FragmentActivity?) : CenterBaseDialog(context) {
         }
 
         @JvmStatic
-        fun createProgressDialog(activity: FragmentActivity?, desc: String = "加载中...", cancelable: Boolean? = null, outsideCancelable: Boolean? = null): ProgressDialog {
+        fun createProgressDialog(activity: FragmentActivity?, desc: String = activity?.getString(R.string.加载中)?: "", cancelable: Boolean? = null, outsideCancelable: Boolean? = null): ProgressDialog {
             return ProgressDialog(activity).apply { setDesc(desc).setCancelable(cancelable?: mGlobalCancelable).setCancelableOnTouchOutside(outsideCancelable?: mGlobalOutsideCancelable) }
         }
     }

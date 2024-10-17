@@ -5,6 +5,7 @@ import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import com.blankj.utilcode.util.StringUtils
 import com.tdxtxt.baselib.callback.MenuCallBack
 import com.tdxtxt.baselib.dialog.CenterBaseDialog
 import com.tdxtxt.baselib.dialog.IBDialog
@@ -158,13 +159,13 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
         }
         @JvmStatic
         fun showTips(context: FragmentActivity, content: CharSequence?){
-            showCommDialog(context, "温馨提示", content)
+            showCommDialog(context,  context.getString(R.string.温馨提示), content)
         }
         @JvmStatic
         fun showCommDialog(activity: FragmentActivity?, content: CharSequence?,
                            leftMenu: MenuCallBack? = null, rightMenu: MenuCallBack? = null): CommDialog? {
             if (activity == null) return null
-            return createCommDialog(activity, "温馨提示", content, leftMenu = leftMenu, rightMenu = rightMenu)?.apply { show() }
+            return createCommDialog(activity,  activity.getString(R.string.温馨提示), content, leftMenu = leftMenu, rightMenu = rightMenu)?.apply { show() }
         }
         @JvmStatic
         fun showCommDialog(activity: FragmentActivity?, title: CharSequence?, content: CharSequence?,
@@ -178,7 +179,7 @@ class CommDialog(context: FragmentActivity) : CenterBaseDialog(context) {
             return createCommDialog(activity, title, content, centerMenu = centerMenu)?.apply { show() }
         }
         @JvmStatic
-        fun createCommDialog(activity: FragmentActivity?, title: CharSequence? = "温馨提示", content: CharSequence?,
+        fun createCommDialog(activity: FragmentActivity?, title: CharSequence? = activity?.getString(R.string.温馨提示), content: CharSequence?,
                              leftMenu: MenuCallBack? = null,
                              centerMenu: MenuCallBack? = null,
                              rightMenu: MenuCallBack? = null): CommDialog? {
