@@ -1,7 +1,7 @@
 package com.tdxtxt.base.net
 
 import com.tdxtxt.base.AppConstant
-import com.tdxtxt.baselib.tools.LogA
+import com.tdxtxt.logger.LogA
 import com.tdxtxt.net.config.DefaultNetProvider
 import com.tdxtxt.net.model.AbsResponse
 

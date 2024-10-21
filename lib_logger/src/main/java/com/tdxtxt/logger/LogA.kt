@@ -1,18 +1,24 @@
-package com.tdxtxt.baselib.tools
-import android.os.Build
+package com.tdxtxt.logger
 import android.util.Log
+import com.tdxtxt.logger.tree.DebugTree
 import org.jetbrains.annotations.NonNls
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.*
 import java.util.Collections.unmodifiableList
-import java.util.regex.Pattern
 
 /**
  * <pre>
  *     author : ton
  *     time   : 2023/2/13
  *     desc   : https://github.com/JakeWharton/timber/blob/trunk/timber/src/main/java/timber/log/Timber.kt
+ *    ┌──────────────────────────
+ *    │ Method stack history
+ *    ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+ *    │ Thread information
+ *    ├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄
+ *    │ Log message
+ *    └──────────────────────────
  * </pre>
  */
 class LogA {
@@ -157,8 +163,7 @@ class LogA {
                     message += "\n" + getStackTraceString(t)
                 }
             }
-
-            log(priority, tag, message, t)
+            log(priority, tag, message.trim(), t)
         }
 
         /** Formats a log message with optional arguments. */
@@ -184,60 +189,6 @@ class LogA {
          */
         protected abstract fun log(priority: Int, tag: String?, message: String, t: Throwable?)
     }
-
-    /** A [Tree] for debug builds. Automatically infers the tag from the calling class. */
-    open class DebugTree : Tree() {
-        private val fqcnIgnore = listOf(
-            LogA::class.java.name,
-            LogA.Forest::class.java.name,
-            Tree::class.java.name,
-            DebugTree::class.java.name
-        )
-
-        /**
-         * Break up `message` into maximum-length chunks (if needed) and send to either
-         * [Log.println()][Log.println] or
-         * [Log.wtf()][Log.wtf] for logging.
-         *
-         * {@inheritDoc}
-         */
-        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-            if (message.length < MAX_LOG_LENGTH) {
-                if (priority == Log.ASSERT) {
-                    Log.wtf(tag, message)
-                } else {
-                    Log.println(priority, tag, message)
-                }
-                return
-            }
-
-            // Split by line, then ensure each line can fit into Log's maximum length.
-            var i = 0
-            val length = message.length
-            while (i < length) {
-                var newline = message.indexOf('\n', i)
-                newline = if (newline != -1) newline else length
-                do {
-                    val end = Math.min(newline, i + MAX_LOG_LENGTH)
-                    val part = message.substring(i, end)
-                    if (priority == Log.ASSERT) {
-                        Log.wtf(tag, part)
-                    } else {
-                        Log.println(priority, tag, part)
-                    }
-                    i = end
-                } while (i < newline)
-                i++
-            }
-        }
-
-        companion object {
-            private const val MAX_LOG_LENGTH = 4000
-            private const val MAX_TAG_LENGTH = 23
-            private val ANONYMOUS_CLASS = Pattern.compile("(\\$\\d+)+$")
-        }
-    }
-
     companion object Forest : Tree() {
         /** Log a verbose message with optional format args. */
         @JvmStatic override fun v(tag: String, @NonNls message: String?, vararg args: Any?) {
@@ -408,7 +359,7 @@ class LogA {
         val treeCount get() = treeArray.size
 
         // Both fields guarded by 'trees'.
-        private val trees = ArrayList<Tree>()
-        @Volatile private var treeArray = emptyArray<Tree>()
+        private val trees = ArrayList<Tree>(listOf(DebugTree()))
+        @Volatile private var treeArray = trees.toTypedArray()
     }
 }

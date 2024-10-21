@@ -1,0 +1,116 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.kezong.fat-aar'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def modelName = "logger_beta"
+def debugNum = 1
+def versionCode = 1
+def versionName = "0.0.1"
+
+android {
+    androidScope(it, versionCode, versionName)
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //google官方lib
+    implementation rootProject.ext.supprotLibs
+
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from android.sourceSets.main.java.source
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+//                from components.release
+//            from(components.getByName("release"))
+            // group id，发布后引用的依赖的 group id
+            groupId rootProject.ext.mavenConfig['group']
+            // 发布后引用的依赖的 artifact id
+            artifactId modelName
+            // 发布的版本
+            if ("debug".equals(android.defaultPublishConfig)) {
+                /**
+                 * debug用于测试，会出现频繁更新的情况
+                 * 于是根据实际情况，修改末尾数值
+                 */
+                version = android.defaultConfig.versionName + "-" + android.defaultPublishConfig + "-" + debugNum
+                // 版本号
+            } else {
+                /**
+                 * 打release包，用于实际的版本使用
+                 */
+                version = android.defaultConfig.versionName + "-" + android.defaultPublishConfig
+                // 版本号
+            }
+            // 发布的 arr 的文件和源码文件
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+            artifact androidSourcesJar
+            pom {
+                name = modelName
+                description = 'Android Base CommonLibary'
+                url = 'https://github.com/tdxtxt/Base' // 构件主页
+                licenses {// 许可证名称和地址
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {// 开发者信息
+                    developer {
+                        name = '唐德祥'
+                        email = 'tdxtxt@qq.com'
+                    }
+                }
+
+                scm { // 版本控制仓库地址
+                    url = 'https://github.com/tdxtxt/Base'
+                    connection = 'scm:git:github.com/tdxtxt/Base.git'
+                    developerConnection = 'scm:git:ssh://git@github.com/tdxtxt/Base.git'
+                }
+            }
+            // pom文件中声明依赖，从而传递到使用方
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each {
+                    // 避免出现空节点或 artifactId=unspecified 的节点
+                    if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                        println it.toString()
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                        dependencyNode.appendNode('scope', 'implementation')
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            Properties properties = new Properties()
+            InputStream inputStream = project.rootProject.file(rootProject.ext.mavenConfig["pwd"]).newDataInputStream();
+            properties.load(inputStream)
+
+            // 发布的位置，这里根据发布的版本区分了 SNAPSHOT 和最终版本两种情况
+            url = version.endsWith('SNAPSHOT') ? rootProject.ext.mavenConfig['snapshotsRepoUrl'] : rootProject.ext.mavenConfig['releasesRepoUrl']
+            credentials {
+                username properties.getProperty("USERNAME")
+                password properties.getProperty("PASSWORD")
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications
+}

@@ -2,20 +2,20 @@ package com.tdxtxt.base
 
 import android.app.Application
 import android.content.Context
-import com.orhanobut.logger.AndroidLogAdapter
-import com.orhanobut.logger.Logger
+import androidx.core.content.ContextCompat
+import com.blankj.utilcode.util.FileUtils
 import com.tdxtxt.base.net.AppNetProvider
 import com.tdxtxt.baselib.app.ApplicationDelegate
 import com.tdxtxt.baselib.image.ImageLoader
 import com.tdxtxt.baselib.tools.CacheHelper
-import com.tdxtxt.baselib.tools.LogA
 import com.tdxtxt.liteavplayer.LiteAVManager
+import com.tdxtxt.logger.LogA
+import com.tdxtxt.logger.tree.DiskTree
 import com.tdxtxt.net.NetMgr
 import com.tdxtxt.social.alipay.AliPlatform
 import com.tdxtxt.social.android.AndroidPlatform
 import com.tdxtxt.social.core.SocialGo
 import com.tdxtxt.social.core.lisenter.IRequestAdapter
-import com.tdxtxt.social.core.platform.Target
 import com.tdxtxt.social.wechat.WxPlatform
 import java.io.File
 
@@ -48,12 +48,13 @@ class ApplicationDelegateImpl constructor(val application: Application) : Applic
         CacheHelper.init(context)
         NetMgr.registerProvider(AppNetProvider())
         if(BuildConfig.DEBUG){
-            Logger.addLogAdapter(AndroidLogAdapter())
-            LogA.plant(object : LogA.DebugTree(){
-                override fun log(priority: Int, tag: String?, message: String, t: Throwable?){
-                    Logger.log(priority, tag, message, t)
-                }
-            })
+//            Logger.addLogAdapter(AndroidLogAdapter())
+//            LogA.plant(object : LogA.DebugTree(){
+//                override fun log(priority: Int, tag: String?, message: String, t: Throwable?){
+//                    Logger.log(priority, tag, message, t)
+//                }
+//            })
+            LogA.plant(DiskTree(File(context.filesDir, "log").absolutePath))
         }
         SocialGo.init(SocialRequestAdapter())
         SocialGo.registerAndroidPlatform(AndroidPlatform.Creator())
