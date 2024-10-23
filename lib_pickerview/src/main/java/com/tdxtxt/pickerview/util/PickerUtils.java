@@ -2,6 +2,7 @@ package com.tdxtxt.pickerview.util;
 
 import android.content.Context;
 
+import com.tdxtxt.pickerview.R;
 import com.tdxtxt.pickerview.dataset.OptionDataSet;
 import com.tdxtxt.pickerview.dataset.StringDataSet;
 import com.tdxtxt.pickerview.picker.OptionPicker;
@@ -110,15 +111,15 @@ public class PickerUtils {
                     public CharSequence format(TimePicker picker, int type, int position, long value) {
                         switch (type) {
                             case TimePicker.TYPE_YEAR:
-                                return String.format("%d年", value);
+                                return String.format("%d%s", value, context.getString(R.string.年));
                             case TimePicker.TYPE_MONTH:
-                                return String.format("%02d月", value);
+                                return String.format("%02d%s", value, context.getString(R.string.月));
                             case TimePicker.TYPE_DAY:
-                                return String.format("%02d日", value);
+                                return String.format("%02d%s", value, context.getString(R.string.日));
                             case TimePicker.TYPE_HOUR:
-                                return String.format("%02d时", value);
+                                return String.format("%02d%s", value, context.getString(R.string.时));
                             case TimePicker.TYPE_MINUTE:
-                                return String.format("%02d分", value);
+                                return String.format("%02d%s", value, context.getString(R.string.分));
                             default:
                                 return String.valueOf(value);
                         }

@@ -1,3 +1,10 @@
 <resources>
   <string name="app_name">PickerView</string>
+  <string name="确定">确定</string>
+  <string name="取消">取消</string>
+  <string name="年">年</string>
+  <string name="月">月</string>
+  <string name="日">日</string>
+  <string name="时">时</string>
+  <string name="分">分</string>
 </resources>
