@@ -18,7 +18,7 @@ import kotlin.math.min
  *    └──────────────────────────
  * </pre>
  */
-open class DebugTree : LogA.Tree() {
+class DebugTree : LogA.Tree() {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         logTopBorder(priority, tag)
         logHeader(priority, tag)

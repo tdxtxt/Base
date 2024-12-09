@@ -11,18 +11,18 @@ import java.io.FileWriter
  * <pre>
  *     author : tangdexiang
  *     time   : 2024-10-18
- *     desc   : 磁盘日志，缓存文件目录名称规则：rootDir/{yyyy-MM-dd}/{HH}_{count}.log
- *     常见缓存目录选择：
- *     /data/data/<包名>/cache context.getCacheDir()
- *     /data/data/<包名>/files context.getFilesDir()
- *     /storage/emulate/0/Android/data/<包名>/cache context.getExternalCacheDir()
- *     /storage/emulate/0/Android/data/<包名>/files context.getExternalFilesDir()
+ *     desc   : 磁盘日志，缓存文件目录名称规则：rootDir/log/{yyyy-MM-dd}/{HH}_{count}.{suffix}
+ *     rootDir: 缓存目录，常见缓存目录如下
+ *              context.getCacheDir()：/data/data/<包名>/cache
+ *              context.getFilesDir()：/data/data/<包名>/files
+ *              context.getExternalCacheDir()：/storage/emulate/0/Android/data/<包名>/cache
+ *              context.getExternalFilesDir()：/storage/emulate/0/Android/data/<包名>/files
+ *     keepDays：缓存事件，默认缓存一天
  * </pre>
  */
-class DiskTree(val rootDir: String, val keepDays: Int = 2) : LogA.Tree() {
+class DiskTree(val rootDir: String, val keepDays: Int = 1) : LogA.Tree() {
     private val mHandlerThread = HandlerThread("WriterLogThread")
     private val mWorker: Worker by lazy { Worker(rootDir, keepDays, mHandlerThread) }
-    private var isDeleteFile = true
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         val currentTime = System.currentTimeMillis()
         val builder = StringBuilder()
@@ -33,7 +33,7 @@ class DiskTree(val rootDir: String, val keepDays: Int = 2) : LogA.Tree() {
             .append(logMessage(message))
             .append(System.lineSeparator())
             .append(logBottomBorder())
-        writeLog(tag, builder.toString(), currentTime)
+        writeLog(tag, builder.toString(), currentTime, "log")
     }
 
     private fun logHeaderContent(currentTime: Long): String {
@@ -70,21 +70,25 @@ class DiskTree(val rootDir: String, val keepDays: Int = 2) : LogA.Tree() {
         return Utils.BOTTOM_BORDER
     }
 
-    private fun writeLog(tag: String?, message: String, currentTime: Long) {
-        if (!mHandlerThread.isAlive) mHandlerThread.start() // 启动线程
+    override fun write(suffix: String, message: String?) {
+        if (message.isNullOrEmpty()) return
+        writeLog(null, message, System.currentTimeMillis(), suffix)
+    }
 
-        mWorker.sendMessage(Message.obtain().apply {
-            what = Utils.SENDMSG_SAVE_LOG
-            obj = LogInfo(tag, message, currentTime)
-        })
-
-        if (isDeleteFile) {
-            isDeleteFile = false
+    private fun writeLog(tag: String?, message: String, currentTime: Long, suffix: String) {
+        if (!mHandlerThread.isAlive) { //启动线程
+            mHandlerThread.start()
+            //删除过期文件
             mWorker.sendMessage(Message.obtain().apply {
                 what = Utils.SENDMSG_DELETE_FILE
             })
         }
 
+        //写日志
+        mWorker.sendMessage(Message.obtain().apply {
+            what = Utils.SENDMSG_SAVE_LOG
+            obj = LogInfo(tag, message, currentTime, suffix)
+        })
     }
 
     private class Worker(val rootDir: String, val keepDays: Int, handlerThread: HandlerThread) :
@@ -94,7 +98,7 @@ class DiskTree(val rootDir: String, val keepDays: Int = 2) : LogA.Tree() {
                 Utils.SENDMSG_SAVE_LOG -> {
                     val logInfo = msg.obj
                     if (logInfo is LogInfo) {
-                        val logFile = Utils.getLogFile(rootDir, logInfo.curTime)
+                        val logFile = Utils.getLogFile(rootDir, logInfo.suffix, logInfo.curTime)
                         var fileWriter: FileWriter? = null
                         try {
                             fileWriter = FileWriter(logFile, true)
@@ -112,11 +116,16 @@ class DiskTree(val rootDir: String, val keepDays: Int = 2) : LogA.Tree() {
                 }
 
                 Utils.SENDMSG_DELETE_FILE -> {
-                    Utils.deleteCacheLog(rootDir, keepDays)
+                    Utils.deleteCacheLog(rootDir, Utils.DIR_LOG, keepDays)
                 }
             }
         }
     }
 
-    private class LogInfo(val tag: String?, val message: String, val curTime: Long)
+    private class LogInfo(
+        val tag: String?,
+        val message: String,
+        val curTime: Long,
+        val suffix: String
+    )
 }

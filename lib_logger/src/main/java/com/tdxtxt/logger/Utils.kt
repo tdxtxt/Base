@@ -13,12 +13,14 @@ import kotlin.math.abs
  *     desc   :
  * </pre>
  */
-object Utils {
+internal object Utils {
     const val MAX_LENGTH_LINE = 1 * 1024 * 1024 //每次最多打印1kb
     const val MAX_LENGTH_FILE = 5 * 1024 * 1024 * 1024 //文件最大5M
 
     const val SENDMSG_SAVE_LOG = 1
     const val SENDMSG_DELETE_FILE = 2
+
+    const val DIR_LOG = "log"
 
     const val MIN_STACK_OFFSET = 5
     const val TOP_LEFT_CORNER = '┌'
@@ -50,8 +52,8 @@ object Utils {
         return builder.toString()
     }
 
-    fun getLogFile(rootDir: String, printLogTime: Long): File {
-        val rootFolder = File(rootDir)
+    fun getLogFile(rootDir: String, suffix: String, printLogTime: Long): File {
+        val rootFolder = File(rootDir, DIR_LOG)
         if (!rootFolder.exists()) {
             rootFolder.mkdir()
         }
@@ -62,12 +64,12 @@ object Utils {
         val fileName = getFileName(printLogTime)
         var newFileCount = 1
         var existingFile: File? = null
-        var newFile = File(logFolder, String.format("%s_%s.log", fileName, newFileCount))
+        var newFile = File(logFolder, String.format("%s_%s.%s", fileName, newFileCount, suffix))
         while (existingFile == null) {
             if (newFile.length() < MAX_LENGTH_FILE) {
                 existingFile = newFile
             } else {
-                newFile = File(logFolder, String.format("%s_%s.log", fileName, newFileCount))
+                newFile = File(logFolder, String.format("%s_%s.%s", fileName, newFileCount, suffix))
             }
             newFileCount++
         }
@@ -79,8 +81,8 @@ object Utils {
         return SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date(time))
     }
 
-    fun deleteCacheLog(rootDir: String, keepDays: Int) {
-        val rootFolder = File(rootDir)
+    fun deleteCacheLog(rootDir: String, childDirName: String, keepDays: Int) {
+        val rootFolder = File(rootDir, childDirName)
         if (!rootFolder.exists()) return
         val listFile = rootFolder.listFiles()
         listFile.forEach { file ->

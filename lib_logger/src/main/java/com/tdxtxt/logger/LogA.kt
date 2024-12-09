@@ -105,22 +105,11 @@ class LogA {
             prepareLog(tag, Log.ERROR, t, null)
         }
 
-        /** Log an assert message with optional format args. */
-        open fun wtf(tag: String, message: String?, vararg args: Any?) {
-            prepareLog(tag, Log.ASSERT, null, message, *args)
-        }
+        /**
+         * suffix:文件存储名称的后缀
+         */
+        open fun write(suffix: String, message: String?) {}
 
-        /** Log an assert exception and a message with optional format args. */
-        open fun wtf(tag: String, t: Throwable?, message: String?, vararg args: Any?) {
-            prepareLog(tag, Log.ASSERT, t, message, *args)
-        }
-
-        /** Log an assert exception. */
-        open fun wtf(tag: String, t: Throwable?) {
-            prepareLog(tag, Log.ASSERT, t, null)
-        }
-
-        /** Log at `priority` a message with optional format args. */
         open fun log(tag: String, priority: Int, message: String?, vararg args: Any?) {
             prepareLog(tag, priority, null, message, *args)
         }
@@ -190,6 +179,7 @@ class LogA {
         protected abstract fun log(priority: Int, tag: String?, message: String, t: Throwable?)
     }
     companion object Forest : Tree() {
+
         /** Log a verbose message with optional format args. */
         @JvmStatic override fun v(tag: String, @NonNls message: String?, vararg args: Any?) {
             treeArray.forEach { it.v(tag, message, *args) }
@@ -265,19 +255,9 @@ class LogA {
             treeArray.forEach { it.e(tag, t) }
         }
 
-        /** Log an assert message with optional format args. */
-        @JvmStatic override fun wtf(tag: String, @NonNls message: String?, vararg args: Any?) {
-            treeArray.forEach { it.wtf(tag, message, *args) }
-        }
-
-        /** Log an assert exception and a message with optional format args. */
-        @JvmStatic override fun wtf(tag: String, t: Throwable?, @NonNls message: String?, vararg args: Any?) {
-            treeArray.forEach { it.wtf(tag, t, message, *args) }
-        }
-
-        /** Log an assert exception. */
-        @JvmStatic override fun wtf(tag: String, t: Throwable?) {
-            treeArray.forEach { it.wtf(tag, t) }
+        /** 写日志，默认设置DiskTree才支持，suffix标识保存文件的后缀名，用于区别日志文件 */
+        @JvmStatic override fun write(suffix: String, message: String?) {
+            treeArray.forEach { it.write(suffix, message) }
         }
 
         /** Log at `priority` a message with optional format args. */
