@@ -76,16 +76,16 @@ ext{
             /**运行时权限管理 https://github.com/guolindev/PermissionX  **/
             "permission"          : 'com.guolindev.permissionx:permissionx:1.5.1',
             /**刷新控件 https://github.com/scwang90/SmartRefreshLayout**/
-            "refresh"             : 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-x',
-            "refresh-header"      : 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-x',//没有使用特殊Header，可以不加这行
+            "refresh"             : 'io.github.scwang90:refresh-layout-kernel:2.1.0',
+            "refresh-header"      : 'io.github.scwang90:refresh-header-classics:2.1.0',//没有使用特殊Header，可以不加这行
             /**日志工具 https://github.com/JakeWharton/timber**/
             "timber"              : 'com.jakewharton.timber:timber:4.7.1',
             /**RecyclerView通用adapter,支持androidx https://github.com/CymChad/BaseRecyclerViewAdapterHelper**/
             "adapter-recyclerview": 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4',
             /**沉浸式状态栏 https://github.com/gyf-dev/ImmersionBar **/
-            "statusBar"           : 'com.gyf.immersionbar:immersionbar:3.0.0',
+            "statusBar"           : 'com.geyifeng.immersionbar:immersionbar:3.2.2',
             "XPopup"              : 'com.github.li-xiaojun:XPopup:2.9.19',
-            "statusbar": "com.gyf.immersionbar:immersionbar:3.0.0",
+//            "statusbar": "com.gyf.immersionbar:immersionbar:3.0.0",
             //https://github.com/gyf-dev/ImmersionBar
             "utilcodex"           : 'com.blankj:utilcodex:1.31.0'
     ].values()

@@ -23,7 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.blankj.utilcode.util.SizeUtils;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.tdxtxt.baselib.R;
 import com.tdxtxt.baselib.callback.LifecycleMethod;
 import com.tdxtxt.baselib.callback.LifecycleObserver;

@@ -4,10 +4,10 @@ apply plugin: 'com.kezong.fat-aar'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-def modelName = "baselib_beta"
+def modelName = "baselib"
 def debugNum = 1
 def versionCode = 1
-def versionName = "0.0.53"
+def versionName = "0.0.5"
 
 android {
     androidScope(it, versionCode, versionName)

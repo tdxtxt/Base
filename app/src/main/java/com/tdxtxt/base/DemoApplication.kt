@@ -48,13 +48,7 @@ class ApplicationDelegateImpl constructor(val application: Application) : Applic
         CacheHelper.init(context)
         NetMgr.registerProvider(AppNetProvider())
         if(BuildConfig.DEBUG){
-//            Logger.addLogAdapter(AndroidLogAdapter())
-//            LogA.plant(object : LogA.DebugTree(){
-//                override fun log(priority: Int, tag: String?, message: String, t: Throwable?){
-//                    Logger.log(priority, tag, message, t)
-//                }
-//            })
-            LogA.plant(DiskTree(File(context.filesDir, "log").absolutePath))
+            LogA.plant(DiskTree(context.filesDir.absolutePath))
         }
         SocialGo.init(SocialRequestAdapter())
         SocialGo.registerAndroidPlatform(AndroidPlatform.Creator())

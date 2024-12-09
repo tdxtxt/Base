@@ -1,4 +1,5 @@
 ext{
+//    https://blog.csdn.net/GeniusLS/article/details/139903315
     GROUP_ID = "io.github.tdxtxt"
     RELEASE_REPOSITORY_URL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
     mavenPublishScope = { publishing, modelName ->
